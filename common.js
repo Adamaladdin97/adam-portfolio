@@ -118,11 +118,14 @@ function span(format, cols, extra = '', rowsOverride) {
 }
 const mobileH = (f) => MOBILE_H[f] || MOBILE_H['16:9'];
 
-const projectFormat = (p) => p.media[0].format;
+const projectFormat = (p) => p.coverFormat || p.media[0].format;
 const projectCover = (p) => p.cover || p.media[0].thumbnail;
+const KIND_LABEL = { video: 'Film', reel: 'Reel', post: 'Post', photo: 'Photo', media: 'Media', album: 'Album' };
+const KIND_PLURAL = { video: 'films', reel: 'reels', post: 'posts', photo: 'photos', media: 'files', album: 'albums' };
 function deliverablesText(p) {
-    const n = (k) => p.media.filter(m => m.kind === k).length;
-    return [[n('video'), 'video'], [n('reel'), 'reel'], [n('photo'), 'photo']].filter(([c]) => c).map(([c, w]) => `${c} ${w}${c > 1 ? 's' : ''}`).join(' · ');
+    const order = ['video', 'reel', 'post', 'photo', 'media', 'album'];
+    return order.map(k => [p.media.filter(m => m.kind === k).length, k]).filter(([n]) => n)
+        .map(([n, k]) => `${n} ${n === 1 ? KIND_LABEL[k].toLowerCase() : KIND_PLURAL[k]}`).join(' · ');
 }
 
 /* ---------------- Project cards (home + work) ---------------- */
@@ -190,61 +193,93 @@ function renderProjectGrid(container, list, view) {
 }
 
 /* ---------------- Media cards (project page) ---------------- */
-function mediaLayout(p) {
-    const ms = p.media, n = ms.length, allV = ms.every(m => isVertical(m.format)), allH = ms.every(m => !isVertical(m.format));
+/* One chapter = up to two grids: verticals together, horizontals together, each packed in whole cells. */
+function layoutList(ms) {
+    const n = ms.length, allV = ms.every(m => isVertical(m.format));
     return ms.map((m, i) => {
         const f = m.format;
         if (n === 1) return isVertical(f) ? span(f, 4, 'lg:col-start-5') : span(f, 12, '', 2);
-        if (allV) {
-            const c = n >= 4 ? 3 : 4;
-            return span(f, c, n === 2 && i === 0 ? 'lg:col-start-3' : '');
+        if (allV) {                                    // rows of 3 (or 4 when n divides by 4); a short last row is centred
+            const rw = n >= 4 && n % 4 === 0 && n % 3 !== 0 ? 4 : Math.min(n, 3), cols = rw === 4 ? 3 : 4, r = n % rw;
+            let extra = '';
+            if (rw === 2 && i === 0) extra = 'lg:col-start-3';
+            else if (rw === 3 && r === 1 && i === n - 1) extra = 'lg:col-start-5';
+            else if (rw === 3 && r === 2 && i === n - 2) extra = 'lg:col-start-3';
+            return span(f, cols, extra);
         }
-        if (allH && n === 2) return span(f, 6, '', 2);
-        if (allH && n >= 4) return span(f, i === n - 1 && n % 2 ? 12 : 6, '', 1);
-        if (i === 0) return span(f, isVertical(f) ? 4 : 8, '', 2);
-        return span(f, 4);
+        if (n === 2) return span(f, 6, '', 2);
+        if (n === 3) return i === 0 ? span(f, 8, '', 2) : span(f, 4);
+        return span(f, i === n - 1 && n % 2 ? 12 : 6, '', 1);
     });
 }
+function mediaGrids(p, ms) {
+    const wrap = document.createDocumentFragment();
+    const V = ms.filter(m => isVertical(m.format)), H = ms.filter(m => !isVertical(m.format));
+    if (H.length === 1 && V.length === 1) {            // one film + one vertical: a single 8 + 4 block
+        const g = document.createElement('div');
+        g.className = GRID + ' mb-5 md:mb-6';
+        g.appendChild(mediaCard(p, H[0], span(H[0].format, 8, '', 2)));
+        g.appendChild(mediaCard(p, V[0], span(V[0].format, 4)));
+        wrap.appendChild(g);
+        return wrap;
+    }
+    [H, V].forEach(group => {
+        if (!group.length) return;
+        const g = document.createElement('div');
+        g.className = GRID + ' mb-5 md:mb-6';
+        const layout = layoutList(group);
+        group.forEach((m, i) => g.appendChild(mediaCard(p, m, layout[i])));
+        wrap.appendChild(g);
+    });
+    return wrap;
+}
 function mediaCard(p, m, layoutClass) {
-    const src = m.video || m.thumbnail;
-    const playable = !!(m.video || m.kind === 'photo');
+    const url = m.video || (m.kind === 'photo' && m.thumbnail ? m.thumbnail : '');
+    const playable = !!url, external = !playable && !!m.link;
     const label = m.title || p.title;
-    const el = document.createElement('div');
-    el.className = `${mobileH(m.format)} md:h-auto ${layoutClass} luxury-card rounded-2xl overflow-hidden relative group flex flex-col justify-between ${playable ? 'cursor-pointer' : ''}`;
-    const kindLabel = { video: 'Film', reel: 'Reel', photo: 'Photo' }[m.kind] || m.kind;
+    const el = document.createElement(external ? 'a' : 'div');
+    if (external) { el.href = m.link; el.target = '_blank'; el.rel = 'noopener'; }
+    el.className = `${mobileH(m.format)} md:h-auto ${layoutClass} luxury-card rounded-2xl overflow-hidden relative group flex flex-col justify-between ${playable || external ? 'cursor-pointer' : ''}`;
+    const kindLabel = KIND_LABEL[m.kind] || m.kind;
+    const bg = m.thumbnail
+        ? `<img src="${esc(m.thumbnail)}" alt="${esc(label)}" loading="lazy" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 group-hover:opacity-95 transition duration-700">
+           <div class="absolute inset-0 bg-gradient-to-t from-obsidian/90 via-transparent to-black/20"></div>`
+        : `<div class="absolute inset-0 bg-gradient-to-br from-white/[0.06] to-white/[0.01]"></div>
+           <div class="absolute inset-0 flex items-center justify-center text-neutral-600 font-serif text-6xl select-none">↗</div>`;
     el.innerHTML = `
-        <img src="${esc(m.thumbnail)}" alt="${esc(label)}" loading="lazy" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 group-hover:opacity-95 transition duration-700">
-        <div class="absolute inset-0 bg-gradient-to-t from-obsidian/90 via-transparent to-black/20"></div>
+        ${bg}
         <div class="relative z-10 p-4 md:p-5 flex justify-between items-center">
             <span class="px-3 py-1 rounded-full bg-black/55 backdrop-blur-md border border-white/10 text-[10px] uppercase tracking-widest text-neutral-300">${kindLabel}</span>
             <span class="px-2.5 py-1 rounded bg-black/60 text-[10px] font-mono text-neutral-400 border border-white/10">${esc(m.format)}</span>
         </div>
-        ${playable ? `<div class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"><div class="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/25 flex items-center justify-center group-hover:bg-white group-hover:text-black transition duration-300"><svg class="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>` : ''}
+        ${playable && m.thumbnail ? `<div class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"><div class="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/25 flex items-center justify-center group-hover:bg-white group-hover:text-black transition duration-300"><svg class="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>` : ''}
         <div class="relative z-10 p-5 flex items-center justify-between gap-3">
-            <span dir="auto" class="text-sm text-white truncate">${m.title ? esc(m.title) : ''}</span>
+            <span dir="auto" class="text-sm text-white truncate">${m.title ? esc(m.title) : (external ? 'Open ↗' : '')}</span>
             ${m.instagramUrl ? `<a href="${esc(m.instagramUrl)}" target="_blank" rel="noopener" data-ig class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white hover:text-black backdrop-blur-md border border-white/15 text-[11px] text-white transition whitespace-nowrap">Verify on IG ↗</a>` : ''}
         </div>`;
     if (playable) el.addEventListener('click', (e) => {
         if (e.target.closest('[data-ig]')) return;
-        openModal({ title: m.title ? `${p.title} — ${m.title}` : p.title, url: src, format: m.format, instagramUrl: m.instagramUrl });
+        openModal({ title: m.title ? `${p.title} — ${m.title}` : p.title, url, format: m.format, instagramUrl: m.instagramUrl });
     });
     return el;
 }
 
 /* ---------------- Story blocks (project page) ---------------- */
-function storyHTML(p) {
+function factsHTML(p) {
     const facts = (p.facts || []).map(x => `
         <div class="luxury-card rounded-2xl p-5 md:p-6">
             <div class="font-serif text-3xl md:text-4xl text-white mb-1">${esc(x.value)}</div>
             <div class="text-xs uppercase tracking-widest text-neutral-500">${esc(x.label)}</div>
         </div>`).join('');
-    const chapters = (p.chapters || []).map((c, i) => `
-        <div class="luxury-card rounded-2xl p-6 md:p-8">
-            <p class="text-xs font-mono text-neutral-500 mb-3">${String(i + 1).padStart(2, '0')}</p>
-            <h3 dir="auto" class="font-serif text-2xl text-white mb-3">${esc(c.title)}</h3>
-            <p dir="auto" class="text-sm text-neutral-400 font-light leading-relaxed">${esc(c.text)}</p>
-        </div>`).join('');
-    const n = (p.chapters || []).length;
-    return (facts ? `<div class="grid grid-cols-1 sm:grid-cols-${Math.min((p.facts || []).length, 3)} gap-5 md:gap-6 mb-5 md:mb-6">${facts}</div>` : '')
-        + (chapters ? `<div class="grid grid-cols-1 ${n > 1 ? 'md:grid-cols-2' : ''} gap-5 md:gap-6 mb-12 md:mb-14">${chapters}</div>` : '');
+    return facts ? `<div class="grid grid-cols-1 sm:grid-cols-${Math.min((p.facts || []).length, 3)} gap-5 md:gap-6 mb-12 md:mb-14">${facts}</div>` : '';
+}
+function chapterHead(i, c) {
+    return `<div class="mb-6 md:mb-8 max-w-3xl">
+        <p class="text-xs font-mono text-neutral-500 mb-3">${String(i + 1).padStart(2, '0')}</p>
+        <h2 dir="auto" class="font-serif text-3xl md:text-4xl text-white mb-3">${esc(c.title)}</h2>
+        ${c.text ? `<p dir="auto" class="text-sm md:text-base text-neutral-400 font-light leading-relaxed">${esc(c.text)}</p>` : ''}
+    </div>`;
+}
+function accountChip(p) {
+    return p.account ? `<a href="https://www.instagram.com/${esc(p.account.handle)}/" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-md bg-white/10 border border-white/10 text-xs text-white hover:bg-white hover:text-black transition">@${esc(p.account.handle)} · ${esc(p.account.followers)} ↗</a>` : '';
 }

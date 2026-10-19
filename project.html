@@ -17,9 +17,12 @@
     <main class="max-w-7xl mx-auto px-5 md:px-6 pt-28 md:pt-36">
         <a href="work.html" class="link-arrow mb-8 md:mb-10">← All projects</a>
         <div id="project-head" class="mb-10 md:mb-12"></div>
-        <div id="project-story"></div>
-        <p class="eyebrow mb-5 md:mb-6">Deliverables · <span id="deliv"></span></p>
-        <div id="project-grid"></div>
+        <div id="project-facts"></div>
+        <div id="project-chapters"></div>
+        <div id="project-flat" class="hidden">
+            <p class="eyebrow mb-5 md:mb-6">Deliverables · <span id="deliv"></span></p>
+            <div id="project-grid"></div>
+        </div>
         <div id="project-nav" class="mt-16 grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6"></div>
     </main>
 
@@ -42,14 +45,31 @@
                 ${p.description ? `<p dir="auto" class="text-neutral-400 text-sm md:text-base font-light leading-relaxed max-w-2xl mb-6">${esc(p.description)}</p>` : ''}
                 <div class="flex flex-wrap gap-2">
                     <span class="px-3 py-1.5 rounded-md bg-white/10 border border-white/10 text-xs text-white">${esc(cat ? cat.label : p.category)}</span>
+                    ${accountChip(p)}
                     ${(p.scope || []).map(t => `<span class="px-3 py-1.5 rounded-md bg-white/5 border border-white/5 text-xs text-neutral-300">${esc(t)}</span>`).join('')}
                 </div>`;
-            $('project-story').innerHTML = storyHTML(p);
-            $('deliv').textContent = deliverablesText(p);
-            const grid = $('project-grid');
-            grid.className = GRID;
-            const layout = mediaLayout(p);
-            p.media.forEach((m, i) => grid.appendChild(mediaCard(p, m, layout[i])));
+            $('project-facts').innerHTML = factsHTML(p);
+            const chapters = p.chapters || [];
+            if (chapters.some(c => c.media && c.media.length)) {
+                chapters.forEach((c, i) => {
+                    const sec = document.createElement('section');
+                    sec.className = 'mb-12 md:mb-16';
+                    sec.innerHTML = chapterHead(i, c);
+                    if (c.media && c.media.length) sec.appendChild(mediaGrids(p, c.media));
+                    $('project-chapters').appendChild(sec);
+                });
+            } else {
+                if (chapters.length) {
+                    const n = chapters.length;
+                    $('project-chapters').innerHTML = `<div class="grid grid-cols-1 ${n > 1 ? 'md:grid-cols-2' : ''} gap-5 md:gap-6 mb-12 md:mb-14">` + chapters.map((c, i) => `
+                        <div class="luxury-card rounded-2xl p-6 md:p-8"><p class="text-xs font-mono text-neutral-500 mb-3">${String(i + 1).padStart(2, '0')}</p>
+                        <h3 dir="auto" class="font-serif text-2xl text-white mb-3">${esc(c.title)}</h3>
+                        <p dir="auto" class="text-sm text-neutral-400 font-light leading-relaxed">${esc(c.text)}</p></div>`).join('') + '</div>';
+                }
+                $('project-flat').classList.remove('hidden');
+                $('deliv').textContent = deliverablesText(p);
+                $('project-grid').appendChild(mediaGrids(p, p.media));
+            }
 
             const nav = (q, dir) => `<a href="project.html?p=${encodeURIComponent(q.slug)}" class="luxury-card rounded-2xl p-6 flex flex-col gap-2 group ${dir === 'next' ? 'sm:text-right' : ''}">
                 <span class="eyebrow">${dir === 'next' ? 'Next project →' : '← Previous project'}</span>

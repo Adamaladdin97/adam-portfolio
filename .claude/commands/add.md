@@ -13,7 +13,7 @@ Read `CLAUDE.md` first (site rules + data model), then do these steps in order.
 
 2. **New project or extra deliverable?** The site is *project-centric*: one project = one client campaign holding all its deliverables.
    - Search `projects` in `data.js` for the same client (match `client`, `slug`, or title). If it exists → **append to its `media[]`** (do not create a duplicate project).
-   - Otherwise create a **new project**. Group everything in the input that belongs to the same client/campaign into ONE project (e.g. a commercial + its reels + photos).
+   - Otherwise create a **new project** with chapters. Group everything in the input that belongs to the same client/campaign into ONE project (e.g. a commercial + its reels + photos).
 
 3. **Pick category & formats** (the only design decisions you make):
    - `category`: `commercial` (brand films, documentaries) · `social` (full social campaigns, personal brand) · `events` (events, seminars, live multi-cam) · `podcasts` · `reels` (a loose one-off reel with no campaign → append to the single `reels` collection project's `media[]`, don't create a new project) · `photo`.
@@ -28,11 +28,13 @@ Read `CLAUDE.md` first (site rules + data model), then do these steps in order.
    - Thumbnails: his image if given; YouTube → `https://img.youtube.com/vi/<id>/maxresdefault.jpg` (fallback `hqdefault.jpg`) saved into `assets/images/`; local video → extract a frame with ffmpeg; Instagram → fetch the cover from `https://www.instagram.com/<reel|p>/<id>/embed` (`EmbeddedMediaImage`) and save it locally (those CDN URLs expire). If no thumbnail is possible, tell him exactly what to send.
    - Instagram reel: `video` = the reel URL (opens in the lightbox), `instagramUrl` = same URL ("Verify on Instagram").
 
-5. **Edit `data.js` only** (never the HTML/JS pages). New projects go right after the `home` projects at the top of the list (newest first). Keep `slug` unique kebab-case. Run `node --check data.js`.
+5. **Chapters.** Put each deliverable in the chapter it belongs to (e.g. "Studio", "Episodes", "Reels", "Live", "Behind the scenes"); keep the flat `media[]` in sync; set `cover`/`coverFormat`. Keep chapter text to 1–3 sentences from what Adam said. An account chip needs `account: { handle, followers }` (read the follower count from the public profile's og:description).
 
-6. **Verify.** Serve the folder (`python3 -m http.server 8765`), open `work.html` and the new `project.html?p=<slug>` in the browser tool; confirm no overlap, images load, video opens in the lightbox. Stop the server.
+6. **Edit `data.js` only** (never the HTML/JS pages). New projects go right after the `home` projects at the top of the list (newest first). Keep `slug` unique kebab-case. Run `node --check data.js`.
 
-7. **Publish:**
+7. **Verify.** Serve the folder (`python3 -m http.server 8765`), open `work.html` and the new `project.html?p=<slug>` in the browser tool; confirm no overlap, images load, video opens in the lightbox. Stop the server.
+
+8. **Publish:**
    ```
    git add . && git commit -m "Add: <project name>" && git push
    ```

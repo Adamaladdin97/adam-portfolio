@@ -12,7 +12,8 @@ Static multi-page site (no build step). Live: https://adamaladdin97.github.io/ad
 - `assets/images`, `assets/videos` — media (kebab-case names).
 
 ## Data model (project-centric)
-A **project** = one client campaign / case study with all its deliverables in `media[]` (films, reels, photos). Never add loose single files as separate cards when they belong to an existing client — append to that project's `media[]`.
+A **project** = one client campaign / case study told in `chapters[]` (title + 1–3 sentence text + that chapter's `media[]`), plus `scope`, `facts`, `account` (Instagram handle + followers) and a `cover`. The flat `media[]` must list every deliverable (used for the cover fallback and counts). Never add loose single files as separate cards when they belong to an existing client — add them to the right chapter (or a new chapter) of that project.
+Media from Instagram/YouTube/Drive is turned into a local thumbnail in `assets/images/`; Google Photos / Samsung links have no accessible thumbnail, so they become plain link tiles (`link`) unless Adam provides the image.
 
 ## Rules
 - To add/change work edit `data.js` only. Never edit the HTML/JS pages for content.
