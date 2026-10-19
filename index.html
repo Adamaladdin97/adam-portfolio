@@ -42,12 +42,12 @@
     <nav class="fixed top-0 w-full z-40 bg-obsidian/80 backdrop-blur-md border-b border-white/5">
         <div class="max-w-7xl mx-auto px-5 md:px-6 py-4 md:py-5 flex justify-between items-center gap-4">
             <div class="min-w-0">
-                <a href="#" class="font-serif text-xl md:text-3xl tracking-wider text-white whitespace-nowrap">ADAM ALADDIN</a>
+                <a href="#" class="font-serif text-lg sm:text-xl md:text-3xl tracking-wider text-white whitespace-nowrap">ADAM ALADDIN</a>
                 <p class="text-[11px] text-neutral-400 tracking-widest uppercase mt-0.5 hidden lg:block">Director & Visual Creator — Turning chaos into high-end visuals</p>
             </div>
             <div class="flex items-center gap-4 md:gap-8 text-[11px] md:text-xs tracking-widest uppercase text-neutral-400">
-                <a href="#works" class="hover:text-white transition">Works</a>
-                <a href="#about" class="hover:text-white transition">About</a>
+                <a href="#works" class="hover:text-white transition hidden sm:inline">Works</a>
+                <a href="#about" class="hover:text-white transition hidden sm:inline">About</a>
                 <a href="#contact" class="px-3 md:px-4 py-2 rounded-full border border-white/15 text-white hover:bg-white hover:text-black transition whitespace-nowrap">Let's Talk ↗</a>
             </div>
         </div>
@@ -89,7 +89,7 @@
         </div>
 
         <!-- Bento grid: every cell is exactly 300px tall on desktop; cards span whole cells so nothing overlaps -->
-        <div id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-6 md:auto-rows-[300px] grid-flow-dense"></div>
+        <div id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5 md:gap-6 md:auto-rows-[300px] grid-flow-dense"></div>
         <p id="empty-msg" class="hidden text-center text-neutral-500 text-sm py-16">Nothing here yet.</p>
     </main>
 
@@ -174,9 +174,14 @@
         const MOBILE_H = { '16:9': 'h-[240px]', '9:16': 'h-[480px]', '4:5': 'h-[420px]', '1:1': 'h-[340px]' };
         const CAT_LABEL = { commercial: 'Commercial', reels: 'Reel', events: 'Event', photo: 'Photography' };
 
+        // Desktop (lg, 12 cols) uses the maps above; tablet (md, 2 cols) is derived from them.
         function spanFor(item, filter) {
-            if (filter === 'all') return item.featured && item.format === '16:9' ? SPANS_ALL.featured : (SPANS_ALL[item.format] || SPANS_ALL['16:9']);
-            return SPANS_FILTERED[item.format] || SPANS_FILTERED['16:9'];
+            const d = filter === 'all'
+                ? (item.featured && item.format === '16:9' ? SPANS_ALL.featured : (SPANS_ALL[item.format] || SPANS_ALL['16:9']))
+                : (SPANS_FILTERED[item.format] || SPANS_FILTERED['16:9']);
+            const rows = /row-span-2/.test(d) ? 'md:row-span-2' : 'md:row-span-1';
+            const wide = filter === 'all' && /col-span-8/.test(d);
+            return `${wide ? 'md:col-span-2' : 'md:col-span-1'} ${rows} ${d.replace(/md:/g, 'lg:')}`;
         }
 
         /* ---------- Video helpers ---------- */
