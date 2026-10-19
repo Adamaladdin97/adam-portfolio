@@ -17,6 +17,8 @@
     <main class="max-w-7xl mx-auto px-5 md:px-6 pt-28 md:pt-36">
         <a href="work.html" class="link-arrow mb-8 md:mb-10">← All projects</a>
         <div id="project-head" class="mb-10 md:mb-12"></div>
+        <div id="project-story"></div>
+        <p class="eyebrow mb-5 md:mb-6">Deliverables · <span id="deliv"></span></p>
         <div id="project-grid"></div>
         <div id="project-nav" class="mt-16 grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6"></div>
     </main>
@@ -29,19 +31,21 @@
         renderChrome('work');
 
         const slug = new URLSearchParams(location.search).get('p');
-        const idx = projects.findIndex(p => p.slug === slug);
+        const idx = PROJECTS.findIndex(p => p.slug === slug);
         if (idx < 0) { location.replace('work.html'); }
         else {
-            const p = projects[idx], cat = catById(p.category);
+            const p = PROJECTS[idx], cat = catById(p.category);
             document.title = `${p.title} — ADAM ALADDIN`;
             $('project-head').innerHTML = `
                 <p dir="auto" class="eyebrow mb-3">${esc(p.client)}</p>
                 <h1 dir="auto" class="font-serif text-4xl md:text-6xl text-white leading-tight mb-5">${esc(p.title)}</h1>
                 ${p.description ? `<p dir="auto" class="text-neutral-400 text-sm md:text-base font-light leading-relaxed max-w-2xl mb-6">${esc(p.description)}</p>` : ''}
                 <div class="flex flex-wrap gap-2">
-                    <span class="px-3 py-1.5 rounded-md bg-white/5 border border-white/5 text-xs text-neutral-300">${esc(cat ? cat.label : p.category)}</span>
-                    <span class="px-3 py-1.5 rounded-md bg-white/5 border border-white/5 text-xs text-neutral-300">${esc(deliverablesText(p))}</span>
+                    <span class="px-3 py-1.5 rounded-md bg-white/10 border border-white/10 text-xs text-white">${esc(cat ? cat.label : p.category)}</span>
+                    ${(p.scope || []).map(t => `<span class="px-3 py-1.5 rounded-md bg-white/5 border border-white/5 text-xs text-neutral-300">${esc(t)}</span>`).join('')}
                 </div>`;
+            $('project-story').innerHTML = storyHTML(p);
+            $('deliv').textContent = deliverablesText(p);
             const grid = $('project-grid');
             grid.className = GRID;
             const layout = mediaLayout(p);
@@ -50,7 +54,7 @@
             const nav = (q, dir) => `<a href="project.html?p=${encodeURIComponent(q.slug)}" class="luxury-card rounded-2xl p-6 flex flex-col gap-2 group ${dir === 'next' ? 'sm:text-right' : ''}">
                 <span class="eyebrow">${dir === 'next' ? 'Next project →' : '← Previous project'}</span>
                 <span dir="auto" class="font-serif text-2xl text-white group-hover:underline">${esc(q.title)}</span></a>`;
-            const prev = projects[(idx - 1 + projects.length) % projects.length], next = projects[(idx + 1) % projects.length];
+            const prev = PROJECTS[(idx - 1 + PROJECTS.length) % PROJECTS.length], next = PROJECTS[(idx + 1) % PROJECTS.length];
             $('project-nav').innerHTML = nav(prev, 'prev') + nav(next, 'next');
         }
 

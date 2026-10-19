@@ -16,11 +16,11 @@ Read `CLAUDE.md` first (site rules + data model), then do these steps in order.
    - Otherwise create a **new project**. Group everything in the input that belongs to the same client/campaign into ONE project (e.g. a commercial + its reels + photos).
 
 3. **Pick category & formats** (the only design decisions you make):
-   - `category`: `commercial` (brand films, YouTube, documentaries) · `social` (vertical reels, UGC, personal brand) · `events` (events, seminars, podcasts, multi-cam) · `photo` (photography).
+   - `category`: `commercial` (brand films, documentaries) · `social` (full social campaigns, personal brand) · `events` (events, seminars, live multi-cam) · `podcasts` · `reels` (a loose one-off reel with no campaign → append to the single `reels` collection project's `media[]`, don't create a new project) · `photo`.
    - Each media item: `kind` = `video` | `reel` | `photo`; `format` = real aspect ratio (`16:9`, `9:16`, `1:1`, `4:5`) — check files with `ffprobe` / `sips`, never guess.
    - Put the strongest deliverable FIRST in `media[]` (it becomes the project cover). Prefer a 16:9 film first when there is one.
    - `wide: true` only for a flagship 16:9 project; `home: true` only if Adam says it should be on the home page (keep exactly 4 home projects, and the set should be one wide 16:9 + one vertical + two 16:9 so the home grid packs perfectly — if he adds one, ask which to replace).
-   - Write a `description` only from facts he gave. Never invent results, numbers, awards or dates.
+   - Write `description`, `scope` (chips), `facts` (2–3 headline numbers) and `chapters` (short story blocks) only from facts he gave — concise, professional English, no hype. Never invent results, numbers, awards or dates. If he tells a long story, compress it to what a client scanning in 10 seconds needs.
 
 4. **Handle media.**
    - Copy local files into `assets/images/` or `assets/videos/` with kebab-case names.

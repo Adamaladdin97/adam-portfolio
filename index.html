@@ -84,16 +84,16 @@
             b.addEventListener('click', () => openModal({ title: sr.title, url: sr.video, format: '16:9' }));
         }
 
-        // Selected projects (projects with home: true)
-        const home = projects.filter(p => p.home);
+        // Selected projects (home: true)
+        const home = PROJECTS.filter(p => p.home);
         $('home-grid').className = GRID;
-        renderProjectGrid($('home-grid'), home, 'all');
+        renderProjectGrid($('home-grid'), home, 'home');
 
         // Category tiles
-        const liveCats = categories.filter(c => projects.some(p => p.category === c.id));
-        $('cat-tiles').classList.add(liveCats.length === 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-4');
+        const liveCats = categories.filter(c => PROJECTS.some(p => p.category === c.id));
+        $('cat-tiles').classList.add({ 3: 'lg:grid-cols-3', 4: 'lg:grid-cols-4', 5: 'lg:grid-cols-5', 6: 'lg:grid-cols-3' }[liveCats.length] || 'lg:grid-cols-3');
         $('cat-tiles').innerHTML = liveCats.map(c => {
-            const n = projects.filter(p => p.category === c.id).length;
+            const n = PROJECTS.filter(p => p.category === c.id).length;
             if (!n) return '';
             return `<a href="work.html?cat=${c.id}" class="luxury-card rounded-2xl p-6 md:p-7 flex flex-col gap-10 group">
                 <span class="text-xs font-mono text-neutral-500">${String(n).padStart(2, '0')} PROJECTS</span>

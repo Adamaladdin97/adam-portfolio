@@ -33,14 +33,14 @@
         const grid = $('work-grid');
         grid.className = GRID;
         const pillCls = 'filter-btn px-4 md:px-5 py-2 rounded-full text-[11px] md:text-xs tracking-widest uppercase border border-white/10 text-neutral-400 hover:text-white transition';
-        const filters = [{ id: 'all', label: 'All Projects' }, ...categories.filter(c => projects.some(p => p.category === c.id))];
+        const filters = [{ id: 'all', label: 'All Projects' }, ...categories.filter(c => PROJECTS.some(p => p.category === c.id))];
         $('filters').innerHTML = filters.map(f => `<button data-filter="${f.id}" class="${pillCls}">${esc(f.label)}</button>`).join('');
 
         function show(cat) {
             if (!filters.some(f => f.id === cat)) cat = 'all';
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === cat));
-            const list = cat === 'all' ? projects : projects.filter(p => p.category === cat);
-            renderProjectGrid(grid, list, cat === 'all' ? 'all' : 'filtered');
+            const list = cat === 'all' ? PROJECTS : PROJECTS.filter(p => p.category === cat);
+            renderProjectGrid(grid, list, 'work');
             $('empty-msg').classList.toggle('hidden', list.length > 0);
             const deliverables = list.reduce((s, p) => s + p.media.length, 0);
             $('work-sub').textContent = `${list.length} projects · ${deliverables} deliverables`;

@@ -9,6 +9,9 @@ tailwind.config = {
     } }
 };
 
+/* Only published projects (drafts or projects without media stay hidden) */
+const PROJECTS = projects.filter(p => !p.draft && p.media.length);
+
 const $ = (id) => document.getElementById(id);
 const esc = (s = '') => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const waLink = () => 'https://wa.me/' + siteConfig.whatsapp + '?text=' + encodeURIComponent(siteConfig.whatsappMessage);
@@ -123,17 +126,46 @@ function deliverablesText(p) {
 }
 
 /* ---------------- Project cards (home + work) ---------------- */
-function projectSpan(p, view) {
-    const f = projectFormat(p);
-    if (view === 'all') return span(f, p.wide && f === '16:9' ? 8 : 4);
-    return span(f, f === '16:9' ? 6 : 4);
+/* Work page: every card is one 4-col slot. Verticals are 1 slot x 2 rows, horizontals 1 slot x 1 row,
+   so we order them in blocks that fill whole 3x2 rectangles (3V | 2V+2H | 1V+4H | 6H) and widen a short last row. */
+function layoutProjects(list) {
+    const V = list.filter(p => isVertical(projectFormat(p))), H = list.filter(p => !isVertical(projectFormat(p)));
+    const seq = [], push = (p, cols, extra = '', rows) => seq.push({ p, cls: span(projectFormat(p), cols, extra, rows) });
+    if (!H.length) {                                   // only verticals: centre short sets
+        V.forEach((p, i) => push(p, 4, V.length === 1 ? 'lg:col-start-5' : (V.length === 2 && i === 0 ? 'lg:col-start-3' : '')));
+        return seq;
+    }
+    if (!V.length) {                                   // only horizontals: rows of 3, widen the last row
+        H.forEach((p, i) => { const r = H.length % 3, left = H.length - i; push(p, r === 1 && left === 1 ? 12 : r === 2 && left <= 2 ? 6 : 4); });
+        return seq;
+    }
+    let hs = [...H], vs = [...V];
+    for (let i = 0; i < 3 && hs.length > 3; i++) push(hs.shift(), 4);        // opening row of 3 horizontals
+    while (vs.length >= 3) { for (let i = 0; i < 3; i++) push(vs.shift(), 4); }
+    if (vs.length) {                                   // leftover verticals + the horizontals that complete their block
+        vs.forEach(p => push(p, 4));
+        const t = hs.splice(0, vs.length === 2 ? 2 : 4), k = t.length;
+        t.forEach((p, i) => {
+            if (vs.length === 1 && k === 1) push(p, 8, '', 2);
+            else if (vs.length === 1 && k === 2) push(p, 8, '', 1);
+            else if (vs.length === 1 && k === 3 && i === 2) push(p, 8, '', 1);
+            else if (vs.length === 2 && k === 1) push(p, 4, '', 2);
+            else push(p, 4);
+        });
+    }
+    hs.forEach((p, i) => { const r = hs.length % 3, left = hs.length - i; push(p, r === 1 && left === 1 ? 12 : r === 2 && left <= 2 ? 6 : 4); });
+    return seq;
 }
-function projectCard(p, view) {
+function homeSpan(p) {
+    const f = projectFormat(p);
+    return span(f, p.wide && f === '16:9' ? 8 : 4);
+}
+function projectCard(p, spanClass) {
     const cat = catById(p.category);
     const multi = p.media.length > 1;
     const a = document.createElement('a');
     a.href = `project.html?p=${encodeURIComponent(p.slug)}`;
-    a.className = `${mobileH(projectFormat(p))} md:h-auto ${projectSpan(p, view)} luxury-card rounded-2xl overflow-hidden relative group cursor-pointer flex flex-col justify-between`;
+    a.className = `${mobileH(projectFormat(p))} md:h-auto ${spanClass} luxury-card rounded-2xl overflow-hidden relative group cursor-pointer flex flex-col justify-between`;
     a.innerHTML = `
         <img src="${esc(projectCover(p))}" alt="${esc(p.title)}" loading="lazy" class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 group-hover:opacity-90 transition duration-700">
         <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/30 to-transparent"></div>
@@ -150,9 +182,11 @@ function projectCard(p, view) {
         </div>`;
     return a;
 }
+/* view: 'home' (hand-picked 4, one wide) or 'work' (auto-packed) */
 function renderProjectGrid(container, list, view) {
     container.innerHTML = '';
-    list.forEach(p => container.appendChild(projectCard(p, view)));
+    if (view === 'home') list.forEach(p => container.appendChild(projectCard(p, homeSpan(p))));
+    else layoutProjects(list).forEach(({ p, cls }) => container.appendChild(projectCard(p, cls)));
 }
 
 /* ---------------- Media cards (project page) ---------------- */
@@ -195,4 +229,22 @@ function mediaCard(p, m, layoutClass) {
         openModal({ title: m.title ? `${p.title} — ${m.title}` : p.title, url: src, format: m.format, instagramUrl: m.instagramUrl });
     });
     return el;
+}
+
+/* ---------------- Story blocks (project page) ---------------- */
+function storyHTML(p) {
+    const facts = (p.facts || []).map(x => `
+        <div class="luxury-card rounded-2xl p-5 md:p-6">
+            <div class="font-serif text-3xl md:text-4xl text-white mb-1">${esc(x.value)}</div>
+            <div class="text-xs uppercase tracking-widest text-neutral-500">${esc(x.label)}</div>
+        </div>`).join('');
+    const chapters = (p.chapters || []).map((c, i) => `
+        <div class="luxury-card rounded-2xl p-6 md:p-8">
+            <p class="text-xs font-mono text-neutral-500 mb-3">${String(i + 1).padStart(2, '0')}</p>
+            <h3 dir="auto" class="font-serif text-2xl text-white mb-3">${esc(c.title)}</h3>
+            <p dir="auto" class="text-sm text-neutral-400 font-light leading-relaxed">${esc(c.text)}</p>
+        </div>`).join('');
+    const n = (p.chapters || []).length;
+    return (facts ? `<div class="grid grid-cols-1 sm:grid-cols-${Math.min((p.facts || []).length, 3)} gap-5 md:gap-6 mb-5 md:mb-6">${facts}</div>` : '')
+        + (chapters ? `<div class="grid grid-cols-1 ${n > 1 ? 'md:grid-cols-2' : ''} gap-5 md:gap-6 mb-12 md:mb-14">${chapters}</div>` : '');
 }
