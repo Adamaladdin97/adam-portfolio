@@ -24,7 +24,7 @@ const siteConfig = {
     },
     whatsapp: "96566534771",          // country code + number, digits only (Kuwait +965)
     whatsappMessage: "Hi Adam, I saw your portfolio and I'd like to talk about a project.",
-    email: "contact@adamaladdin.com"
+    email: "adamaladdin97@gmail.com"
 };
 
 const portfolioItems = [
