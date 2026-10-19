@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work — ADAM ALADDIN</title>
+    <meta name="description" content="All projects by Adam Aladdin: commercials, social campaigns, events and podcasts.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-grain antialiased selection:bg-white selection:text-black">
+    <div id="site-nav"></div>
+
+    <main class="max-w-7xl mx-auto px-5 md:px-6 pt-28 md:pt-36">
+        <p class="eyebrow mb-3">Work</p>
+        <h1 class="font-serif text-4xl md:text-6xl text-white mb-4">All Projects</h1>
+        <p id="work-sub" class="text-neutral-400 text-sm md:text-base font-light mb-10 md:mb-12"></p>
+        <div id="filters" class="flex flex-wrap items-center gap-2 md:gap-3 mb-10 md:mb-12"></div>
+        <div id="work-grid" class="min-h-[300px]"></div>
+        <p id="empty-msg" class="hidden text-center text-neutral-500 text-sm py-16">Nothing here yet.</p>
+    </main>
+
+    <div id="site-footer"></div>
+    <script src="data.js"></script>
+    <script src="common.js"></script>
+    <script>
+
+        renderChrome('work');
+
+        const grid = $('work-grid');
+        grid.className = GRID;
+        const pillCls = 'filter-btn px-4 md:px-5 py-2 rounded-full text-[11px] md:text-xs tracking-widest uppercase border border-white/10 text-neutral-400 hover:text-white transition';
+        const filters = [{ id: 'all', label: 'All Projects' }, ...categories.filter(c => projects.some(p => p.category === c.id))];
+        $('filters').innerHTML = filters.map(f => `<button data-filter="${f.id}" class="${pillCls}">${esc(f.label)}</button>`).join('');
+
+        function show(cat) {
+            if (!filters.some(f => f.id === cat)) cat = 'all';
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === cat));
+            const list = cat === 'all' ? projects : projects.filter(p => p.category === cat);
+            renderProjectGrid(grid, list, cat === 'all' ? 'all' : 'filtered');
+            $('empty-msg').classList.toggle('hidden', list.length > 0);
+            const deliverables = list.reduce((s, p) => s + p.media.length, 0);
+            $('work-sub').textContent = `${list.length} projects · ${deliverables} deliverables`;
+            history.replaceState(null, '', cat === 'all' ? 'work.html' : `work.html?cat=${cat}`);
+        }
+        $('filters').addEventListener('click', (e) => { const b = e.target.closest('.filter-btn'); if (b) show(b.dataset.filter); });
+        show(new URLSearchParams(location.search).get('cat') || 'all');
+
+    </script>
+</body>
+</html>

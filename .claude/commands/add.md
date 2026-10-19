@@ -7,32 +7,35 @@ Adam is adding new work to his portfolio. Input:
 
 $ARGUMENTS
 
-Follow `CLAUDE.md` in this repo, then do these steps in order:
+Read `CLAUDE.md` first (site rules + data model), then do these steps in order.
 
-1. **Understand the input.** Extract: project/client name, what it is, links (YouTube / Vimeo / Instagram / TikTok), any local files (video, images) he mentioned or attached, view counts. If the title or client is missing, infer a sensible one from the context; ask only if a link/file is truly unclear.
+1. **Understand the input.** Extract: client / project name, what it is, every link (YouTube / Vimeo / Instagram / TikTok), local files (video, images), and any description or view counts he gave. Ask only if a link or file is truly unclear.
 
-2. **Pick the card format** (this is the one design decision you make):
-   - Horizontal video (commercial, YouTube, film, showreel piece) → `format: "16:9"`, `category: "commercial"`
-   - Event / seminar / podcast multi-cam → `format: "16:9"`, `category: "events"`
-   - Vertical reel / UGC / TikTok → `format: "9:16"`, `category: "reels"`
-   - Product / lifestyle photo → `format: "1:1"` (or `"4:5"` if portrait), `category: "photo"`
-   - Check the real dimensions of any file with `ffprobe`/`sips` instead of guessing.
-   - Set `featured: true` only if Adam says so (and remove it from the previous featured item).
+2. **New project or extra deliverable?** The site is *project-centric*: one project = one client campaign holding all its deliverables.
+   - Search `projects` in `data.js` for the same client (match `client`, `slug`, or title). If it exists → **append to its `media[]`** (do not create a duplicate project).
+   - Otherwise create a **new project**. Group everything in the input that belongs to the same client/campaign into ONE project (e.g. a commercial + its reels + photos).
 
-3. **Handle media.**
-   - Copy local files into `assets/images/` or `assets/videos/` with kebab-case names (never leave originals in other folders referenced).
-   - Optimize: images → max 1600px wide, JPG ≤ 400 KB (`sips`/`ffmpeg`); videos → if > 15 MB, don't commit; ask him for a YouTube/Vimeo link or compress with ffmpeg (H.264, CRF 26, 1080p max).
-   - Thumbnail: use his image if provided; otherwise extract a frame from the video with ffmpeg; for a link-only item, try the YouTube thumbnail (`https://img.youtube.com/vi/<id>/maxresdefault.jpg`, downloaded into `assets/images/`). If no thumbnail is possible, tell him exactly what to send.
-   - Instagram reel → `video: ""` and `instagramUrl: "<link>"` unless he gave a direct mp4; thumbnail is required.
+3. **Pick category & formats** (the only design decisions you make):
+   - `category`: `commercial` (brand films, YouTube, documentaries) · `social` (vertical reels, UGC, personal brand) · `events` (events, seminars, podcasts, multi-cam) · `photo` (photography).
+   - Each media item: `kind` = `video` | `reel` | `photo`; `format` = real aspect ratio (`16:9`, `9:16`, `1:1`, `4:5`) — check files with `ffprobe` / `sips`, never guess.
+   - Put the strongest deliverable FIRST in `media[]` (it becomes the project cover). Prefer a 16:9 film first when there is one.
+   - `wide: true` only for a flagship 16:9 project; `home: true` only if Adam says it should be on the home page (keep exactly 4 home projects, and the set should be one wide 16:9 + one vertical + two 16:9 so the home grid packs perfectly — if he adds one, ask which to replace).
+   - Write a `description` only from facts he gave. Never invent results, numbers, awards or dates.
 
-4. **Edit `data.js`.** Add the object to the TOP of `portfolioItems` (newest first), after the `featured` item if there is one. Remove any `placeholder: true` item of the same category if this replaces it. Do not touch `index.html`.
+4. **Handle media.**
+   - Copy local files into `assets/images/` or `assets/videos/` with kebab-case names.
+   - Optimize: images → max 1600px wide, JPG ≤ 400 KB (`sips -Z 1600 -s format jpeg -s formatOptions 80`); videos → if > 15 MB don't commit; ask for a YouTube/Vimeo link or compress with ffmpeg (H.264, CRF 26, 1080p max).
+   - Thumbnails: his image if given; YouTube → `https://img.youtube.com/vi/<id>/maxresdefault.jpg` (fallback `hqdefault.jpg`) saved into `assets/images/`; local video → extract a frame with ffmpeg; Instagram → fetch the cover from `https://www.instagram.com/<reel|p>/<id>/embed` (`EmbeddedMediaImage`) and save it locally (those CDN URLs expire). If no thumbnail is possible, tell him exactly what to send.
+   - Instagram reel: `video` = the reel URL (opens in the lightbox), `instagramUrl` = same URL ("Verify on Instagram").
 
-5. **Verify.** Open `index.html` in the browser tool (or run `node --check data.js` at minimum), confirm the new card renders with no overlap in "All" and in its category filter.
+5. **Edit `data.js` only** (never the HTML/JS pages). New projects go right after the `home` projects at the top of the list (newest first). Keep `slug` unique kebab-case. Run `node --check data.js`.
 
-6. **Publish:**
+6. **Verify.** Serve the folder (`python3 -m http.server 8765`), open `work.html` and the new `project.html?p=<slug>` in the browser tool; confirm no overlap, images load, video opens in the lightbox. Stop the server.
+
+7. **Publish:**
    ```
    git add . && git commit -m "Add: <project name>" && git push
    ```
-   Then tell Adam (in Egyptian Arabic, short): what was added, which format was chosen, and the live URL (it updates in ~1 minute).
+   Then tell Adam (Egyptian Arabic, short): what was added / which project it joined, the category and layout chosen, and the live URL https://adamaladdin97.github.io/adam-portfolio/ (updates in ~1 minute).
 
-If anything is missing (thumbnail, link), still add what you can, push, and list precisely what he should send next.
+If something is missing (thumbnail, link), still add what you can, push, and list precisely what to send next.

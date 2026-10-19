@@ -1,16 +1,29 @@
 # Adam Aladdin Portfolio — project rules
 
-Static site (no build step): `index.html` (layout/code) + `data.js` (ALL content) + `assets/`.
-Hosted on GitHub Pages / Cloudflare Pages — `git push` to `main` = live update.
+Static multi-page site (no build step). Live: https://adamaladdin97.github.io/adam-portfolio/ — hosted on GitHub Pages, `git push` to `main` = live in ~1 minute.
+
+## Files
+- `index.html` — short home: hero/showreel, 4 selected projects, category tiles, about teaser.
+- `work.html` — all projects + filter pills (`?cat=` supported).
+- `project.html?p=<slug>` — project case-study page (all deliverables of one project).
+- `about.html` — about, portrait, philosophy.
+- `data.js` — **ALL content** (`siteConfig`, `categories`, `projects`). Field docs at the top of the file.
+- `common.js` — shared nav/footer/lightbox + bento layout rules. `style.css` — theme tokens.
+- `assets/images`, `assets/videos` — media (kebab-case names).
+
+## Data model (project-centric)
+A **project** = one client campaign / case study with all its deliverables in `media[]` (films, reels, photos). Never add loose single files as separate cards when they belong to an existing client — append to that project's `media[]`.
 
 ## Rules
-- Never edit `index.html` to add work. Only append to `portfolioItems` in `data.js` (field docs are at the top of that file).
-- Card size is decided by `format` only ("16:9", "9:16", "1:1", "4:5"). Never hand-write grid spans.
-- At most ONE item has `featured: true` (a 16:9 hero card, 8 cols wide).
-- Keep the "Silent Luxury" look: obsidian/charcoal/off-white, no accent colors, no neon.
-- Media lives in `assets/images/` and `assets/videos/` (lowercase-kebab file names). Photos: JPG/WebP ≤ 400 KB, 1600px wide max. Videos: MP4 H.264 ≤ 15 MB; bigger → upload to YouTube/Vimeo and use the link instead.
-- Never embed Instagram widgets. Reels use a thumbnail + `instagramUrl` ("Verify on Instagram ↗").
-- Remove `placeholder: true` items when real work replaces them.
+- To add/change work edit `data.js` only. Never edit the HTML/JS pages for content.
+- Card/gallery sizes are decided by `format` (+ number of deliverables) in `common.js` — never hand-write grid spans in data.
+- Grid is always `grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 md:auto-rows-[300px] grid-flow-dense`; every card spans whole 300px cells → no overlap.
+- The home page shows exactly 4 projects (`home: true`): one `wide` 16:9, one vertical, two 16:9.
+- Silent Luxury look: obsidian `#060709`, charcoal `#0E1014`, off-white `#F4F4F6`, silver `#A1A1AA`, 1px `rgba(255,255,255,.08)` borders. No accent colors, no neon.
+- Never embed Instagram widgets on pages. Reels are thumbnail cards that open the embed in the lightbox on click, plus a "Verify on Instagram ↗" button.
+- Photos ≤ 400 KB (1600px wide max). Videos ≤ 15 MB MP4 H.264; bigger → YouTube/Vimeo link.
+- Never invent facts (descriptions, numbers, dates) — only what Adam provided.
+- WhatsApp contact is configured in `siteConfig` (no Instagram DM button).
 
 ## Update command
 `/add` — see `.claude/commands/add.md`.
