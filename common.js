@@ -58,7 +58,7 @@ function renderChrome(active) {
             <span>BASE: KUWAIT · SILENT LUXURY EDITION</span>
         </div>
     </footer>
-    <div id="lightbox" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl hidden items-center justify-center p-4 md:p-10" role="dialog" aria-modal="true">
+    <div id="lightbox" class="fixed inset-0 z-50 bg-black hidden items-center justify-center p-4 md:p-10" role="dialog" aria-modal="true">
         <button id="modal-close" class="absolute top-4 right-4 md:top-6 md:right-6 text-neutral-400 hover:text-white text-xs uppercase tracking-widest border border-white/15 px-4 py-2 rounded-full">Close ✕</button>
         <div class="w-full max-w-5xl flex flex-col items-center">
             <h3 id="modal-title" dir="auto" class="font-serif text-2xl text-white mb-4 self-start"></h3>
@@ -249,7 +249,7 @@ function mediaCard(p, m, layoutClass) {
     el.innerHTML = `
         ${bg}
         <div class="relative z-10 p-4 md:p-5 flex justify-between items-center">
-            <span class="px-3 py-1 rounded-full bg-black/55 backdrop-blur-md border border-white/10 text-[10px] uppercase tracking-widest text-neutral-300">${kindLabel}</span>
+            <span class="px-3 py-1 rounded-full bg-black/55 backdrop-blur-md border border-white/10 text-[10px] uppercase tracking-widest text-neutral-300">${m.views ? '▶ ' + esc(m.views) : kindLabel}</span>
             <span class="px-2.5 py-1 rounded bg-black/60 text-[10px] font-mono text-neutral-400 border border-white/10">${esc(m.format)}</span>
         </div>
         ${playable && m.thumbnail ? `<div class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"><div class="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/25 flex items-center justify-center group-hover:bg-white group-hover:text-black transition duration-300"><svg class="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>` : ''}

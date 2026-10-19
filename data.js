@@ -25,6 +25,7 @@
         thumbnail    "assets/images/x.jpg"  ("" = shows a plain tile)
         video        URL opened in the lightbox (YouTube / Vimeo / Instagram / Drive preview / mp4)
         instagramUrl "Verify on Instagram" link ("" to hide)
+        views        optional – real engagement badge, e.g. "1.4M Views" (never invent; shown instead of the kind label)
         link         optional external URL; used when there is no video (opens in a new tab)
    ============================================================ */
 
