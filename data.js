@@ -22,7 +22,8 @@ const siteConfig = {
         poster: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1800&q=80",
         loop: "https://assets.mixkit.co/videos/preview/mixkit-set-of-plateaus-seen-from-the-heights-in-a-sunset-26070-large.mp4"
     },
-    instagram: "https://instagram.com/",
+    whatsapp: "96566534771",          // country code + number, digits only (Kuwait +965)
+    whatsappMessage: "Hi Adam, I saw your portfolio and I'd like to talk about a project.",
     email: "contact@adamaladdin.com"
 };
 
