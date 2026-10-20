@@ -219,7 +219,7 @@ function projectCard(p, spanClass) {
     const multi = p.media.length > 1;
     const a = document.createElement('a');
     a.href = `project.html?p=${encodeURIComponent(p.slug)}`;
-    a.className = `${mobileH(projectFormat(p))} md:h-auto ${spanClass} luxury-card rounded-2xl overflow-hidden relative group cursor-pointer flex flex-col justify-between`;
+    a.className = `${mobileH(projectFormat(p))} md:h-auto ${spanClass} tone-${CAT_TONE[p.category] || 'promo'} glow-card luxury-card rounded-2xl overflow-hidden relative group cursor-pointer flex flex-col justify-between`;
     a.innerHTML = `
         <img src="${esc(projectCover(p))}" alt="${esc(p.title)}" loading="lazy" class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 group-hover:opacity-90 transition duration-700">
         <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/30 to-transparent"></div>
@@ -321,7 +321,7 @@ function mediaCard(p, m, layoutClass, photoSetForGrid = [], photoIndex = -1) {
     el.innerHTML = `
         ${bg}
         <div class="relative z-10 p-4 md:p-5 flex justify-between items-center">
-            <span class="px-3 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-[10px] uppercase tracking-widest ${m.views ? 'text-white' : 'text-neutral-300'}">${m.views ? '▶ ' + esc(m.views) + ' Views' : kindLabel}</span>
+            <span class="px-3 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-[10px] uppercase tracking-widest ${m.views ? 'text-white' : 'text-neutral-300'}">${m.views ? '🔥 ' + esc(m.views) + ' Views' : kindLabel}</span>
             <span class="px-2.5 py-1 rounded bg-black/60 text-[10px] font-mono text-neutral-400 border border-white/10">${esc(m.format)}</span>
         </div>
         ${playable && m.thumbnail && !isPhoto ? `<div class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"><div class="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/25 flex items-center justify-center group-hover:bg-white group-hover:text-black transition duration-300"><svg class="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>` : ''}
@@ -343,7 +343,7 @@ function mediaCard(p, m, layoutClass, photoSetForGrid = [], photoIndex = -1) {
 const isLocalVideo = (u) => !!u && !/^https?:/.test(u) && /\.(mp4|webm|mov)$/i.test(u);
 function stageBadge(m) {
     return m.views
-        ? `<span class="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-[10px] uppercase tracking-widest text-white">▶ ${esc(m.views)} Views</span>`
+        ? `<span class="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-[10px] uppercase tracking-widest text-white">🔥 ${esc(m.views)} Views</span>`
         : `<span class="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-[10px] uppercase tracking-widest text-neutral-300">${esc(KIND_LABEL[m.kind] || m.kind)}</span>`;
 }
 /* Visual layer of a card: muted looping preview for local mp4 (starts when in view), else the thumbnail */
@@ -394,6 +394,19 @@ function filmCard(p, m) {
     el.querySelector('.ed-screen').addEventListener('click', () => openMedia(p, m));
     return el;
 }
+/* Ambient glow tone of a story row: explicit `tone` wins, else guessed from the title / media.
+   promo = cool cinematic blue · motion = deep violet (DOOH, screens, design) · live = warm (events, coverage, studio) · stills = neutral */
+const TONES = ['promo', 'motion', 'live', 'stills'];
+function toneOf(item, title) {
+    if (TONES.includes(item.tone)) return item.tone;
+    const t = (title || '').toLowerCase(), ms = item.media || [];
+    if (ms.length && ms.every(m => m.kind === 'photo')) return 'stills';
+    if (/screen|dooh|motion|animation|design|identity|graphic/.test(t)) return 'motion';
+    if (/live|event|coverage|episode|studio|star|behind|set|bts|podcast|appearance/.test(t)) return 'live';
+    return 'promo';
+}
+const CAT_TONE = { commercial: 'promo', social: 'motion', events: 'live', podcasts: 'live', reels: 'promo', photo: 'stills' };
+
 /* Right-hand media stage for one story step */
 function mediaStage(p, ms, caption) {
     const stage = document.createElement('div');
@@ -432,9 +445,9 @@ function mediaStage(p, ms, caption) {
     return stage;
 }
 /* One story row: sticky narrative (left) + media stage (right) */
-function editorialRow(p, head, ms, caption) {
+function editorialRow(p, head, ms, caption, tone = 'promo') {
     const row = document.createElement('div');
-    row.className = 'ed-row grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 py-10 md:py-14 border-t border-white/5';
+    row.className = `ed-row tone-${tone} grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 py-10 md:py-14 border-t border-white/5`;
     row.innerHTML = `<div class="lg:col-span-4"><div class="ed-text lg:sticky lg:top-32">${head}</div></div><div class="ed-stage lg:col-span-8"></div>`;
     if (ms && ms.length) row.querySelector('.ed-stage').appendChild(mediaStage(p, ms, caption));
     else row.querySelector('.ed-stage').remove();
@@ -461,13 +474,13 @@ function renderEditorial(container, p) {
                 <p class="text-xs font-mono text-neutral-500 mb-4">${String(j + 1).padStart(2, '0')} <span class="text-neutral-700">/ ${String(c.steps.length).padStart(2, '0')}</span></p>
                 <h3 dir="auto" class="font-serif text-2xl md:text-3xl text-white leading-snug mb-3">${esc(st.title)}</h3>
                 ${st.text ? `<p dir="auto" class="text-sm md:text-[15px] text-neutral-400 font-light leading-relaxed">${esc(st.text)}</p>` : ''}
-                ${pointsHTML(st.points)}`, st.media, `${p.client} — ${st.title}`)));
+                ${pointsHTML(st.points)}`, st.media, `${p.client} — ${st.title}`, toneOf(st, st.title))));
         } else {
             sec.appendChild(editorialRow(p, `
                 <p class="text-xs font-mono text-neutral-500 mb-4">${label}</p>
                 <h2 dir="auto" class="font-serif text-3xl md:text-4xl text-white leading-tight mb-3">${esc(c.title)}</h2>
                 ${c.text ? `<p dir="auto" class="text-sm md:text-[15px] text-neutral-400 font-light leading-relaxed">${esc(c.text)}</p>` : ''}
-                ${pointsHTML(c.points)}`, c.media, caption));
+                ${pointsHTML(c.points)}`, c.media, caption, toneOf(c, c.title)));
         }
         container.appendChild(sec);
     });

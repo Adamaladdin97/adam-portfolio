@@ -8,7 +8,7 @@ You are the Senior Art Director and Lead Frontend Engineer for Adam Aladdin's pe
 - Generous negative space; the work does the talking.
 
 ## 2. Mandatory asset formatting (never break)
-- **Vertical reels / UGC (9:16):** always a dedicated vertical card (`md:col-span-4 md:row-span-2` style, smartphone proportion) — never a stretched horizontal card. Every reel card has: (1) a clean cinematic thumbnail, (2) an engagement badge (e.g. `▶ 1.4M Views`, or `High Engagement`) **only when Adam supplied the real number/claim** (field `views` on the media item — never invent metrics), (3) a styled "Verify on IG ↗" button.
+- **Vertical reels / UGC (9:16):** always a dedicated vertical card (`md:col-span-4 md:row-span-2` style, smartphone proportion) — never a stretched horizontal card. Every reel card has: (1) a clean cinematic thumbnail, (2) an engagement badge (e.g. `🔥 1.4M Views`, or `High Engagement`) **only when Adam supplied the real number/claim** (field `views` on the media item — never invent metrics), (3) a styled "Verify on IG ↗" button.
 - **Photography & BTS:** never an image dump. Always a cinematic gallery grid with smooth hover-zoom; clicking a photo opens a full-screen minimalist lightbox on a near-black `rgba(6,7,9,0.96)` backdrop.
 - **Projects over isolated files:** work is presented as campaigns / complete projects (brand launches, mall activations, corporate events). Bento grid stays mathematically aligned (`auto-rows-[300px]` + `grid-flow-dense`): no overlap, no floating cards, no messy gaps.
 
@@ -29,6 +29,14 @@ Whenever Adam explains the story behind a client (Gate Mall, Gulf Cryo, Sportap,
 - Finish with a "Behind the scenes" / stills chapter (photos → masonry + photo lightbox).
 - Reels/posts (9:16, 4:5) render in minimal phone frames with the badge top-left and "Verify on Instagram ↗" under the frame (only if `instagramUrl`); other verticals (screen animations, films) use plain 9:16 cards; widescreen uses 16:9 cards. Never hand-write layout.
 - Only Adam's facts, compressed for a client scanning in 10 seconds. Every media item appears exactly once in the steps and once in the flat `media[]`.
+
+## 3c. Ambient glow standard (approved by Adam — permanent)
+- Base never changes: obsidian `#060709` page, charcoal `#0E1014` cards, 1px subtle borders. No bright or full-page colour changes.
+- Every editorial story row carries a subtle radial **ambient glow tone** (CSS `.tone-*` in `style.css`, set by `toneOf()` in common.js): `promo` = cool cinematic blue (`#060913` tint) for promos/films · `motion` = deep violet (`#0A0711`) for DOOH, screen animation, design · `live` = warm charcoal for events, live coverage, appearances, studio · `stills` = neutral for photo/BTS galleries. The row in view glows fully, others dim.
+- Set `tone` on a step/chapter in `data.js` when the title alone doesn't say it; otherwise it is guessed from the title/media.
+- Project cards on home/work glow on hover in their category tone (`CAT_TONE`).
+- Engagement badge format: `🔥 <views> Views`, permanently visible top-left, only with Adam's real numbers.
+- All project pages use this one standard: editorial split layout, universal in-site player, Verify on Instagram as a secondary link, ambient glows.
 
 ## 4. Decision protocol for `/add` and chat requests
 1. Analyze the input: 16:9 commercial, 9:16 reel, event, or photo series.

@@ -13,7 +13,9 @@
      cover        thumbnail used on cards;  coverFormat = its format (decides the card shape)
      highlights   optional – 3-card strip under the facts: { title, items: [{ title, text }] }
      chapters     the story, in order: [{ label, title, text, steps | media }]
-                  steps  optional story steps, each one editorial row: [{ title, text, media: [ ... ] }]
+                  steps  optional story steps, each one editorial row: [{ title, text, tone, media: [ ... ] }]
+                  tone   optional ambient glow of the row: promo (blue) | motion (violet: DOOH, screens, design)
+                         | live (warm: events, coverage) | stills (neutral) — guessed from the title if omitted
                   label  optional eyebrow, e.g. "Campaign 01" (default: 01, 02 …)
                   points optional editorial bullets beside the title: [{ title, text }]
                   (a project with no chapter media just uses the flat `media` list)
@@ -29,7 +31,7 @@
         thumbnail    "assets/images/x.jpg"  (required – items with no thumbnail/video are never shown)
         video        URL opened in the lightbox (YouTube / Vimeo / Instagram / Drive preview / mp4)
         instagramUrl "Verify on Instagram" link ("" to hide)
-        views        optional – real engagement badge, e.g. "1.4M Views" (never invent; shown instead of the kind label)
+        views        optional – real engagement badge, e.g. "1.4M" → "🔥 1.4M Views" (never invent; shown instead of the kind label)
         link         optional source URL for reference only (never rendered – no external redirects)
         full         photos only – local high-res image for the photo lightbox (assets/photos/…)
    ============================================================ */
@@ -95,6 +97,7 @@ const projects = [
                 steps: [
                     {
                         title: "Pre-event & visual identity",
+                        tone: "motion",
                         text: "Stickers, banners, staff tees, Eidiya cards and social competition posts.",
                         media: [
                         { kind: "post", title: "Social set", format: "4:5", thumbnail: "assets/images/ig-dywlix9ikht.jpg", video: "https://www.instagram.com/p/DYwlIx9iKht/", instagramUrl: "https://www.instagram.com/p/DYwlIx9iKht/" },
@@ -107,6 +110,7 @@ const projects = [
                     },
                     {
                         title: "Mall-wide DOOH & arch motion",
+                        tone: "motion",
                         text: "Custom animation for vertical, horizontal and curved arch screens across the mall.",
                         media: [
                         { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/gate-mall/eid/gm-screen-1.webp", video: "assets/videos/gate-mall/eid/gm-screen-1.mp4", instagramUrl: "" },
@@ -122,6 +126,7 @@ const projects = [
                     },
                     {
                         title: "Next-day festival coverage",
+                        tone: "promo",
                         text: "A promo for each of the three sub-events plus a master recap, delivered within 24 hours so the campaign stayed live through the four days of Eid.",
                         media: [
                         { kind: "video", title: "Recap film", format: "9:16", thumbnail: "assets/images/gate-mall/eid/gm-recap.webp", video: "assets/videos/gate-mall/eid/gm-recap.mp4", instagramUrl: "" },
@@ -133,6 +138,7 @@ const projects = [
                     },
                     {
                         title: "Viral & real-time reels",
+                        tone: "live",
                         text: "A 360° POV reel of the youth team handing out Eidiya, and an instant phone reel of a grand-prize winner, published within minutes.",
                         media: [
                         { kind: "reel", title: "Eidiya POV reel", format: "9:16", thumbnail: "assets/images/gate-mall/eid/gm-eidiya-pov.webp", video: "assets/videos/gate-mall/eid/gm-eidiya-pov.mp4", instagramUrl: "" },
@@ -149,6 +155,7 @@ const projects = [
                 steps: [
                     {
                         title: "Hype & UGC strategy",
+                        tone: "promo",
                         text: "High-energy pre-event promos and multi-format UGC videos to pull football fans into the gaming and competition zone.",
                         media: [
                         { kind: "post", title: "Fan Zone promo", format: "9:16", thumbnail: "assets/images/ig-daawtpkqlm2.jpg", video: "https://www.instagram.com/p/DaawTPkqLm2/", instagramUrl: "https://www.instagram.com/p/DaawTPkqLm2/" },
@@ -159,6 +166,7 @@ const projects = [
                     },
                     {
                         title: "Star appearances & live action",
+                        tone: "live",
                         text: "Full cinematic and social coverage with Kuwaiti football star Bader Al Mutawa and freestyle performer Karam Medani.",
                         media: [
                         { kind: "video", title: "Event coverage", format: "9:16", thumbnail: "assets/images/drive-157vqeeb2vxk.jpg", video: "https://drive.google.com/file/d/157vQeeb2vxKfCVW2uTuJxh_thAFwahZj/preview", instagramUrl: "", link: "https://drive.google.com/file/d/157vQeeb2vxKfCVW2uTuJxh_thAFwahZj/view" },
@@ -167,6 +175,7 @@ const projects = [
                     },
                     {
                         title: "Screen animation & event design",
+                        tone: "motion",
                         text: "Screen animation and event design for the Fan Zone.",
                         media: [
                         { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/drive-1faqxr0zghav.jpg", video: "https://drive.google.com/file/d/1FAqXR0ZgHav2_c1_5GvMInX4Gvzj_md9/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1FAqXR0ZgHav2_c1_5GvMInX4Gvzj_md9/view" },

@@ -19,3 +19,19 @@ body { background-color: var(--obsidian); color: var(--ink); font-family: 'Plus 
 @media (min-width: 1024px) { .ed-row:not(.is-active) .ed-text { opacity: .35; } }
 .phone-frame { box-shadow: 0 30px 60px -20px rgba(0,0,0,.9), inset 0 0 0 1px rgba(255,255,255,.03); transition: border-color .4s, transform .4s cubic-bezier(0.16,1,0.3,1); }
 .phone-frame:hover { border-color: rgba(255,255,255,.3); transform: translateY(-4px); }
+
+/* Ambient glow tones (permanent standard): subtle radial light behind a story row / on card hover.
+   The base stays obsidian; only the glow is tinted. */
+.tone-promo  { --glow: rgba(72, 112, 255, .10);  --glow-edge: rgba(72, 112, 255, .28);  --tint: #060913; }
+.tone-motion { --glow: rgba(140, 92, 255, .11);  --glow-edge: rgba(140, 92, 255, .30);  --tint: #0A0711; }
+.tone-live   { --glow: rgba(255, 168, 96, .08);  --glow-edge: rgba(255, 168, 96, .24);  --tint: #0D0A08; }
+.tone-stills { --glow: rgba(255, 255, 255, .045); --glow-edge: rgba(255, 255, 255, .18); --tint: #0B0C0E; }
+.ed-row { position: relative; isolation: isolate; }
+.ed-row::before {
+    content: ''; position: absolute; inset: -60px -4vw; z-index: -1; pointer-events: none;
+    background: radial-gradient(55% 60% at 68% 50%, var(--glow), transparent 72%), radial-gradient(35% 45% at 12% 30%, var(--glow), transparent 75%);
+    opacity: .45; transition: opacity 1s cubic-bezier(0.16,1,0.3,1);
+}
+.ed-row.is-active::before { opacity: 1; }
+.ed-row .luxury-card, .ed-row .phone-frame { background-color: var(--tint); }
+.glow-card:hover { box-shadow: 0 30px 80px -30px var(--glow-edge), 0 25px 50px -12px rgba(0,0,0,.9); border-color: var(--glow-edge); }
