@@ -37,6 +37,7 @@ Read `CLAUDE.md` first (site rules + data model), then do these steps in order.
 
 8. **Publish:**
    ```
+   V=$(date +%Y%m%d%H%M); sed -i '' -E "s#(data\.js|common\.js|style\.css)\?v=[0-9]+#\1?v=$V#g" *.html
    git add . && git commit -m "Add: <project name>" && git push
    ```
    Then tell Adam (Egyptian Arabic, short): what was added / which project it joined, the category and layout chosen, and the live URL https://adamaladdin97.github.io/adam-portfolio/ (updates in ~1 minute).

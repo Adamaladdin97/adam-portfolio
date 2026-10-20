@@ -67,6 +67,7 @@ Media from Instagram/YouTube/Drive is turned into a local thumbnail in `assets/i
 - Photos ≤ 400 KB (1600px wide max). Videos ≤ 15 MB MP4 H.264; bigger → YouTube/Vimeo link.
 - Never invent facts (descriptions, numbers, dates) — only what Adam provided.
 - WhatsApp contact is configured in `siteConfig` (no Instagram DM button).
+- Cache-busting: every HTML page loads `data.js`, `common.js`, `style.css` with `?v=<YYYYMMDDHHMM>`. Before EVERY push bump it in all pages: `V=$(date +%Y%m%d%H%M); sed -i '' -E "s#(data\.js|common\.js|style\.css)\?v=[0-9]+#\1?v=$V#g" *.html` — otherwise visitors get a stale mix and pages render empty.
 
 ## Update command
 `/add` — see `.claude/commands/add.md`.
