@@ -102,6 +102,19 @@ const projects = [
                     { kind: "post", title: "Activation 1", format: "9:16", thumbnail: "assets/images/ig-dy9yscluiy1.jpg", video: "https://www.instagram.com/p/DY9YsCluiY1/", instagramUrl: "https://www.instagram.com/p/DY9YsCluiY1/" },
                     { kind: "post", title: "Activation 2", format: "9:16", thumbnail: "assets/images/ig-dy9zspuovlj.jpg", video: "https://www.instagram.com/p/DY9ZSpuOVlJ/", instagramUrl: "https://www.instagram.com/p/DY9ZSpuOVlJ/" },
                     { kind: "post", title: "Activation 3", format: "9:16", thumbnail: "assets/images/ig-dy9bcgeuwhg.jpg", video: "https://www.instagram.com/p/DY9bCGeuwhG/", instagramUrl: "https://www.instagram.com/p/DY9bCGeuwhG/" },
+                    { kind: "video", title: "Recap film", format: "9:16", thumbnail: "assets/images/gate-mall/eid/gm-recap.webp", video: "assets/videos/gate-mall/eid/gm-recap.mp4", instagramUrl: "" },
+                    { kind: "reel", title: "Contest winner reel", format: "9:16", thumbnail: "assets/images/gate-mall/eid/gm-contest-winner.webp", video: "assets/videos/gate-mall/eid/gm-contest-winner.mp4", instagramUrl: "" },
+                    { kind: "reel", title: "Eidiya POV reel", format: "9:16", thumbnail: "assets/images/gate-mall/eid/gm-eidiya-pov.webp", video: "assets/videos/gate-mall/eid/gm-eidiya-pov.mp4", instagramUrl: "" },
+                    { kind: "reel", title: "UGC video", format: "9:16", thumbnail: "assets/images/gate-mall/eid/gm-ugc.webp", video: "assets/videos/gate-mall/eid/gm-ugc.mp4", instagramUrl: "" },
+                    { kind: "video", title: "Screen animation", format: "16:9", thumbnail: "assets/images/gate-mall/eid/gm-screen-1.webp", video: "assets/videos/gate-mall/eid/gm-screen-1.mp4", instagramUrl: "" },
+                    { kind: "video", title: "Screen animation", format: "16:9", thumbnail: "assets/images/gate-mall/eid/gm-screen-2.webp", video: "assets/videos/gate-mall/eid/gm-screen-2.mp4", instagramUrl: "" },
+                    { kind: "video", title: "Screen animation", format: "16:9", thumbnail: "assets/images/gate-mall/eid/gm-screen-3.webp", video: "assets/videos/gate-mall/eid/gm-screen-3.mp4", instagramUrl: "" },
+                    { kind: "video", title: "Screen animation", format: "9:16", thumbnail: "assets/images/gate-mall/eid/gm-screen-4.webp", video: "assets/videos/gate-mall/eid/gm-screen-4.mp4", instagramUrl: "" },
+                    { kind: "video", title: "Screen animation", format: "16:9", thumbnail: "assets/images/gate-mall/eid/gm-screen-5.webp", video: "assets/videos/gate-mall/eid/gm-screen-5.mp4", instagramUrl: "" },
+                    { kind: "video", title: "Screen animation", format: "9:16", thumbnail: "assets/images/gate-mall/eid/gm-screen-6.webp", video: "assets/videos/gate-mall/eid/gm-screen-6.mp4", instagramUrl: "" },
+                    { kind: "video", title: "Screen animation", format: "9:16", thumbnail: "assets/images/gate-mall/eid/gm-screen-7.webp", video: "assets/videos/gate-mall/eid/gm-screen-7.mp4", instagramUrl: "" },
+                    { kind: "video", title: "Screen animation", format: "16:9", thumbnail: "assets/images/gate-mall/eid/gm-screen-8.webp", video: "assets/videos/gate-mall/eid/gm-screen-8.mp4", instagramUrl: "" },
+                    { kind: "video", title: "Screen animation", format: "16:9", thumbnail: "assets/images/gate-mall/eid/gm-screen-9.webp", video: "assets/videos/gate-mall/eid/gm-screen-9.mp4", instagramUrl: "" },
                     { kind: "post", title: "Social set", format: "4:5", thumbnail: "assets/images/ig-dywlix9ikht.jpg", video: "https://www.instagram.com/p/DYwlIx9iKht/", instagramUrl: "https://www.instagram.com/p/DYwlIx9iKht/" },
                     { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-11qtilgrka-h.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-11qtilgrka-h.jpg" },
                     { kind: "photo", title: "", format: "9:16", thumbnail: "assets/images/drive-16rhtflnznnw.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-16rhtflnznnw.jpg" },
@@ -153,6 +166,19 @@ const projects = [
             { kind: "post", title: "Activation 1", format: "9:16", thumbnail: "assets/images/ig-dy9yscluiy1.jpg", video: "https://www.instagram.com/p/DY9YsCluiY1/", instagramUrl: "https://www.instagram.com/p/DY9YsCluiY1/" },
             { kind: "post", title: "Activation 2", format: "9:16", thumbnail: "assets/images/ig-dy9zspuovlj.jpg", video: "https://www.instagram.com/p/DY9ZSpuOVlJ/", instagramUrl: "https://www.instagram.com/p/DY9ZSpuOVlJ/" },
             { kind: "post", title: "Activation 3", format: "9:16", thumbnail: "assets/images/ig-dy9bcgeuwhg.jpg", video: "https://www.instagram.com/p/DY9bCGeuwhG/", instagramUrl: "https://www.instagram.com/p/DY9bCGeuwhG/" },
+            { kind: "video", title: "Recap film", format: "9:16", thumbnail: "assets/images/gate-mall/eid/gm-recap.webp", video: "assets/videos/gate-mall/eid/gm-recap.mp4", instagramUrl: "" },
+            { kind: "reel", title: "Contest winner reel", format: "9:16", thumbnail: "assets/images/gate-mall/eid/gm-contest-winner.webp", video: "assets/videos/gate-mall/eid/gm-contest-winner.mp4", instagramUrl: "" },
+            { kind: "reel", title: "Eidiya POV reel", format: "9:16", thumbnail: "assets/images/gate-mall/eid/gm-eidiya-pov.webp", video: "assets/videos/gate-mall/eid/gm-eidiya-pov.mp4", instagramUrl: "" },
+            { kind: "reel", title: "UGC video", format: "9:16", thumbnail: "assets/images/gate-mall/eid/gm-ugc.webp", video: "assets/videos/gate-mall/eid/gm-ugc.mp4", instagramUrl: "" },
+            { kind: "video", title: "Screen animation", format: "16:9", thumbnail: "assets/images/gate-mall/eid/gm-screen-1.webp", video: "assets/videos/gate-mall/eid/gm-screen-1.mp4", instagramUrl: "" },
+            { kind: "video", title: "Screen animation", format: "16:9", thumbnail: "assets/images/gate-mall/eid/gm-screen-2.webp", video: "assets/videos/gate-mall/eid/gm-screen-2.mp4", instagramUrl: "" },
+            { kind: "video", title: "Screen animation", format: "16:9", thumbnail: "assets/images/gate-mall/eid/gm-screen-3.webp", video: "assets/videos/gate-mall/eid/gm-screen-3.mp4", instagramUrl: "" },
+            { kind: "video", title: "Screen animation", format: "9:16", thumbnail: "assets/images/gate-mall/eid/gm-screen-4.webp", video: "assets/videos/gate-mall/eid/gm-screen-4.mp4", instagramUrl: "" },
+            { kind: "video", title: "Screen animation", format: "16:9", thumbnail: "assets/images/gate-mall/eid/gm-screen-5.webp", video: "assets/videos/gate-mall/eid/gm-screen-5.mp4", instagramUrl: "" },
+            { kind: "video", title: "Screen animation", format: "9:16", thumbnail: "assets/images/gate-mall/eid/gm-screen-6.webp", video: "assets/videos/gate-mall/eid/gm-screen-6.mp4", instagramUrl: "" },
+            { kind: "video", title: "Screen animation", format: "9:16", thumbnail: "assets/images/gate-mall/eid/gm-screen-7.webp", video: "assets/videos/gate-mall/eid/gm-screen-7.mp4", instagramUrl: "" },
+            { kind: "video", title: "Screen animation", format: "16:9", thumbnail: "assets/images/gate-mall/eid/gm-screen-8.webp", video: "assets/videos/gate-mall/eid/gm-screen-8.mp4", instagramUrl: "" },
+            { kind: "video", title: "Screen animation", format: "16:9", thumbnail: "assets/images/gate-mall/eid/gm-screen-9.webp", video: "assets/videos/gate-mall/eid/gm-screen-9.mp4", instagramUrl: "" },
             { kind: "post", title: "Social set", format: "4:5", thumbnail: "assets/images/ig-dywlix9ikht.jpg", video: "https://www.instagram.com/p/DYwlIx9iKht/", instagramUrl: "https://www.instagram.com/p/DYwlIx9iKht/" },
             { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-11qtilgrka-h.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-11qtilgrka-h.jpg" },
             { kind: "photo", title: "", format: "9:16", thumbnail: "assets/images/drive-16rhtflnznnw.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-16rhtflnznnw.jpg" },
@@ -378,7 +404,10 @@ const projects = [
                 text: "We designed the studio in her home, sourced and built the décor, bought the right equipment and installed a complete set-up, technical details included.",
                 media: [
                     { kind: "photo", title: "Studio build 1", format: "1:1", thumbnail: "assets/images/qs-d54rrvtm7mgd.jpg", video: "", instagramUrl: "", link: "https://quickshare.samsungcloud.com/d54RrvTm7MgD", full: "assets/images/qs-d54rrvtm7mgd.jpg" },
-                    { kind: "photo", title: "Studio build 2", format: "1:1", thumbnail: "assets/images/qs-hkcr3yjmfdgp.jpg", video: "", instagramUrl: "", link: "https://quickshare.samsungcloud.com/hKCR3yjMFdgP", full: "assets/images/qs-hkcr3yjmfdgp.jpg" }
+                    { kind: "photo", title: "Studio build 2", format: "1:1", thumbnail: "assets/images/qs-hkcr3yjmfdgp.jpg", video: "", instagramUrl: "", link: "https://quickshare.samsungcloud.com/hKCR3yjMFdgP", full: "assets/images/qs-hkcr3yjmfdgp.jpg" },
+                    { kind: "photo", title: "Studio build", format: "16:9", thumbnail: "assets/images/buthaina/bt-studio-3.webp", video: "", instagramUrl: "", full: "assets/photos/buthaina/bt-studio-3.webp" },
+                    { kind: "video", title: "Studio build", format: "9:16", thumbnail: "assets/images/buthaina/bt-studio-4.webp", video: "assets/videos/buthaina/bt-studio-4.mp4", instagramUrl: "" },
+                    { kind: "photo", title: "Studio build", format: "16:9", thumbnail: "assets/images/buthaina/bt-studio-5.webp", video: "", instagramUrl: "", full: "assets/photos/buthaina/bt-studio-5.webp" }
                 ]
             },
             {
@@ -424,6 +453,9 @@ const projects = [
         media: [
             { kind: "photo", title: "Studio build 1", format: "1:1", thumbnail: "assets/images/qs-d54rrvtm7mgd.jpg", video: "", instagramUrl: "", link: "https://quickshare.samsungcloud.com/d54RrvTm7MgD", full: "assets/images/qs-d54rrvtm7mgd.jpg" },
             { kind: "photo", title: "Studio build 2", format: "1:1", thumbnail: "assets/images/qs-hkcr3yjmfdgp.jpg", video: "", instagramUrl: "", link: "https://quickshare.samsungcloud.com/hKCR3yjMFdgP", full: "assets/images/qs-hkcr3yjmfdgp.jpg" },
+            { kind: "photo", title: "Studio build", format: "16:9", thumbnail: "assets/images/buthaina/bt-studio-3.webp", video: "", instagramUrl: "", full: "assets/photos/buthaina/bt-studio-3.webp" },
+            { kind: "video", title: "Studio build", format: "9:16", thumbnail: "assets/images/buthaina/bt-studio-4.webp", video: "assets/videos/buthaina/bt-studio-4.mp4", instagramUrl: "" },
+            { kind: "photo", title: "Studio build", format: "16:9", thumbnail: "assets/images/buthaina/bt-studio-5.webp", video: "", instagramUrl: "", full: "assets/photos/buthaina/bt-studio-5.webp" },
             { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/yt-nh67ywvk3qq.jpg", video: "https://www.youtube.com/watch?v=nh67YWvk3QQ", instagramUrl: "" },
             { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/yt-4ooiml8szha.jpg", video: "https://www.youtube.com/watch?v=4oOIMl8SzHA", instagramUrl: "" },
             { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/yt-d7rvuf1qpfw.jpg", video: "https://www.youtube.com/watch?v=D7rVuF1QPfw", instagramUrl: "" },
@@ -465,7 +497,8 @@ const projects = [
                 title: "Episode one",
                 text: "His first full episode with a host, in a simple, calm set that suits his topics.",
                 media: [
-                    { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/yt-cbnylpunk0o.jpg", video: "https://www.youtube.com/watch?v=cBNyLpUnK0o", instagramUrl: "" }
+                    { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/yt-cbnylpunk0o.jpg", video: "https://www.youtube.com/watch?v=cBNyLpUnK0o", instagramUrl: "" },
+                    { kind: "video", title: "Behind the scenes", format: "9:16", thumbnail: "assets/images/qissa-w-qanoon/qq-bts.webp", video: "assets/videos/qissa-w-qanoon/qq-bts.mp4", instagramUrl: "" }
                 ]
             },
             {
@@ -491,6 +524,7 @@ const projects = [
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dlk-bxaiogb.jpg", video: "https://www.instagram.com/reel/DLK_bXaioGB/", instagramUrl: "https://www.instagram.com/reel/DLK_bXaioGB/" },
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dlr4mr9cfoi.jpg", video: "https://www.instagram.com/reel/DLR4MR9CFOi/", instagramUrl: "https://www.instagram.com/reel/DLR4MR9CFOi/" },
             { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/yt-cbnylpunk0o.jpg", video: "https://www.youtube.com/watch?v=cBNyLpUnK0o", instagramUrl: "" },
+            { kind: "video", title: "Behind the scenes", format: "9:16", thumbnail: "assets/images/qissa-w-qanoon/qq-bts.webp", video: "assets/videos/qissa-w-qanoon/qq-bts.mp4", instagramUrl: "" },
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dw9w-tkgk-v.jpg", video: "https://www.instagram.com/reel/DW9W-TKgk-V/", instagramUrl: "https://www.instagram.com/reel/DW9W-TKgk-V/" },
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dxupm16at8p.jpg", video: "https://www.instagram.com/reel/DXUpm16At8p/", instagramUrl: "https://www.instagram.com/reel/DXUpm16At8p/" },
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dd4j9vscxgg.jpg", video: "https://www.instagram.com/reel/Dd4J9vsCXgg/", instagramUrl: "https://www.instagram.com/reel/Dd4J9vsCXgg/" },
@@ -523,6 +557,7 @@ const projects = [
                 title: "Sponsor integration",
                 text: "A new way to place the sponsor inside the episode so the ad feels part of the show.",
                 media: [
+                    { kind: "photo", title: "Sponsor inside the episode", format: "16:9", thumbnail: "assets/images/jadwa/jd-sponsor.webp", video: "", instagramUrl: "", full: "assets/photos/jadwa/jd-sponsor.webp" }
                 ]
             },
             {
@@ -539,6 +574,7 @@ const projects = [
             }
         ],
         media: [
+            { kind: "photo", title: "Sponsor inside the episode", format: "16:9", thumbnail: "assets/images/jadwa/jd-sponsor.webp", video: "", instagramUrl: "", full: "assets/photos/jadwa/jd-sponsor.webp" },
             { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/yt-tzxy7btkdqs.jpg", video: "https://www.youtube.com/watch?v=tZxY7BtkDQs", instagramUrl: "" },
             { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/yt-qks5wous72w.jpg", video: "https://www.youtube.com/watch?v=qks5woUS72w", instagramUrl: "" },
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-df4wyodshga.jpg", video: "https://www.instagram.com/reel/DF4wYOdsHga/", instagramUrl: "https://www.instagram.com/reel/DF4wYOdsHga/" },
@@ -652,6 +688,14 @@ const projects = [
                     { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dke-zbysby0.jpg", video: "https://www.instagram.com/reel/DKe-ZbYsBy0/", instagramUrl: "https://www.instagram.com/reel/DKe-ZbYsBy0/" },
                     { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dkpfg61szt3.jpg", video: "https://www.instagram.com/reel/DKPfG61szt3/", instagramUrl: "https://www.instagram.com/reel/DKPfG61szt3/" }
                 ]
+            },
+            {
+                title: "On set",
+                text: "",
+                media: [
+                    { kind: "video", title: "On set", format: "9:16", thumbnail: "assets/images/shahad/sh-set-1.webp", video: "assets/videos/shahad/sh-set-1.mp4", instagramUrl: "" },
+                    { kind: "video", title: "On set", format: "9:16", thumbnail: "assets/images/shahad/sh-set-2.webp", video: "assets/videos/shahad/sh-set-2.mp4", instagramUrl: "" }
+                ]
             }
         ],
         media: [
@@ -662,7 +706,9 @@ const projects = [
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dgfkcjisah-.jpg", video: "https://www.instagram.com/reel/DGfkcJiSaH_/", instagramUrl: "https://www.instagram.com/reel/DGfkcJiSaH_/" },
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dffsajlm0vi.jpg", video: "https://www.instagram.com/reel/DFfsajlM0vi/", instagramUrl: "https://www.instagram.com/reel/DFfsajlM0vi/" },
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dke-zbysby0.jpg", video: "https://www.instagram.com/reel/DKe-ZbYsBy0/", instagramUrl: "https://www.instagram.com/reel/DKe-ZbYsBy0/" },
-            { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dkpfg61szt3.jpg", video: "https://www.instagram.com/reel/DKPfG61szt3/", instagramUrl: "https://www.instagram.com/reel/DKPfG61szt3/" }
+            { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dkpfg61szt3.jpg", video: "https://www.instagram.com/reel/DKPfG61szt3/", instagramUrl: "https://www.instagram.com/reel/DKPfG61szt3/" },
+            { kind: "video", title: "On set", format: "9:16", thumbnail: "assets/images/shahad/sh-set-1.webp", video: "assets/videos/shahad/sh-set-1.mp4", instagramUrl: "" },
+            { kind: "video", title: "On set", format: "9:16", thumbnail: "assets/images/shahad/sh-set-2.webp", video: "assets/videos/shahad/sh-set-2.mp4", instagramUrl: "" }
         ]
     },
     {

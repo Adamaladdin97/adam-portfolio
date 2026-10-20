@@ -51,7 +51,7 @@ Static multi-page site (no build step). Live: https://adamaladdin97.github.io/ad
 
 ## Data model (project-centric)
 A **project** = one client campaign / case study told in `chapters[]` (title + 1–3 sentence text + that chapter's `media[]`), plus `scope`, `facts`, `account` (Instagram handle + followers) and a `cover`. The flat `media[]` must list every deliverable (used for the cover fallback and counts). Never add loose single files as separate cards when they belong to an existing client — add them to the right chapter (or a new chapter) of that project.
-Media from Instagram/YouTube/Drive is turned into a local thumbnail in `assets/images/`. Google Photos / Samsung / Drive-folder links are NOT added to the site (no link tiles) — ask Adam for the files (or a shared Drive file link) instead.
+Media from Instagram/YouTube/Drive is turned into a local thumbnail in `assets/images/`. Google Photos / Samsung / Drive-folder links are NEVER shown as link tiles. Google Photos shared albums CAN be ingested: open the `photos.app.goo.gl` link in the browser, read each item's `lh3.googleusercontent.com/pw/…` URL from the page scripts (videos carry key `76647426`), download with `=dv` (video) or `=w2400` (photo), then compress: videos → H.264 ≤1280px long side, CRF 27, faststart, into `assets/videos/<project>/`; posters + photos → `.webp` via `cwebp` into `assets/images/<project>/` (thumb ≤1080px) and `assets/photos/<project>/` (full ≤1600px). Local mp4s play in the in-site lightbox.
 
 ## Rules
 - To add/change work edit `data.js` only. Never edit the HTML/JS pages for content.
