@@ -55,7 +55,7 @@
                     const sec = document.createElement('section');
                     sec.className = 'mb-12 md:mb-16';
                     sec.innerHTML = chapterHead(i, c);
-                    if (c.media && c.media.length) sec.appendChild(mediaGrids(p, c.media));
+                    if (c.media && c.media.length) sec.appendChild(mediaGrids(p, c.media, c.title));
                     $('project-chapters').appendChild(sec);
                 });
             } else {

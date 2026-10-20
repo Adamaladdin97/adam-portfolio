@@ -12,7 +12,13 @@ You are the Senior Art Director and Lead Frontend Engineer for Adam Aladdin's pe
 - **Photography & BTS:** never an image dump. Always a cinematic gallery grid with smooth hover-zoom; clicking a photo opens a full-screen minimalist lightbox on a pure black backdrop.
 - **Projects over isolated files:** work is presented as campaigns / complete projects (brand launches, mall activations, corporate events). Bento grid stays mathematically aligned (`auto-rows-[300px]` + `grid-flow-dense`): no overlap, no floating cards, no messy gaps.
 
-## 3. Decision protocol for `/add` and chat requests
+## 3. Direct asset & media display (no external platform dependency)
+- Videos/reels that are local or unlisted play in the site's own lightbox (mp4, YouTube unlisted, Vimeo, Drive preview) — never force an Instagram dependency.
+- Photography & BTS: never folder dumps. Uniform/masonry grid, 1px subtle borders, charcoal `#0E1014` cards, hover-zoom. Clicking opens the photo lightbox: high-res image, dark backdrop, centred caption, smooth close (✕ / Esc / backdrop click) and ←/→ between photos of the same gallery.
+- Photos must be stored locally in high resolution (`assets/photos/`) so the lightbox shows the real image, not a third-party viewer.
+- Clean fallbacks: no Instagram link → no social badge/button; the card focuses 100% on the internal preview.
+
+## 4. Decision protocol for `/add` and chat requests
 1. Analyze the input: 16:9 commercial, 9:16 reel, event, or photo series.
 2. Pick the bento span with the strict rules (widescreen = 8 or 6 cols; reels = 4 cols x 2 rows; photo = 4 cols) — `common.js` already encodes this; never hand-write spans.
 3. Before finishing, review the result for clutter, redundant buttons, or unaligned text, and keep the pristine dark gallery look.

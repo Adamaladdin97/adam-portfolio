@@ -66,9 +66,31 @@ function renderChrome(active) {
             <div id="modal-actions" class="mt-4 self-start"></div>
         </div>
     </div>`;
+    document.body.insertAdjacentHTML('beforeend', `
+    <div id="photo-box" class="fixed inset-0 z-50 bg-black hidden items-center justify-center p-4 md:p-12 opacity-0 transition-opacity duration-300" role="dialog" aria-modal="true">
+        <button id="photo-close" class="absolute top-4 right-4 md:top-6 md:right-6 text-neutral-400 hover:text-white text-xs uppercase tracking-widest border border-white/15 px-4 py-2 rounded-full z-10">Close ✕</button>
+        <button id="photo-prev" aria-label="Previous" class="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-white/15 text-white/70 hover:text-white hover:bg-white/10 transition z-10">←</button>
+        <button id="photo-next" aria-label="Next" class="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-white/15 text-white/70 hover:text-white hover:bg-white/10 transition z-10">→</button>
+        <figure class="flex flex-col items-center max-w-6xl w-full">
+            <img id="photo-img" src="" alt="" class="max-h-[80vh] max-w-full object-contain rounded-lg border border-white/10 transition-opacity duration-300">
+            <figcaption class="mt-5 text-center">
+                <p id="photo-caption" dir="auto" class="font-serif text-xl text-white tracking-wide"></p>
+                <p id="photo-count" class="mt-1 text-[11px] font-mono text-neutral-500"></p>
+            </figcaption>
+        </figure>
+    </div>`);
+    $('photo-close').addEventListener('click', closePhoto);
+    $('photo-prev').addEventListener('click', (e) => { e.stopPropagation(); stepPhoto(-1); });
+    $('photo-next').addEventListener('click', (e) => { e.stopPropagation(); stepPhoto(1); });
+    $('photo-box').addEventListener('click', (e) => { if (e.target.id === 'photo-box') closePhoto(); });
+    window.addEventListener('keydown', (e) => {
+        if ($('photo-box').classList.contains('hidden')) return;
+        if (e.key === 'ArrowRight') stepPhoto(1);
+        if (e.key === 'ArrowLeft') stepPhoto(-1);
+    });
     $('modal-close').addEventListener('click', closeModal);
     $('lightbox').addEventListener('click', (e) => { if (e.target.id === 'lightbox') closeModal(); });
-    window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+    window.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); closePhoto(); } });
 }
 
 /* ---------------- Lightbox ---------------- */
@@ -101,6 +123,33 @@ function closeModal() {
     $('modal-content').innerHTML = '';
     $('lightbox').classList.replace('flex', 'hidden');
     document.body.style.overflow = '';
+}
+
+/* ---------------- Photo lightbox (photography & BTS) ---------------- */
+let photoSet = [], photoIdx = 0;
+function showPhoto() {
+    const ph = photoSet[photoIdx], img = $('photo-img');
+    img.style.opacity = 0;
+    img.onload = () => { img.style.opacity = 1; };
+    img.src = ph.src; img.alt = ph.caption;
+    $('photo-caption').textContent = ph.caption;
+    $('photo-count').textContent = photoSet.length > 1 ? `${photoIdx + 1} / ${photoSet.length}` : '';
+    $('photo-prev').style.display = $('photo-next').style.display = photoSet.length > 1 ? '' : 'none';
+}
+function openPhoto(set, idx) {
+    photoSet = set; photoIdx = idx;
+    const box = $('photo-box');
+    box.classList.replace('hidden', 'flex');
+    setTimeout(() => box.classList.replace('opacity-0', 'opacity-100'), 20);
+    document.body.style.overflow = 'hidden';
+    showPhoto();
+}
+function stepPhoto(d) { photoIdx = (photoIdx + d + photoSet.length) % photoSet.length; showPhoto(); }
+function closePhoto() {
+    const box = $('photo-box');
+    if (!box || box.classList.contains('hidden')) return;
+    box.classList.replace('opacity-100', 'opacity-0');
+    setTimeout(() => { box.classList.replace('flex', 'hidden'); $('photo-img').src = ''; document.body.style.overflow = ''; }, 250);
 }
 
 /* ---------------- Bento layout rules ----------------
@@ -212,14 +261,18 @@ function layoutList(ms) {
         return span(f, i === n - 1 && n % 2 ? 12 : 6, '', 1);
     });
 }
-function mediaGrids(p, ms) {
+function mediaGrids(p, ms, chapterTitle = '') {
     const wrap = document.createDocumentFragment();
+    const photos = ms.filter(m => m.kind === 'photo' && (m.full || m.thumbnail));
+    const set = photos.map(m => ({ src: m.full || m.thumbnail, caption: m.title || (chapterTitle ? `${p.title} — ${chapterTitle}` : p.title) }));
+    const mediaCard_ = mediaCard;
+    const mediaCard2 = (pp, m, cls) => mediaCard_(pp, m, cls, set, photos.indexOf(m));
     const V = ms.filter(m => isVertical(m.format)), H = ms.filter(m => !isVertical(m.format));
     if (H.length === 1 && V.length === 1) {            // one film + one vertical: a single 8 + 4 block
         const g = document.createElement('div');
         g.className = GRID + ' mb-5 md:mb-6';
-        g.appendChild(mediaCard(p, H[0], span(H[0].format, 8, '', 2)));
-        g.appendChild(mediaCard(p, V[0], span(V[0].format, 4)));
+        g.appendChild(mediaCard2(p, H[0], span(H[0].format, 8, '', 2)));
+        g.appendChild(mediaCard2(p, V[0], span(V[0].format, 4)));
         wrap.appendChild(g);
         return wrap;
     }
@@ -228,13 +281,14 @@ function mediaGrids(p, ms) {
         const g = document.createElement('div');
         g.className = GRID + ' mb-5 md:mb-6';
         const layout = layoutList(group);
-        group.forEach((m, i) => g.appendChild(mediaCard(p, m, layout[i])));
+        group.forEach((m, i) => g.appendChild(mediaCard2(p, m, layout[i])));
         wrap.appendChild(g);
     });
     return wrap;
 }
-function mediaCard(p, m, layoutClass) {
-    const url = m.video || (m.kind === 'photo' && m.thumbnail ? m.thumbnail : '');
+function mediaCard(p, m, layoutClass, photoSetForGrid = [], photoIndex = -1) {
+    const isPhoto = m.kind === 'photo' && !m.video && !!(m.full || m.thumbnail);
+    const url = m.video || (isPhoto ? (m.full || m.thumbnail) : '');
     const playable = !!url, external = !playable && !!m.link;
     const label = m.title || p.title;
     const el = document.createElement(external ? 'a' : 'div');
@@ -252,12 +306,13 @@ function mediaCard(p, m, layoutClass) {
             <span class="px-3 py-1 rounded-full bg-black/55 backdrop-blur-md border border-white/10 text-[10px] uppercase tracking-widest text-neutral-300">${m.views ? '▶ ' + esc(m.views) : kindLabel}</span>
             <span class="px-2.5 py-1 rounded bg-black/60 text-[10px] font-mono text-neutral-400 border border-white/10">${esc(m.format)}</span>
         </div>
-        ${playable && m.thumbnail ? `<div class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"><div class="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/25 flex items-center justify-center group-hover:bg-white group-hover:text-black transition duration-300"><svg class="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>` : ''}
+        ${playable && m.thumbnail && !isPhoto ? `<div class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"><div class="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/25 flex items-center justify-center group-hover:bg-white group-hover:text-black transition duration-300"><svg class="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>` : ''}
         <div class="relative z-10 p-5 flex items-center justify-between gap-3">
             <span dir="auto" class="text-sm text-white truncate">${m.title ? esc(m.title) : (external ? 'Open ↗' : '')}</span>
             ${m.instagramUrl ? `<a href="${esc(m.instagramUrl)}" target="_blank" rel="noopener" data-ig class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white hover:text-black backdrop-blur-md border border-white/15 text-[11px] text-white transition whitespace-nowrap">Verify on IG ↗</a>` : ''}
         </div>`;
-    if (playable) el.addEventListener('click', (e) => {
+    if (isPhoto) el.addEventListener('click', () => openPhoto(photoSetForGrid.length ? photoSetForGrid : [{ src: url, caption: label }], Math.max(photoIndex, 0)));
+    else if (playable) el.addEventListener('click', (e) => {
         if (e.target.closest('[data-ig]')) return;
         openModal({ title: m.title ? `${p.title} — ${m.title}` : p.title, url, format: m.format, instagramUrl: m.instagramUrl });
     });

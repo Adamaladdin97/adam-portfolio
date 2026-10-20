@@ -27,6 +27,7 @@
         instagramUrl "Verify on Instagram" link ("" to hide)
         views        optional – real engagement badge, e.g. "1.4M Views" (never invent; shown instead of the kind label)
         link         optional external URL; used when there is no video (opens in a new tab)
+        full         photos only – local high-res image for the photo lightbox (assets/photos/…)
    ============================================================ */
 
 const siteConfig = {
@@ -94,12 +95,12 @@ const projects = [
                 text: "Stickers, banners, tees, social posts, contests and Eidiya cards, plus animation for every mall screen: large, small, vertical, horizontal, even the arch.",
                 media: [
                     { kind: "post", title: "Social set", format: "4:5", thumbnail: "assets/images/ig-dywlix9ikht.jpg", video: "https://www.instagram.com/p/DYwlIx9iKht/", instagramUrl: "https://www.instagram.com/p/DYwlIx9iKht/" },
-                    { kind: "media", title: "", format: "4:5", thumbnail: "assets/images/drive-11qtilgrka-h.jpg", video: "https://drive.google.com/file/d/11qTiLGRKA_HjgCyg0M37Dk5CAD_wKw2q/preview", instagramUrl: "", link: "https://drive.google.com/file/d/11qTiLGRKA_HjgCyg0M37Dk5CAD_wKw2q/view" },
-                    { kind: "media", title: "", format: "9:16", thumbnail: "assets/images/drive-16rhtflnznnw.jpg", video: "https://drive.google.com/file/d/16RhTfLnznNWBK9CtTzyWL12YDNOSo2Dw/preview", instagramUrl: "", link: "https://drive.google.com/file/d/16RhTfLnznNWBK9CtTzyWL12YDNOSo2Dw/view" },
-                    { kind: "media", title: "", format: "4:5", thumbnail: "assets/images/drive-1agkg8toat7m.jpg", video: "https://drive.google.com/file/d/1AGkg8TOaT7M6Krkv10Syu-DYn_NV3z3d/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1AGkg8TOaT7M6Krkv10Syu-DYn_NV3z3d/view" },
-                    { kind: "media", title: "", format: "4:5", thumbnail: "assets/images/drive-1ytembw8ssgk.jpg", video: "https://drive.google.com/file/d/1YtEmbw8SsGkZvlnaaT-uc790tT71YmGD/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1YtEmbw8SsGkZvlnaaT-uc790tT71YmGD/view" },
+                    { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-11qtilgrka-h.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-11qtilgrka-h.jpg" },
+                    { kind: "photo", title: "", format: "9:16", thumbnail: "assets/images/drive-16rhtflnznnw.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-16rhtflnznnw.jpg" },
+                    { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-1agkg8toat7m.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1agkg8toat7m.jpg" },
+                    { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-1ytembw8ssgk.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1ytembw8ssgk.jpg" },
                     { kind: "media", title: "", format: "9:16", thumbnail: "", video: "https://drive.google.com/file/d/1qYKyZMY4v6z1jGnQBPi96JDf-4oPOE7f/view", instagramUrl: "" },
-                    { kind: "media", title: "", format: "1:1", thumbnail: "assets/images/drive-1vz31gagyetw.jpg", video: "https://drive.google.com/file/d/1vZ31GaGYeTwMbxDljDe2AU5bTBYyUbhJ/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1vZ31GaGYeTwMbxDljDe2AU5bTBYyUbhJ/view" },
+                    { kind: "photo", title: "", format: "1:1", thumbnail: "assets/images/drive-1vz31gagyetw.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1vz31gagyetw.jpg" },
                     { kind: "album", title: "Screen animations", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/Fytste3XbWYAiRNo7" }
                 ]
             },
@@ -111,7 +112,7 @@ const projects = [
                     { kind: "post", title: "UGC", format: "9:16", thumbnail: "assets/images/ig-daaw55zkhsm.jpg", video: "https://www.instagram.com/p/Daaw55ZKhSM/", instagramUrl: "https://www.instagram.com/p/Daaw55ZKhSM/" },
                     { kind: "post", title: "UGC", format: "9:16", thumbnail: "assets/images/ig-daw4xdqqfnn.jpg", video: "https://www.instagram.com/p/DaW4XDqqfnn/", instagramUrl: "https://www.instagram.com/p/DaW4XDqqfnn/" },
                     { kind: "post", title: "UGC", format: "9:16", thumbnail: "assets/images/ig-dbv3f9skpze.jpg", video: "https://www.instagram.com/p/DbV3F9SKPZe/", instagramUrl: "https://www.instagram.com/p/DbV3F9SKPZe/" },
-                    { kind: "media", title: "Event coverage", format: "9:16", thumbnail: "assets/images/drive-157vqeeb2vxk.jpg", video: "https://drive.google.com/file/d/157vQeeb2vxKfCVW2uTuJxh_thAFwahZj/preview", instagramUrl: "", link: "https://drive.google.com/file/d/157vQeeb2vxKfCVW2uTuJxh_thAFwahZj/view" },
+                    { kind: "video", title: "Event coverage", format: "9:16", thumbnail: "assets/images/drive-157vqeeb2vxk.jpg", video: "https://drive.google.com/file/d/157vQeeb2vxKfCVW2uTuJxh_thAFwahZj/preview", instagramUrl: "", link: "https://drive.google.com/file/d/157vQeeb2vxKfCVW2uTuJxh_thAFwahZj/view" },
                     { kind: "post", title: "Event highlights", format: "4:5", thumbnail: "assets/images/ig-dapbeordvqj.jpg", video: "https://www.instagram.com/p/DapbeoRDvQj/", instagramUrl: "https://www.instagram.com/p/DapbeoRDvQj/" }
                 ]
             },
@@ -119,25 +120,25 @@ const projects = [
                 title: "World Cup: animation & design",
                 text: "Screen animation and event design for the Fan Zone.",
                 media: [
-                    { kind: "media", title: "", format: "16:9", thumbnail: "assets/images/drive-1faqxr0zghav.jpg", video: "https://drive.google.com/file/d/1FAqXR0ZgHav2_c1_5GvMInX4Gvzj_md9/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1FAqXR0ZgHav2_c1_5GvMInX4Gvzj_md9/view" },
-                    { kind: "media", title: "", format: "9:16", thumbnail: "assets/images/drive-18bpahpwtcik.jpg", video: "https://drive.google.com/file/d/18BpAHPWtciK7mVggwNHan2qkv-gFSWkj/preview", instagramUrl: "", link: "https://drive.google.com/file/d/18BpAHPWtciK7mVggwNHan2qkv-gFSWkj/view" },
-                    { kind: "media", title: "", format: "16:9", thumbnail: "assets/images/drive-1jtwizh17t6w.jpg", video: "https://drive.google.com/file/d/1jtWIzH17T6WSBfUYt5xsmKR5cah4_0tp/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1jtWIzH17T6WSBfUYt5xsmKR5cah4_0tp/view" },
-                    { kind: "media", title: "", format: "16:9", thumbnail: "assets/images/drive-1ir4ck0nhnhe.jpg", video: "https://drive.google.com/file/d/1Ir4Ck0NHNhEBleeWZZex-vkR99ZBjSBz/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1Ir4Ck0NHNhEBleeWZZex-vkR99ZBjSBz/view" },
-                    { kind: "media", title: "", format: "16:9", thumbnail: "assets/images/drive-1bmtm-jdidqw.jpg", video: "https://drive.google.com/file/d/1Bmtm_JdIdQwC2jG3V8oyrV3d2TvRdSRo/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1Bmtm_JdIdQwC2jG3V8oyrV3d2TvRdSRo/view" },
-                    { kind: "media", title: "", format: "9:16", thumbnail: "assets/images/drive-1cle8dvem-zc.jpg", video: "https://drive.google.com/file/d/1cLe8dveM_ZC-J-5bITcZ7szy9v6if94K/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1cLe8dveM_ZC-J-5bITcZ7szy9v6if94K/view" },
-                    { kind: "media", title: "", format: "9:16", thumbnail: "assets/images/drive-1z1juvi4ock7.jpg", video: "https://drive.google.com/file/d/1Z1jUVI4oCK76ZiAu5BsegnW4pAHgk_Zb/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1Z1jUVI4oCK76ZiAu5BsegnW4pAHgk_Zb/view" }
+                    { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/drive-1faqxr0zghav.jpg", video: "https://drive.google.com/file/d/1FAqXR0ZgHav2_c1_5GvMInX4Gvzj_md9/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1FAqXR0ZgHav2_c1_5GvMInX4Gvzj_md9/view" },
+                    { kind: "video", title: "", format: "9:16", thumbnail: "assets/images/drive-18bpahpwtcik.jpg", video: "https://drive.google.com/file/d/18BpAHPWtciK7mVggwNHan2qkv-gFSWkj/preview", instagramUrl: "", link: "https://drive.google.com/file/d/18BpAHPWtciK7mVggwNHan2qkv-gFSWkj/view" },
+                    { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/drive-1jtwizh17t6w.jpg", video: "https://drive.google.com/file/d/1jtWIzH17T6WSBfUYt5xsmKR5cah4_0tp/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1jtWIzH17T6WSBfUYt5xsmKR5cah4_0tp/view" },
+                    { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/drive-1ir4ck0nhnhe.jpg", video: "https://drive.google.com/file/d/1Ir4Ck0NHNhEBleeWZZex-vkR99ZBjSBz/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1Ir4Ck0NHNhEBleeWZZex-vkR99ZBjSBz/view" },
+                    { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/drive-1bmtm-jdidqw.jpg", video: "https://drive.google.com/file/d/1Bmtm_JdIdQwC2jG3V8oyrV3d2TvRdSRo/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1Bmtm_JdIdQwC2jG3V8oyrV3d2TvRdSRo/view" },
+                    { kind: "photo", title: "", format: "9:16", thumbnail: "assets/images/drive-1cle8dvem-zc.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1cle8dvem-zc.jpg" },
+                    { kind: "photo", title: "", format: "9:16", thumbnail: "assets/images/drive-1z1juvi4ock7.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1z1juvi4ock7.jpg" }
                 ]
             },
             {
                 title: "Behind the scenes",
                 text: "Coverage of the Eid activations from every angle.",
                 media: [
-                    { kind: "media", title: "", format: "16:9", thumbnail: "assets/images/drive-1w16kwm3ydzi.jpg", video: "https://drive.google.com/file/d/1w16kwm3YDZI09A5OaTBM4iFo0gRl2adn/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1w16kwm3YDZI09A5OaTBM4iFo0gRl2adn/view" },
-                    { kind: "media", title: "", format: "4:5", thumbnail: "assets/images/drive-1xlbkqpiyhj1.jpg", video: "https://drive.google.com/file/d/1XLbKqPIYHJ1NbIX61hUtUGlvyuFwcPFQ/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1XLbKqPIYHJ1NbIX61hUtUGlvyuFwcPFQ/view" },
-                    { kind: "media", title: "", format: "4:5", thumbnail: "assets/images/drive-17jmyfdjxy9h.jpg", video: "https://drive.google.com/file/d/17jMYfdJxy9HptfeITA7uBfI8h75K5K3w/preview", instagramUrl: "", link: "https://drive.google.com/file/d/17jMYfdJxy9HptfeITA7uBfI8h75K5K3w/view" },
-                    { kind: "media", title: "", format: "4:5", thumbnail: "assets/images/drive-17hu4mqzuitq.jpg", video: "https://drive.google.com/file/d/17Hu4MqZUiTQnargoLRIpPIDFpI4yp_wD/preview", instagramUrl: "", link: "https://drive.google.com/file/d/17Hu4MqZUiTQnargoLRIpPIDFpI4yp_wD/view" },
-                    { kind: "media", title: "", format: "4:5", thumbnail: "assets/images/drive-1cacbphcaruf.jpg", video: "https://drive.google.com/file/d/1CaCbPHCarUFtwmR5sFAjnsAON0OGjD1Q/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1CaCbPHCarUFtwmR5sFAjnsAON0OGjD1Q/view" },
-                    { kind: "media", title: "", format: "16:9", thumbnail: "assets/images/drive-1wyrbfdjmrdu.jpg", video: "https://drive.google.com/file/d/1WYRBfDJMrDuPD0zI_RBMppuUZKgu8Ue1/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1WYRBfDJMrDuPD0zI_RBMppuUZKgu8Ue1/view" }
+                    { kind: "photo", title: "", format: "16:9", thumbnail: "assets/images/drive-1w16kwm3ydzi.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1w16kwm3ydzi.jpg" },
+                    { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-1xlbkqpiyhj1.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1xlbkqpiyhj1.jpg" },
+                    { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-17jmyfdjxy9h.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-17jmyfdjxy9h.jpg" },
+                    { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-17hu4mqzuitq.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-17hu4mqzuitq.jpg" },
+                    { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-1cacbphcaruf.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1cacbphcaruf.jpg" },
+                    { kind: "photo", title: "", format: "16:9", thumbnail: "assets/images/drive-1wyrbfdjmrdu.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1wyrbfdjmrdu.jpg" }
                 ]
             }
         ],
@@ -152,32 +153,32 @@ const projects = [
             { kind: "album", title: "Eidiya POV reel", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/XTrkamp6Gid683mw5" },
             { kind: "album", title: "UGC video", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/SVUGhSUtV9evhixC7" },
             { kind: "post", title: "Social set", format: "4:5", thumbnail: "assets/images/ig-dywlix9ikht.jpg", video: "https://www.instagram.com/p/DYwlIx9iKht/", instagramUrl: "https://www.instagram.com/p/DYwlIx9iKht/" },
-            { kind: "media", title: "", format: "4:5", thumbnail: "assets/images/drive-11qtilgrka-h.jpg", video: "https://drive.google.com/file/d/11qTiLGRKA_HjgCyg0M37Dk5CAD_wKw2q/preview", instagramUrl: "", link: "https://drive.google.com/file/d/11qTiLGRKA_HjgCyg0M37Dk5CAD_wKw2q/view" },
-            { kind: "media", title: "", format: "9:16", thumbnail: "assets/images/drive-16rhtflnznnw.jpg", video: "https://drive.google.com/file/d/16RhTfLnznNWBK9CtTzyWL12YDNOSo2Dw/preview", instagramUrl: "", link: "https://drive.google.com/file/d/16RhTfLnznNWBK9CtTzyWL12YDNOSo2Dw/view" },
-            { kind: "media", title: "", format: "4:5", thumbnail: "assets/images/drive-1agkg8toat7m.jpg", video: "https://drive.google.com/file/d/1AGkg8TOaT7M6Krkv10Syu-DYn_NV3z3d/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1AGkg8TOaT7M6Krkv10Syu-DYn_NV3z3d/view" },
-            { kind: "media", title: "", format: "4:5", thumbnail: "assets/images/drive-1ytembw8ssgk.jpg", video: "https://drive.google.com/file/d/1YtEmbw8SsGkZvlnaaT-uc790tT71YmGD/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1YtEmbw8SsGkZvlnaaT-uc790tT71YmGD/view" },
+            { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-11qtilgrka-h.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-11qtilgrka-h.jpg" },
+            { kind: "photo", title: "", format: "9:16", thumbnail: "assets/images/drive-16rhtflnznnw.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-16rhtflnznnw.jpg" },
+            { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-1agkg8toat7m.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1agkg8toat7m.jpg" },
+            { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-1ytembw8ssgk.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1ytembw8ssgk.jpg" },
             { kind: "media", title: "", format: "9:16", thumbnail: "", video: "https://drive.google.com/file/d/1qYKyZMY4v6z1jGnQBPi96JDf-4oPOE7f/view", instagramUrl: "" },
-            { kind: "media", title: "", format: "1:1", thumbnail: "assets/images/drive-1vz31gagyetw.jpg", video: "https://drive.google.com/file/d/1vZ31GaGYeTwMbxDljDe2AU5bTBYyUbhJ/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1vZ31GaGYeTwMbxDljDe2AU5bTBYyUbhJ/view" },
+            { kind: "photo", title: "", format: "1:1", thumbnail: "assets/images/drive-1vz31gagyetw.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1vz31gagyetw.jpg" },
             { kind: "album", title: "Screen animations", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/Fytste3XbWYAiRNo7" },
             { kind: "post", title: "Fan Zone promo", format: "9:16", thumbnail: "assets/images/ig-daawtpkqlm2.jpg", video: "https://www.instagram.com/p/DaawTPkqLm2/", instagramUrl: "https://www.instagram.com/p/DaawTPkqLm2/" },
             { kind: "post", title: "UGC", format: "9:16", thumbnail: "assets/images/ig-daaw55zkhsm.jpg", video: "https://www.instagram.com/p/Daaw55ZKhSM/", instagramUrl: "https://www.instagram.com/p/Daaw55ZKhSM/" },
             { kind: "post", title: "UGC", format: "9:16", thumbnail: "assets/images/ig-daw4xdqqfnn.jpg", video: "https://www.instagram.com/p/DaW4XDqqfnn/", instagramUrl: "https://www.instagram.com/p/DaW4XDqqfnn/" },
             { kind: "post", title: "UGC", format: "9:16", thumbnail: "assets/images/ig-dbv3f9skpze.jpg", video: "https://www.instagram.com/p/DbV3F9SKPZe/", instagramUrl: "https://www.instagram.com/p/DbV3F9SKPZe/" },
-            { kind: "media", title: "Event coverage", format: "9:16", thumbnail: "assets/images/drive-157vqeeb2vxk.jpg", video: "https://drive.google.com/file/d/157vQeeb2vxKfCVW2uTuJxh_thAFwahZj/preview", instagramUrl: "", link: "https://drive.google.com/file/d/157vQeeb2vxKfCVW2uTuJxh_thAFwahZj/view" },
+            { kind: "video", title: "Event coverage", format: "9:16", thumbnail: "assets/images/drive-157vqeeb2vxk.jpg", video: "https://drive.google.com/file/d/157vQeeb2vxKfCVW2uTuJxh_thAFwahZj/preview", instagramUrl: "", link: "https://drive.google.com/file/d/157vQeeb2vxKfCVW2uTuJxh_thAFwahZj/view" },
             { kind: "post", title: "Event highlights", format: "4:5", thumbnail: "assets/images/ig-dapbeordvqj.jpg", video: "https://www.instagram.com/p/DapbeoRDvQj/", instagramUrl: "https://www.instagram.com/p/DapbeoRDvQj/" },
-            { kind: "media", title: "", format: "16:9", thumbnail: "assets/images/drive-1faqxr0zghav.jpg", video: "https://drive.google.com/file/d/1FAqXR0ZgHav2_c1_5GvMInX4Gvzj_md9/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1FAqXR0ZgHav2_c1_5GvMInX4Gvzj_md9/view" },
-            { kind: "media", title: "", format: "9:16", thumbnail: "assets/images/drive-18bpahpwtcik.jpg", video: "https://drive.google.com/file/d/18BpAHPWtciK7mVggwNHan2qkv-gFSWkj/preview", instagramUrl: "", link: "https://drive.google.com/file/d/18BpAHPWtciK7mVggwNHan2qkv-gFSWkj/view" },
-            { kind: "media", title: "", format: "16:9", thumbnail: "assets/images/drive-1jtwizh17t6w.jpg", video: "https://drive.google.com/file/d/1jtWIzH17T6WSBfUYt5xsmKR5cah4_0tp/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1jtWIzH17T6WSBfUYt5xsmKR5cah4_0tp/view" },
-            { kind: "media", title: "", format: "16:9", thumbnail: "assets/images/drive-1ir4ck0nhnhe.jpg", video: "https://drive.google.com/file/d/1Ir4Ck0NHNhEBleeWZZex-vkR99ZBjSBz/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1Ir4Ck0NHNhEBleeWZZex-vkR99ZBjSBz/view" },
-            { kind: "media", title: "", format: "16:9", thumbnail: "assets/images/drive-1bmtm-jdidqw.jpg", video: "https://drive.google.com/file/d/1Bmtm_JdIdQwC2jG3V8oyrV3d2TvRdSRo/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1Bmtm_JdIdQwC2jG3V8oyrV3d2TvRdSRo/view" },
-            { kind: "media", title: "", format: "9:16", thumbnail: "assets/images/drive-1cle8dvem-zc.jpg", video: "https://drive.google.com/file/d/1cLe8dveM_ZC-J-5bITcZ7szy9v6if94K/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1cLe8dveM_ZC-J-5bITcZ7szy9v6if94K/view" },
-            { kind: "media", title: "", format: "9:16", thumbnail: "assets/images/drive-1z1juvi4ock7.jpg", video: "https://drive.google.com/file/d/1Z1jUVI4oCK76ZiAu5BsegnW4pAHgk_Zb/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1Z1jUVI4oCK76ZiAu5BsegnW4pAHgk_Zb/view" },
-            { kind: "media", title: "", format: "16:9", thumbnail: "assets/images/drive-1w16kwm3ydzi.jpg", video: "https://drive.google.com/file/d/1w16kwm3YDZI09A5OaTBM4iFo0gRl2adn/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1w16kwm3YDZI09A5OaTBM4iFo0gRl2adn/view" },
-            { kind: "media", title: "", format: "4:5", thumbnail: "assets/images/drive-1xlbkqpiyhj1.jpg", video: "https://drive.google.com/file/d/1XLbKqPIYHJ1NbIX61hUtUGlvyuFwcPFQ/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1XLbKqPIYHJ1NbIX61hUtUGlvyuFwcPFQ/view" },
-            { kind: "media", title: "", format: "4:5", thumbnail: "assets/images/drive-17jmyfdjxy9h.jpg", video: "https://drive.google.com/file/d/17jMYfdJxy9HptfeITA7uBfI8h75K5K3w/preview", instagramUrl: "", link: "https://drive.google.com/file/d/17jMYfdJxy9HptfeITA7uBfI8h75K5K3w/view" },
-            { kind: "media", title: "", format: "4:5", thumbnail: "assets/images/drive-17hu4mqzuitq.jpg", video: "https://drive.google.com/file/d/17Hu4MqZUiTQnargoLRIpPIDFpI4yp_wD/preview", instagramUrl: "", link: "https://drive.google.com/file/d/17Hu4MqZUiTQnargoLRIpPIDFpI4yp_wD/view" },
-            { kind: "media", title: "", format: "4:5", thumbnail: "assets/images/drive-1cacbphcaruf.jpg", video: "https://drive.google.com/file/d/1CaCbPHCarUFtwmR5sFAjnsAON0OGjD1Q/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1CaCbPHCarUFtwmR5sFAjnsAON0OGjD1Q/view" },
-            { kind: "media", title: "", format: "16:9", thumbnail: "assets/images/drive-1wyrbfdjmrdu.jpg", video: "https://drive.google.com/file/d/1WYRBfDJMrDuPD0zI_RBMppuUZKgu8Ue1/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1WYRBfDJMrDuPD0zI_RBMppuUZKgu8Ue1/view" }
+            { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/drive-1faqxr0zghav.jpg", video: "https://drive.google.com/file/d/1FAqXR0ZgHav2_c1_5GvMInX4Gvzj_md9/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1FAqXR0ZgHav2_c1_5GvMInX4Gvzj_md9/view" },
+            { kind: "video", title: "", format: "9:16", thumbnail: "assets/images/drive-18bpahpwtcik.jpg", video: "https://drive.google.com/file/d/18BpAHPWtciK7mVggwNHan2qkv-gFSWkj/preview", instagramUrl: "", link: "https://drive.google.com/file/d/18BpAHPWtciK7mVggwNHan2qkv-gFSWkj/view" },
+            { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/drive-1jtwizh17t6w.jpg", video: "https://drive.google.com/file/d/1jtWIzH17T6WSBfUYt5xsmKR5cah4_0tp/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1jtWIzH17T6WSBfUYt5xsmKR5cah4_0tp/view" },
+            { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/drive-1ir4ck0nhnhe.jpg", video: "https://drive.google.com/file/d/1Ir4Ck0NHNhEBleeWZZex-vkR99ZBjSBz/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1Ir4Ck0NHNhEBleeWZZex-vkR99ZBjSBz/view" },
+            { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/drive-1bmtm-jdidqw.jpg", video: "https://drive.google.com/file/d/1Bmtm_JdIdQwC2jG3V8oyrV3d2TvRdSRo/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1Bmtm_JdIdQwC2jG3V8oyrV3d2TvRdSRo/view" },
+            { kind: "photo", title: "", format: "9:16", thumbnail: "assets/images/drive-1cle8dvem-zc.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1cle8dvem-zc.jpg" },
+            { kind: "photo", title: "", format: "9:16", thumbnail: "assets/images/drive-1z1juvi4ock7.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1z1juvi4ock7.jpg" },
+            { kind: "photo", title: "", format: "16:9", thumbnail: "assets/images/drive-1w16kwm3ydzi.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1w16kwm3ydzi.jpg" },
+            { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-1xlbkqpiyhj1.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1xlbkqpiyhj1.jpg" },
+            { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-17jmyfdjxy9h.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-17jmyfdjxy9h.jpg" },
+            { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-17hu4mqzuitq.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-17hu4mqzuitq.jpg" },
+            { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-1cacbphcaruf.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1cacbphcaruf.jpg" },
+            { kind: "photo", title: "", format: "16:9", thumbnail: "assets/images/drive-1wyrbfdjmrdu.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1wyrbfdjmrdu.jpg" }
         ]
     },
     {
@@ -247,10 +248,10 @@ const projects = [
                     { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dhcdbskkqyz.jpg", video: "https://www.instagram.com/reel/DHCDbSkKQyZ/", instagramUrl: "https://www.instagram.com/reel/DHCDbSkKQyZ/" },
                     { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-di9agyiqfil.jpg", video: "https://www.instagram.com/reel/DI9aGyiqFiL/", instagramUrl: "https://www.instagram.com/reel/DI9aGyiqFiL/" },
                     { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-djr6zchkcx7.jpg", video: "https://www.instagram.com/reel/DJR6ZcHKcX7/", instagramUrl: "https://www.instagram.com/reel/DJR6ZcHKcX7/" },
-                    { kind: "media", title: "", format: "9:16", thumbnail: "assets/images/drive-1fcokadqbwlg.jpg", video: "https://drive.google.com/file/d/1fcoKAdQBWLgxdP_yUlHV_oSNNlpapDlM/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1fcoKAdQBWLgxdP_yUlHV_oSNNlpapDlM/view" },
-                    { kind: "media", title: "", format: "9:16", thumbnail: "assets/images/drive-1getobg79mkk.jpg", video: "https://drive.google.com/file/d/1GEToBg79MkkDKZLSROecR4EXRxjC86gy/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1GEToBg79MkkDKZLSROecR4EXRxjC86gy/view" },
-                    { kind: "media", title: "", format: "9:16", thumbnail: "assets/images/drive-1gs7jsr9crnh.jpg", video: "https://drive.google.com/file/d/1Gs7jsR9cRnhzmI1VblgrWF9TKEU9sAKX/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1Gs7jsR9cRnhzmI1VblgrWF9TKEU9sAKX/view" },
-                    { kind: "media", title: "", format: "9:16", thumbnail: "assets/images/drive-1nvp9bkzcpxq.jpg", video: "https://drive.google.com/file/d/1nvp9bkZcPxQH-cz8Oowh3jfgWsLdE1gp/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1nvp9bkZcPxQH-cz8Oowh3jfgWsLdE1gp/view" }
+                    { kind: "photo", title: "", format: "9:16", thumbnail: "assets/images/drive-1fcokadqbwlg.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1fcokadqbwlg.jpg" },
+                    { kind: "photo", title: "", format: "9:16", thumbnail: "assets/images/drive-1getobg79mkk.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1getobg79mkk.jpg" },
+                    { kind: "photo", title: "", format: "9:16", thumbnail: "assets/images/drive-1gs7jsr9crnh.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1gs7jsr9crnh.jpg" },
+                    { kind: "photo", title: "", format: "9:16", thumbnail: "assets/images/drive-1nvp9bkzcpxq.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1nvp9bkzcpxq.jpg" }
                 ]
             }
         ],
@@ -270,10 +271,10 @@ const projects = [
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dhcdbskkqyz.jpg", video: "https://www.instagram.com/reel/DHCDbSkKQyZ/", instagramUrl: "https://www.instagram.com/reel/DHCDbSkKQyZ/" },
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-di9agyiqfil.jpg", video: "https://www.instagram.com/reel/DI9aGyiqFiL/", instagramUrl: "https://www.instagram.com/reel/DI9aGyiqFiL/" },
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-djr6zchkcx7.jpg", video: "https://www.instagram.com/reel/DJR6ZcHKcX7/", instagramUrl: "https://www.instagram.com/reel/DJR6ZcHKcX7/" },
-            { kind: "media", title: "", format: "9:16", thumbnail: "assets/images/drive-1fcokadqbwlg.jpg", video: "https://drive.google.com/file/d/1fcoKAdQBWLgxdP_yUlHV_oSNNlpapDlM/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1fcoKAdQBWLgxdP_yUlHV_oSNNlpapDlM/view" },
-            { kind: "media", title: "", format: "9:16", thumbnail: "assets/images/drive-1getobg79mkk.jpg", video: "https://drive.google.com/file/d/1GEToBg79MkkDKZLSROecR4EXRxjC86gy/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1GEToBg79MkkDKZLSROecR4EXRxjC86gy/view" },
-            { kind: "media", title: "", format: "9:16", thumbnail: "assets/images/drive-1gs7jsr9crnh.jpg", video: "https://drive.google.com/file/d/1Gs7jsR9cRnhzmI1VblgrWF9TKEU9sAKX/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1Gs7jsR9cRnhzmI1VblgrWF9TKEU9sAKX/view" },
-            { kind: "media", title: "", format: "9:16", thumbnail: "assets/images/drive-1nvp9bkzcpxq.jpg", video: "https://drive.google.com/file/d/1nvp9bkZcPxQH-cz8Oowh3jfgWsLdE1gp/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1nvp9bkZcPxQH-cz8Oowh3jfgWsLdE1gp/view" }
+            { kind: "photo", title: "", format: "9:16", thumbnail: "assets/images/drive-1fcokadqbwlg.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1fcokadqbwlg.jpg" },
+            { kind: "photo", title: "", format: "9:16", thumbnail: "assets/images/drive-1getobg79mkk.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1getobg79mkk.jpg" },
+            { kind: "photo", title: "", format: "9:16", thumbnail: "assets/images/drive-1gs7jsr9crnh.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1gs7jsr9crnh.jpg" },
+            { kind: "photo", title: "", format: "9:16", thumbnail: "assets/images/drive-1nvp9bkzcpxq.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1nvp9bkzcpxq.jpg" }
         ]
     },
     {
@@ -377,8 +378,8 @@ const projects = [
                 title: "The studio",
                 text: "We designed the studio in her home, sourced and built the décor, bought the right equipment and installed a complete set-up, technical details included.",
                 media: [
-                    { kind: "photo", title: "Studio build 1", format: "1:1", thumbnail: "assets/images/qs-d54rrvtm7mgd.jpg", video: "", instagramUrl: "", link: "https://quickshare.samsungcloud.com/d54RrvTm7MgD" },
-                    { kind: "photo", title: "Studio build 2", format: "1:1", thumbnail: "assets/images/qs-hkcr3yjmfdgp.jpg", video: "", instagramUrl: "", link: "https://quickshare.samsungcloud.com/hKCR3yjMFdgP" },
+                    { kind: "photo", title: "Studio build 1", format: "1:1", thumbnail: "assets/images/qs-d54rrvtm7mgd.jpg", video: "", instagramUrl: "", link: "https://quickshare.samsungcloud.com/d54RrvTm7MgD", full: "assets/images/qs-d54rrvtm7mgd.jpg" },
+                    { kind: "photo", title: "Studio build 2", format: "1:1", thumbnail: "assets/images/qs-hkcr3yjmfdgp.jpg", video: "", instagramUrl: "", link: "https://quickshare.samsungcloud.com/hKCR3yjMFdgP", full: "assets/images/qs-hkcr3yjmfdgp.jpg" },
                     { kind: "album", title: "Studio build 3", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/o1VYkXZ9TpQT9iD16" },
                     { kind: "album", title: "Studio build 4", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/aLpdnVEokgnvj7wWA" },
                     { kind: "album", title: "Studio build 5", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/Vp7JRtU94w7CEejt5" }
@@ -425,8 +426,8 @@ const projects = [
             }
         ],
         media: [
-            { kind: "photo", title: "Studio build 1", format: "1:1", thumbnail: "assets/images/qs-d54rrvtm7mgd.jpg", video: "", instagramUrl: "", link: "https://quickshare.samsungcloud.com/d54RrvTm7MgD" },
-            { kind: "photo", title: "Studio build 2", format: "1:1", thumbnail: "assets/images/qs-hkcr3yjmfdgp.jpg", video: "", instagramUrl: "", link: "https://quickshare.samsungcloud.com/hKCR3yjMFdgP" },
+            { kind: "photo", title: "Studio build 1", format: "1:1", thumbnail: "assets/images/qs-d54rrvtm7mgd.jpg", video: "", instagramUrl: "", link: "https://quickshare.samsungcloud.com/d54RrvTm7MgD", full: "assets/images/qs-d54rrvtm7mgd.jpg" },
+            { kind: "photo", title: "Studio build 2", format: "1:1", thumbnail: "assets/images/qs-hkcr3yjmfdgp.jpg", video: "", instagramUrl: "", link: "https://quickshare.samsungcloud.com/hKCR3yjMFdgP", full: "assets/images/qs-hkcr3yjmfdgp.jpg" },
             { kind: "album", title: "Studio build 3", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/o1VYkXZ9TpQT9iD16" },
             { kind: "album", title: "Studio build 4", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/aLpdnVEokgnvj7wWA" },
             { kind: "album", title: "Studio build 5", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/Vp7JRtU94w7CEejt5" },
