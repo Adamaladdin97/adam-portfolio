@@ -36,6 +36,7 @@ Whenever Adam explains the story behind a client (Gate Mall, Gulf Cryo, Sportap,
 - Set `tone` on a step/chapter in `data.js` when the title alone doesn't say it; otherwise it is guessed from the title/media.
 - Project cards on home/work glow on hover in their category tone (`CAT_TONE`).
 - Engagement badge format: `🔥 <views> Views`, permanently visible top-left, only with Adam's real numbers.
+- **Live view counts:** YouTube counts update automatically — `.github/workflows/views.yml` runs `scripts/update_views.py` every 6h, writing `assets/data/views.json`; badges with `data-yt` fill in client-side (from `siteConfig.viewsMin`, default 1000, so tiny unlisted counts never show). Instagram exposes no public view counts (embed has none, API needs the account owner's Graph API token) — IG reels only show a badge when Adam gives the number (`views` field) or a Graph API token is set up.
 - All project pages use this one standard: editorial split layout, universal in-site player, Verify on Instagram as a secondary link, ambient glows.
 
 ## 4. Decision protocol for `/add` and chat requests

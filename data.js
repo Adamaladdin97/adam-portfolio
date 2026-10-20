@@ -45,6 +45,7 @@ const siteConfig = {
     },
     whatsapp: "96566534771",          // country code + number, digits only (Kuwait +965)
     whatsappMessage: "Hi Adam, I saw your portfolio and I'd like to talk about a project.",
+    viewsMin: 1000,                  // live YouTube view badges show only from this many views up
     email: "adamaladdin97@gmail.com"
 };
 
