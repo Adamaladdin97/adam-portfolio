@@ -35,7 +35,8 @@ def main():
         print("no change")
         return
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps({"updated": datetime.now(timezone.utc).isoformat(timespec="minutes"), "youtube": counts}, indent=1) + "\n")
+    old.update({"updated": datetime.now(timezone.utc).isoformat(timespec="minutes"), "youtube": counts})  # keeps the manual "instagram" block
+    OUT.write_text(json.dumps(old, indent=1) + "\n")
     print("wrote", OUT, len(counts))
 
 

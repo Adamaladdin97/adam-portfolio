@@ -20,14 +20,17 @@ const isVertical = (f) => f === '9:16' || f === '4:5';
 
 /* ---------------- Live view counts ----------------
    assets/data/views.json is refreshed every 6h by .github/workflows/views.yml (public YouTube counts).
-   Badges carry data-yt="<id>"; once the file loads they switch to "🔥 228K Views" (only from siteConfig.viewsMin up). */
+   Instagram counts live in the same file under "instagram" (read by hand from the accounts' Reels grids — IG has no public counts).
+   Badges carry data-yt="<id>" / data-igc="<shortcode>"; once the file loads they switch to "🔥 228K Views" (only from siteConfig.viewsMin up). */
 const ytId = (url = '') => (url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/|youtube\.com\/embed\/)([\w-]{11})/) || [])[1] || '';
+const igCode = (url = '') => (url.match(/instagram\.com\/(?:reel|p|tv)\/([\w-]+)/) || [])[1] || '';
+const viewsAttr = (m) => ytId(m.video) ? `data-yt="${ytId(m.video)}"` : igCode(m.instagramUrl || m.video) ? `data-igc="${igCode(m.instagramUrl || m.video)}"` : '';
 const fmtViews = (n) => new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 }).format(n);
 const VIEWS = fetch('assets/data/views.json?t=' + Math.floor(Date.now() / 3.6e6), { cache: 'no-cache' })
     .then(r => (r.ok ? r.json() : {})).catch(() => ({}));
 function applyViews() {           // queries the whole page when the counts arrive (cards may still be in a fragment now)
-    VIEWS.then(v => document.querySelectorAll('[data-yt]').forEach(el => {
-        const n = (v.youtube || {})[el.dataset.yt];
+    VIEWS.then(v => document.querySelectorAll('[data-yt],[data-igc]').forEach(el => {
+        const n = el.dataset.yt ? (v.youtube || {})[el.dataset.yt] : (v.instagram || {})[el.dataset.igc];
         if (n == null || n < (siteConfig.viewsMin || 0)) return;
         el.textContent = `🔥 ${fmtViews(n)} Views`;
         el.classList.replace('text-neutral-300', 'text-white');
@@ -338,7 +341,7 @@ function mediaCard(p, m, layoutClass, photoSetForGrid = [], photoIndex = -1) {
     el.innerHTML = `
         ${bg}
         <div class="relative z-10 p-4 md:p-5 flex justify-between items-center">
-            <span class="px-3 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-[10px] uppercase tracking-widest ${m.views ? 'text-white' : 'text-neutral-300'}" ${!m.views && ytId(m.video) ? `data-yt="${ytId(m.video)}"` : ''}>${m.views ? '🔥 ' + esc(m.views) + ' Views' : kindLabel}</span>
+            <span class="px-3 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-[10px] uppercase tracking-widest ${m.views ? 'text-white' : 'text-neutral-300'}" ${!m.views ? viewsAttr(m) : ''}>${m.views ? '🔥 ' + esc(m.views) + ' Views' : kindLabel}</span>
             <span class="px-2.5 py-1 rounded bg-black/60 text-[10px] font-mono text-neutral-400 border border-white/10">${esc(m.format)}</span>
         </div>
         ${playable && m.thumbnail && !isPhoto ? `<div class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"><div class="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/25 flex items-center justify-center group-hover:bg-white group-hover:text-black transition duration-300"><svg class="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>` : ''}
@@ -361,7 +364,7 @@ const isLocalVideo = (u) => !!u && !/^https?:/.test(u) && /\.(mp4|webm|mov)$/i.t
 function stageBadge(m) {
     return m.views
         ? `<span class="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-[10px] uppercase tracking-widest text-white">🔥 ${esc(m.views)} Views</span>`
-        : `<span ${ytId(m.video) ? `data-yt="${ytId(m.video)}"` : ''} class="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-[10px] uppercase tracking-widest text-neutral-300">${esc(KIND_LABEL[m.kind] || m.kind)}</span>`;
+        : `<span ${viewsAttr(m)} class="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-[10px] uppercase tracking-widest text-neutral-300">${esc(KIND_LABEL[m.kind] || m.kind)}</span>`;
 }
 /* Visual layer of a card: muted looping preview for local mp4 (starts when in view), else the thumbnail */
 function stageVisual(m, alt) {
