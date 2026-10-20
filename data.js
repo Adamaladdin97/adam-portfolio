@@ -11,7 +11,10 @@
      facts        optional – 2–3 headline numbers: [{ value: "2", label: "major campaigns" }]
      account      optional – { handle: "brand", followers: "33K" }  (shown as an Instagram chip)
      cover        thumbnail used on cards;  coverFormat = its format (decides the card shape)
-     chapters     the story, in order: [{ title, text, media: [ ... ] }]
+     highlights   optional – 3-card strip under the facts: { title, items: [{ title, text }] }
+     chapters     the story, in order: [{ label, title, text, points, media: [ ... ] }]
+                  label  optional eyebrow, e.g. "Campaign 01" (default: 01, 02 …)
+                  points optional editorial bullets beside the title: [{ title, text }]
                   (a project with no chapter media just uses the flat `media` list)
      media        flat list of every deliverable (cover/count source; keep in sync with chapters)
      wide         optional – true makes a 16:9 project card 8 columns wide (home only)
@@ -22,11 +25,11 @@
         kind         video | reel | post | photo | media | album
         title        optional label
         format       "16:9" | "9:16" | "1:1" | "4:5"   (decides the card shape)
-        thumbnail    "assets/images/x.jpg"  ("" = shows a plain tile)
+        thumbnail    "assets/images/x.jpg"  (required – items with no thumbnail/video are never shown)
         video        URL opened in the lightbox (YouTube / Vimeo / Instagram / Drive preview / mp4)
         instagramUrl "Verify on Instagram" link ("" to hide)
         views        optional – real engagement badge, e.g. "1.4M Views" (never invent; shown instead of the kind label)
-        link         optional external URL; used when there is no video (opens in a new tab)
+        link         optional source URL for reference only (never rendered – no external redirects)
         full         photos only – local high-res image for the photo lightbox (assets/photos/…)
    ============================================================ */
 
@@ -66,60 +69,62 @@ const projects = [
     },
     {
         slug: "the-gate-mall",
-        title: "The Gate Mall — Eid & World Cup Campaigns",
+        title: "The Gate Mall — 360° Seasonal & World Cup Campaigns",
         client: "The Gate Mall",
         category: "social",
-        description: "Two major campaigns for The Gate Mall, Eid al-Adha and the World Cup Fan Zone, delivered end to end: promo films, design, animation, live coverage and same-day social.",
-        scope: ["Promo films", "Event coverage", "Animation", "Graphic design", "Social content", "Photography"],
+        description: "A full production partnership across two major seasonal activations at The Gate Mall, bridging high-end commercial production with fast, real-time social storytelling to drive footfall across multi-day festivals.",
+        scope: ["Creative direction", "Full media production", "DOOH motion", "Real-time social coverage"],
+        highlights: {
+            title: "Purpose-driven gear & speed",
+            items: [
+                { title: "Cinema cameras", text: "Flagship promos, celebrity appearances and the master festival recaps." },
+                { title: "360° action cam", text: "Funny POV reels following the Eidiya team, building FOMO across the four days of Eid." },
+                { title: "Real-time mobile", text: "Grand-prize winners captured on the spot and published within minutes, plus next-morning delivery of every daily promo." }
+            ]
+        },
         facts: [{ value: "2", label: "major campaigns" }, { value: "Next day", label: "promo delivery, during Eid" }],
         account: { handle: "thegatemallkwt", followers: "102K" },
         cover: "assets/images/ig-daawtpkqlm2.jpg",
         coverFormat: "9:16",
         chapters: [
             {
-                title: "Eid al-Adha: films",
-                text: "Promo film, a video for each of the three activations and a recap film. A same-day phone reel for a contest winner, and a funny POV reel of the Eidiya team to bring people in across the four days. Phone, 360 and cinema cameras, each chosen for its job.",
+                label: "Campaign 01",
+                title: "Eid al-Adha — 360° mall takeover & live coverage",
+                text: "Four days of Eid covered end to end, from on-ground identity to next-day films.",
+                points: [
+                    { title: "Pre-event & visual identity", text: "Stickers, banners, staff tees, Eidiya cards and social competition posts." },
+                    { title: "Mall-wide DOOH & arch motion", text: "Custom animation for vertical, horizontal and curved arch screens across the mall." },
+                    { title: "Next-day festival coverage", text: "A promo for each of the three sub-events plus a master recap, delivered within 24 hours." },
+                    { title: "Viral & real-time reels", text: "A 360° POV reel of the Eidiya team and an instant phone reel of a grand-prize winner." }
+                ],
                 media: [
                     { kind: "post", title: "Promo", format: "9:16", thumbnail: "assets/images/ig-dyj9auxixdj.jpg", video: "https://www.instagram.com/p/DYj9auxIxDJ/", instagramUrl: "https://www.instagram.com/p/DYj9auxIxDJ/" },
                     { kind: "post", title: "Activation 1", format: "9:16", thumbnail: "assets/images/ig-dy9yscluiy1.jpg", video: "https://www.instagram.com/p/DY9YsCluiY1/", instagramUrl: "https://www.instagram.com/p/DY9YsCluiY1/" },
                     { kind: "post", title: "Activation 2", format: "9:16", thumbnail: "assets/images/ig-dy9zspuovlj.jpg", video: "https://www.instagram.com/p/DY9ZSpuOVlJ/", instagramUrl: "https://www.instagram.com/p/DY9ZSpuOVlJ/" },
                     { kind: "post", title: "Activation 3", format: "9:16", thumbnail: "assets/images/ig-dy9bcgeuwhg.jpg", video: "https://www.instagram.com/p/DY9bCGeuwhG/", instagramUrl: "https://www.instagram.com/p/DY9bCGeuwhG/" },
-                    { kind: "album", title: "Recap film", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/prztt8RP5j1kvnoV7" },
-                    { kind: "album", title: "Contest winner reel", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/jumhwwsTqLHk2Bjb8" },
-                    { kind: "album", title: "Eidiya POV reel", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/XTrkamp6Gid683mw5" },
-                    { kind: "album", title: "UGC video", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/SVUGhSUtV9evhixC7" }
-                ]
-            },
-            {
-                title: "Eid al-Adha: design & animation",
-                text: "Stickers, banners, tees, social posts, contests and Eidiya cards, plus animation for every mall screen: large, small, vertical, horizontal, even the arch.",
-                media: [
                     { kind: "post", title: "Social set", format: "4:5", thumbnail: "assets/images/ig-dywlix9ikht.jpg", video: "https://www.instagram.com/p/DYwlIx9iKht/", instagramUrl: "https://www.instagram.com/p/DYwlIx9iKht/" },
                     { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-11qtilgrka-h.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-11qtilgrka-h.jpg" },
                     { kind: "photo", title: "", format: "9:16", thumbnail: "assets/images/drive-16rhtflnznnw.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-16rhtflnznnw.jpg" },
                     { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-1agkg8toat7m.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1agkg8toat7m.jpg" },
                     { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-1ytembw8ssgk.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1ytembw8ssgk.jpg" },
-                    { kind: "media", title: "", format: "9:16", thumbnail: "", video: "https://drive.google.com/file/d/1qYKyZMY4v6z1jGnQBPi96JDf-4oPOE7f/view", instagramUrl: "" },
-                    { kind: "photo", title: "", format: "1:1", thumbnail: "assets/images/drive-1vz31gagyetw.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1vz31gagyetw.jpg" },
-                    { kind: "album", title: "Screen animations", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/Fytste3XbWYAiRNo7" }
+                    { kind: "photo", title: "", format: "1:1", thumbnail: "assets/images/drive-1vz31gagyetw.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1vz31gagyetw.jpg" }
                 ]
             },
             {
-                title: "World Cup Fan Zone: films",
-                text: "A strong launch promo and UGC videos in several styles to pull people in, plus full event coverage featuring freestyle performer Karam Medani and Kuwaiti football star Bader Al Mutawa.",
+                label: "Campaign 02",
+                title: "The Gate Fan Zone — World Cup activation",
+                text: "An interactive gaming and competition zone for football fans, promoted before launch and covered live.",
+                points: [
+                    { title: "Hype & UGC strategy", text: "High-energy pre-event promos and multi-format UGC videos to pull fans into the zone." },
+                    { title: "Star appearances & live action", text: "Full cinematic and social coverage with Kuwaiti football star Bader Al Mutawa and freestyle performer Karam Medani." }
+                ],
                 media: [
                     { kind: "post", title: "Fan Zone promo", format: "9:16", thumbnail: "assets/images/ig-daawtpkqlm2.jpg", video: "https://www.instagram.com/p/DaawTPkqLm2/", instagramUrl: "https://www.instagram.com/p/DaawTPkqLm2/" },
                     { kind: "post", title: "UGC", format: "9:16", thumbnail: "assets/images/ig-daaw55zkhsm.jpg", video: "https://www.instagram.com/p/Daaw55ZKhSM/", instagramUrl: "https://www.instagram.com/p/Daaw55ZKhSM/" },
                     { kind: "post", title: "UGC", format: "9:16", thumbnail: "assets/images/ig-daw4xdqqfnn.jpg", video: "https://www.instagram.com/p/DaW4XDqqfnn/", instagramUrl: "https://www.instagram.com/p/DaW4XDqqfnn/" },
                     { kind: "post", title: "UGC", format: "9:16", thumbnail: "assets/images/ig-dbv3f9skpze.jpg", video: "https://www.instagram.com/p/DbV3F9SKPZe/", instagramUrl: "https://www.instagram.com/p/DbV3F9SKPZe/" },
                     { kind: "video", title: "Event coverage", format: "9:16", thumbnail: "assets/images/drive-157vqeeb2vxk.jpg", video: "https://drive.google.com/file/d/157vQeeb2vxKfCVW2uTuJxh_thAFwahZj/preview", instagramUrl: "", link: "https://drive.google.com/file/d/157vQeeb2vxKfCVW2uTuJxh_thAFwahZj/view" },
-                    { kind: "post", title: "Event highlights", format: "4:5", thumbnail: "assets/images/ig-dapbeordvqj.jpg", video: "https://www.instagram.com/p/DapbeoRDvQj/", instagramUrl: "https://www.instagram.com/p/DapbeoRDvQj/" }
-                ]
-            },
-            {
-                title: "World Cup: animation & design",
-                text: "Screen animation and event design for the Fan Zone.",
-                media: [
+                    { kind: "post", title: "Event highlights", format: "4:5", thumbnail: "assets/images/ig-dapbeordvqj.jpg", video: "https://www.instagram.com/p/DapbeoRDvQj/", instagramUrl: "https://www.instagram.com/p/DapbeoRDvQj/" },
                     { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/drive-1faqxr0zghav.jpg", video: "https://drive.google.com/file/d/1FAqXR0ZgHav2_c1_5GvMInX4Gvzj_md9/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1FAqXR0ZgHav2_c1_5GvMInX4Gvzj_md9/view" },
                     { kind: "video", title: "", format: "9:16", thumbnail: "assets/images/drive-18bpahpwtcik.jpg", video: "https://drive.google.com/file/d/18BpAHPWtciK7mVggwNHan2qkv-gFSWkj/preview", instagramUrl: "", link: "https://drive.google.com/file/d/18BpAHPWtciK7mVggwNHan2qkv-gFSWkj/view" },
                     { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/drive-1jtwizh17t6w.jpg", video: "https://drive.google.com/file/d/1jtWIzH17T6WSBfUYt5xsmKR5cah4_0tp/preview", instagramUrl: "", link: "https://drive.google.com/file/d/1jtWIzH17T6WSBfUYt5xsmKR5cah4_0tp/view" },
@@ -148,18 +153,12 @@ const projects = [
             { kind: "post", title: "Activation 1", format: "9:16", thumbnail: "assets/images/ig-dy9yscluiy1.jpg", video: "https://www.instagram.com/p/DY9YsCluiY1/", instagramUrl: "https://www.instagram.com/p/DY9YsCluiY1/" },
             { kind: "post", title: "Activation 2", format: "9:16", thumbnail: "assets/images/ig-dy9zspuovlj.jpg", video: "https://www.instagram.com/p/DY9ZSpuOVlJ/", instagramUrl: "https://www.instagram.com/p/DY9ZSpuOVlJ/" },
             { kind: "post", title: "Activation 3", format: "9:16", thumbnail: "assets/images/ig-dy9bcgeuwhg.jpg", video: "https://www.instagram.com/p/DY9bCGeuwhG/", instagramUrl: "https://www.instagram.com/p/DY9bCGeuwhG/" },
-            { kind: "album", title: "Recap film", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/prztt8RP5j1kvnoV7" },
-            { kind: "album", title: "Contest winner reel", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/jumhwwsTqLHk2Bjb8" },
-            { kind: "album", title: "Eidiya POV reel", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/XTrkamp6Gid683mw5" },
-            { kind: "album", title: "UGC video", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/SVUGhSUtV9evhixC7" },
             { kind: "post", title: "Social set", format: "4:5", thumbnail: "assets/images/ig-dywlix9ikht.jpg", video: "https://www.instagram.com/p/DYwlIx9iKht/", instagramUrl: "https://www.instagram.com/p/DYwlIx9iKht/" },
             { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-11qtilgrka-h.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-11qtilgrka-h.jpg" },
             { kind: "photo", title: "", format: "9:16", thumbnail: "assets/images/drive-16rhtflnznnw.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-16rhtflnznnw.jpg" },
             { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-1agkg8toat7m.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1agkg8toat7m.jpg" },
             { kind: "photo", title: "", format: "4:5", thumbnail: "assets/images/drive-1ytembw8ssgk.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1ytembw8ssgk.jpg" },
-            { kind: "media", title: "", format: "9:16", thumbnail: "", video: "https://drive.google.com/file/d/1qYKyZMY4v6z1jGnQBPi96JDf-4oPOE7f/view", instagramUrl: "" },
             { kind: "photo", title: "", format: "1:1", thumbnail: "assets/images/drive-1vz31gagyetw.jpg", video: "", instagramUrl: "", full: "assets/photos/drive-1vz31gagyetw.jpg" },
-            { kind: "album", title: "Screen animations", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/Fytste3XbWYAiRNo7" },
             { kind: "post", title: "Fan Zone promo", format: "9:16", thumbnail: "assets/images/ig-daawtpkqlm2.jpg", video: "https://www.instagram.com/p/DaawTPkqLm2/", instagramUrl: "https://www.instagram.com/p/DaawTPkqLm2/" },
             { kind: "post", title: "UGC", format: "9:16", thumbnail: "assets/images/ig-daaw55zkhsm.jpg", video: "https://www.instagram.com/p/Daaw55ZKhSM/", instagramUrl: "https://www.instagram.com/p/Daaw55ZKhSM/" },
             { kind: "post", title: "UGC", format: "9:16", thumbnail: "assets/images/ig-daw4xdqqfnn.jpg", video: "https://www.instagram.com/p/DaW4XDqqfnn/", instagramUrl: "https://www.instagram.com/p/DaW4XDqqfnn/" },
@@ -379,10 +378,7 @@ const projects = [
                 text: "We designed the studio in her home, sourced and built the décor, bought the right equipment and installed a complete set-up, technical details included.",
                 media: [
                     { kind: "photo", title: "Studio build 1", format: "1:1", thumbnail: "assets/images/qs-d54rrvtm7mgd.jpg", video: "", instagramUrl: "", link: "https://quickshare.samsungcloud.com/d54RrvTm7MgD", full: "assets/images/qs-d54rrvtm7mgd.jpg" },
-                    { kind: "photo", title: "Studio build 2", format: "1:1", thumbnail: "assets/images/qs-hkcr3yjmfdgp.jpg", video: "", instagramUrl: "", link: "https://quickshare.samsungcloud.com/hKCR3yjMFdgP", full: "assets/images/qs-hkcr3yjmfdgp.jpg" },
-                    { kind: "album", title: "Studio build 3", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/o1VYkXZ9TpQT9iD16" },
-                    { kind: "album", title: "Studio build 4", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/aLpdnVEokgnvj7wWA" },
-                    { kind: "album", title: "Studio build 5", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/Vp7JRtU94w7CEejt5" }
+                    { kind: "photo", title: "Studio build 2", format: "1:1", thumbnail: "assets/images/qs-hkcr3yjmfdgp.jpg", video: "", instagramUrl: "", link: "https://quickshare.samsungcloud.com/hKCR3yjMFdgP", full: "assets/images/qs-hkcr3yjmfdgp.jpg" }
                 ]
             },
             {
@@ -428,9 +424,6 @@ const projects = [
         media: [
             { kind: "photo", title: "Studio build 1", format: "1:1", thumbnail: "assets/images/qs-d54rrvtm7mgd.jpg", video: "", instagramUrl: "", link: "https://quickshare.samsungcloud.com/d54RrvTm7MgD", full: "assets/images/qs-d54rrvtm7mgd.jpg" },
             { kind: "photo", title: "Studio build 2", format: "1:1", thumbnail: "assets/images/qs-hkcr3yjmfdgp.jpg", video: "", instagramUrl: "", link: "https://quickshare.samsungcloud.com/hKCR3yjMFdgP", full: "assets/images/qs-hkcr3yjmfdgp.jpg" },
-            { kind: "album", title: "Studio build 3", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/o1VYkXZ9TpQT9iD16" },
-            { kind: "album", title: "Studio build 4", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/aLpdnVEokgnvj7wWA" },
-            { kind: "album", title: "Studio build 5", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/Vp7JRtU94w7CEejt5" },
             { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/yt-nh67ywvk3qq.jpg", video: "https://www.youtube.com/watch?v=nh67YWvk3QQ", instagramUrl: "" },
             { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/yt-4ooiml8szha.jpg", video: "https://www.youtube.com/watch?v=4oOIMl8SzHA", instagramUrl: "" },
             { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/yt-d7rvuf1qpfw.jpg", video: "https://www.youtube.com/watch?v=D7rVuF1QPfw", instagramUrl: "" },
@@ -472,8 +465,7 @@ const projects = [
                 title: "Episode one",
                 text: "His first full episode with a host, in a simple, calm set that suits his topics.",
                 media: [
-                    { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/yt-cbnylpunk0o.jpg", video: "https://www.youtube.com/watch?v=cBNyLpUnK0o", instagramUrl: "" },
-                    { kind: "album", title: "Behind the scenes", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/ESzrrK2QY5Vbg7qdA" }
+                    { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/yt-cbnylpunk0o.jpg", video: "https://www.youtube.com/watch?v=cBNyLpUnK0o", instagramUrl: "" }
                 ]
             },
             {
@@ -499,7 +491,6 @@ const projects = [
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dlk-bxaiogb.jpg", video: "https://www.instagram.com/reel/DLK_bXaioGB/", instagramUrl: "https://www.instagram.com/reel/DLK_bXaioGB/" },
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dlr4mr9cfoi.jpg", video: "https://www.instagram.com/reel/DLR4MR9CFOi/", instagramUrl: "https://www.instagram.com/reel/DLR4MR9CFOi/" },
             { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/yt-cbnylpunk0o.jpg", video: "https://www.youtube.com/watch?v=cBNyLpUnK0o", instagramUrl: "" },
-            { kind: "album", title: "Behind the scenes", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/ESzrrK2QY5Vbg7qdA" },
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dw9w-tkgk-v.jpg", video: "https://www.instagram.com/reel/DW9W-TKgk-V/", instagramUrl: "https://www.instagram.com/reel/DW9W-TKgk-V/" },
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dxupm16at8p.jpg", video: "https://www.instagram.com/reel/DXUpm16At8p/", instagramUrl: "https://www.instagram.com/reel/DXUpm16At8p/" },
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dd4j9vscxgg.jpg", video: "https://www.instagram.com/reel/Dd4J9vsCXgg/", instagramUrl: "https://www.instagram.com/reel/Dd4J9vsCXgg/" },
@@ -532,7 +523,6 @@ const projects = [
                 title: "Sponsor integration",
                 text: "A new way to place the sponsor inside the episode so the ad feels part of the show.",
                 media: [
-                    { kind: "album", title: "Sponsor inside the episode", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/LNgSkCPG7vifLFep9" }
                 ]
             },
             {
@@ -551,7 +541,6 @@ const projects = [
         media: [
             { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/yt-tzxy7btkdqs.jpg", video: "https://www.youtube.com/watch?v=tZxY7BtkDQs", instagramUrl: "" },
             { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/yt-qks5wous72w.jpg", video: "https://www.youtube.com/watch?v=qks5woUS72w", instagramUrl: "" },
-            { kind: "album", title: "Sponsor inside the episode", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/LNgSkCPG7vifLFep9" },
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-df4wyodshga.jpg", video: "https://www.instagram.com/reel/DF4wYOdsHga/", instagramUrl: "https://www.instagram.com/reel/DF4wYOdsHga/" },
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dfgi-bsmxjr.jpg", video: "https://www.instagram.com/reel/DFGI_BsMXjr/", instagramUrl: "https://www.instagram.com/reel/DFGI_BsMXjr/" },
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-de5ohunmiah.jpg", video: "https://www.instagram.com/reel/DE5OhUnMIah/", instagramUrl: "https://www.instagram.com/reel/DE5OhUnMIah/" },
@@ -663,14 +652,6 @@ const projects = [
                     { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dke-zbysby0.jpg", video: "https://www.instagram.com/reel/DKe-ZbYsBy0/", instagramUrl: "https://www.instagram.com/reel/DKe-ZbYsBy0/" },
                     { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dkpfg61szt3.jpg", video: "https://www.instagram.com/reel/DKPfG61szt3/", instagramUrl: "https://www.instagram.com/reel/DKPfG61szt3/" }
                 ]
-            },
-            {
-                title: "Stills",
-                text: "",
-                media: [
-                    { kind: "album", title: "Photo set 1", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/4bK68Uh2nz9yj8tH9" },
-                    { kind: "album", title: "Photo set 2", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/mzcr7AxpHgMCK3b66" }
-                ]
             }
         ],
         media: [
@@ -681,9 +662,7 @@ const projects = [
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dgfkcjisah-.jpg", video: "https://www.instagram.com/reel/DGfkcJiSaH_/", instagramUrl: "https://www.instagram.com/reel/DGfkcJiSaH_/" },
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dffsajlm0vi.jpg", video: "https://www.instagram.com/reel/DFfsajlM0vi/", instagramUrl: "https://www.instagram.com/reel/DFfsajlM0vi/" },
             { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dke-zbysby0.jpg", video: "https://www.instagram.com/reel/DKe-ZbYsBy0/", instagramUrl: "https://www.instagram.com/reel/DKe-ZbYsBy0/" },
-            { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dkpfg61szt3.jpg", video: "https://www.instagram.com/reel/DKPfG61szt3/", instagramUrl: "https://www.instagram.com/reel/DKPfG61szt3/" },
-            { kind: "album", title: "Photo set 1", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/4bK68Uh2nz9yj8tH9" },
-            { kind: "album", title: "Photo set 2", format: "16:9", thumbnail: "", video: "", instagramUrl: "", link: "https://photos.app.goo.gl/mzcr7AxpHgMCK3b66" }
+            { kind: "reel", title: "", format: "9:16", thumbnail: "assets/images/ig-dkpfg61szt3.jpg", video: "https://www.instagram.com/reel/DKPfG61szt3/", instagramUrl: "https://www.instagram.com/reel/DKPfG61szt3/" }
         ]
     },
     {

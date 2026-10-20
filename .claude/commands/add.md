@@ -25,10 +25,11 @@ Read `CLAUDE.md` first (site rules + data model), then do these steps in order.
 4. **Handle media.**
    - Copy local files into `assets/images/` or `assets/videos/` with kebab-case names.
    - Optimize: images → max 1600px wide, JPG ≤ 400 KB (`sips -Z 1600 -s format jpeg -s formatOptions 80`); videos → if > 15 MB don't commit; ask for a YouTube/Vimeo link or compress with ffmpeg (H.264, CRF 26, 1080p max).
-   - Thumbnails: his image if given; YouTube → `https://img.youtube.com/vi/<id>/maxresdefault.jpg` (fallback `hqdefault.jpg`) saved into `assets/images/`; local video → extract a frame with ffmpeg; Instagram → fetch the cover from `https://www.instagram.com/<reel|p>/<id>/embed` (`EmbeddedMediaImage`) and save it locally (those CDN URLs expire). If no thumbnail is possible, tell him exactly what to send.
+   - Thumbnails: his image if given; YouTube → `https://img.youtube.com/vi/<id>/maxresdefault.jpg` (fallback `hqdefault.jpg`) saved into `assets/images/`; local video → extract a frame with ffmpeg; Instagram → fetch the cover from `https://www.instagram.com/<reel|p>/<id>/embed` (`EmbeddedMediaImage`) and save it locally (those CDN URLs expire). If no thumbnail is possible, do NOT add the item (no link tiles, no Google Photos / Drive folder cards) — tell him exactly what to send.
+   - Drive video file → `video: "https://drive.google.com/file/d/<id>/preview"` + thumbnail from `drive.google.com/thumbnail?id=<id>&sz=w1600`; it plays in the site lightbox.
    - Instagram reel: `video` = the reel URL (opens in the lightbox), `instagramUrl` = same URL ("Verify on Instagram").
 
-5. **Chapters.** Put each deliverable in the chapter it belongs to (e.g. "Studio", "Episodes", "Reels", "Live", "Behind the scenes"); keep the flat `media[]` in sync; set `cover`/`coverFormat`. Keep chapter text to 1–3 sentences from what Adam said. An account chip needs `account: { handle, followers }` (read the follower count from the public profile's og:description).
+5. **Chapters (multi-chapter case study — see CLAUDE.md §3b).** When he tells a story, use `label` ("Campaign 01"), `points` [{title,text}] and optional project `highlights`. Put each deliverable in the chapter it belongs to (e.g. "Studio", "Episodes", "Reels", "Live", "Behind the scenes"); keep the flat `media[]` in sync; set `cover`/`coverFormat`. Keep chapter text to 1–3 sentences from what Adam said. An account chip needs `account: { handle, followers }` (read the follower count from the public profile's og:description).
 
 6. **Edit `data.js` only** (never the HTML/JS pages). New projects go right after the `home` projects at the top of the list (newest first). Keep `slug` unique kebab-case. Run `node --check data.js`.
 

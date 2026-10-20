@@ -48,7 +48,7 @@
                     ${accountChip(p)}
                     ${(p.scope || []).map(t => `<span class="px-3 py-1.5 rounded-md bg-white/5 border border-white/5 text-xs text-neutral-300">${esc(t)}</span>`).join('')}
                 </div>`;
-            $('project-facts').innerHTML = factsHTML(p);
+            $('project-facts').innerHTML = factsHTML(p) + highlightsHTML(p);
             const chapters = p.chapters || [];
             if (chapters.some(c => c.media && c.media.length)) {
                 chapters.forEach((c, i) => {

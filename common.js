@@ -58,7 +58,7 @@ function renderChrome(active) {
             <span>BASE: KUWAIT · SILENT LUXURY EDITION</span>
         </div>
     </footer>
-    <div id="lightbox" class="fixed inset-0 z-50 bg-black hidden items-center justify-center p-4 md:p-10" role="dialog" aria-modal="true">
+    <div id="lightbox" class="fixed inset-0 z-50 bg-[rgba(6,7,9,0.96)] backdrop-blur-sm hidden items-center justify-center p-4 md:p-10" role="dialog" aria-modal="true">
         <button id="modal-close" class="absolute top-4 right-4 md:top-6 md:right-6 text-neutral-400 hover:text-white text-xs uppercase tracking-widest border border-white/15 px-4 py-2 rounded-full">Close ✕</button>
         <div class="w-full max-w-5xl flex flex-col items-center">
             <h3 id="modal-title" dir="auto" class="font-serif text-2xl text-white mb-4 self-start"></h3>
@@ -67,7 +67,7 @@ function renderChrome(active) {
         </div>
     </div>`;
     document.body.insertAdjacentHTML('beforeend', `
-    <div id="photo-box" class="fixed inset-0 z-50 bg-black hidden items-center justify-center p-4 md:p-12 opacity-0 transition-opacity duration-300" role="dialog" aria-modal="true">
+    <div id="photo-box" class="fixed inset-0 z-50 bg-[rgba(6,7,9,0.96)] backdrop-blur-sm hidden items-center justify-center p-4 md:p-12 opacity-0 transition-opacity duration-300" role="dialog" aria-modal="true">
         <button id="photo-close" class="absolute top-4 right-4 md:top-6 md:right-6 text-neutral-400 hover:text-white text-xs uppercase tracking-widest border border-white/15 px-4 py-2 rounded-full z-10">Close ✕</button>
         <button id="photo-prev" aria-label="Previous" class="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-white/15 text-white/70 hover:text-white hover:bg-white/10 transition z-10">←</button>
         <button id="photo-next" aria-label="Next" class="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-white/15 text-white/70 hover:text-white hover:bg-white/10 transition z-10">→</button>
@@ -99,6 +99,8 @@ function toEmbed(url) {
     if ((m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/|youtube\.com\/embed\/)([\w-]{11})/)))
         return { type: 'iframe', src: `https://www.youtube.com/embed/${m[1]}?autoplay=1&rel=0` };
     if ((m = url.match(/vimeo\.com\/(?:video\/)?(\d+)/))) return { type: 'iframe', src: `https://player.vimeo.com/video/${m[1]}?autoplay=1` };
+    if ((m = url.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=\w+&)?id=)([\w-]{20,})/)))
+        return { type: 'iframe', src: `https://drive.google.com/file/d/${m[1]}/preview` };
     if ((m = url.match(/instagram\.com\/(reel|p|tv)\/([\w-]+)/))) return { type: 'iframe', src: `https://www.instagram.com/${m[1]}/${m[2]}/embed` };
     if (/\.(jpe?g|png|webp|avif)(\?|$)/i.test(url)) return { type: 'img', src: url };
     if (/\.(mp4|webm|mov)(\?|$)/i.test(url) || !/^https?:/.test(url)) return { type: 'video', src: url };
@@ -263,33 +265,49 @@ function layoutList(ms) {
 }
 function mediaGrids(p, ms, chapterTitle = '') {
     const wrap = document.createDocumentFragment();
-    const photos = ms.filter(m => m.kind === 'photo' && (m.full || m.thumbnail));
-    const set = photos.map(m => ({ src: m.full || m.thumbnail, caption: m.title || (chapterTitle ? `${p.title} — ${chapterTitle}` : p.title) }));
-    const mediaCard_ = mediaCard;
-    const mediaCard2 = (pp, m, cls) => mediaCard_(pp, m, cls, set, photos.indexOf(m));
-    const V = ms.filter(m => isVertical(m.format)), H = ms.filter(m => !isVertical(m.format));
-    if (H.length === 1 && V.length === 1) {            // one film + one vertical: a single 8 + 4 block
-        const g = document.createElement('div');
-        g.className = GRID + ' mb-5 md:mb-6';
-        g.appendChild(mediaCard2(p, H[0], span(H[0].format, 8, '', 2)));
-        g.appendChild(mediaCard2(p, V[0], span(V[0].format, 4)));
-        wrap.appendChild(g);
-        return wrap;
+    ms = ms.filter(m => m.video || m.full || m.thumbnail);   // never render link-only / folder tiles
+    const photos = ms.filter(m => m.kind === 'photo' && !m.video);
+    const set = photos.map(m => ({ src: m.full || m.thumbnail, caption: m.title || (chapterTitle ? `${p.client} — ${chapterTitle}` : p.client) }));
+    const card = (m, cls) => mediaCard(p, m, cls, set, photos.indexOf(m));
+    const gallery = photos.length >= 2;                       // 2+ photos → masonry gallery after the films
+    const rest = gallery ? ms.filter(m => !photos.includes(m)) : ms;
+    const V = rest.filter(m => isVertical(m.format)), H = rest.filter(m => !isVertical(m.format));
+    const groups = [];
+    if (H.length === 1 && V.length === 1) groups.push(['', [[H[0], span(H[0].format, 8, '', 2)], [V[0], span(V[0].format, 4)]]]);
+    else {
+        const order = rest.length && isVertical(rest[0].format) ? [[V, 'Vertical'], [H, 'Widescreen']] : [[H, 'Widescreen'], [V, 'Vertical']];
+        order.forEach(([g, name]) => { if (g.length) { const l = layoutList(g); groups.push([name, g.map((m, i) => [m, l[i]])]); } });
     }
-    [H, V].forEach(group => {
-        if (!group.length) return;
+    const labelled = groups.length + (gallery ? 1 : 0) > 1;
+    const label = (t) => { if (labelled && t) wrap.appendChild(Object.assign(document.createElement('p'), { className: 'eyebrow mb-4 mt-2', textContent: t })); };
+    groups.forEach(([name, items]) => {
+        label(name);
         const g = document.createElement('div');
         g.className = GRID + ' mb-5 md:mb-6';
-        const layout = layoutList(group);
-        group.forEach((m, i) => g.appendChild(mediaCard2(p, m, layout[i])));
+        items.forEach(([m, cls]) => g.appendChild(card(m, cls)));
         wrap.appendChild(g);
     });
+    if (gallery) { label('Stills'); wrap.appendChild(photoGallery(photos, set)); }
     return wrap;
+}
+/* Photography & BTS: masonry gallery (natural ratios), click = full-screen photo lightbox */
+function photoGallery(photos, set) {
+    const g = document.createElement('div');
+    g.className = 'columns-1 md:columns-3 gap-5 mb-5 md:mb-6';
+    photos.forEach((m, i) => {
+        const fig = document.createElement('figure');
+        fig.className = 'luxury-card rounded-2xl overflow-hidden relative group cursor-zoom-in break-inside-avoid mb-5';
+        fig.style.aspectRatio = (m.format || '4:5').replace(':', ' / ');
+        fig.innerHTML = `<img src="${esc(m.thumbnail || m.full)}" alt="${esc(set[i].caption)}" loading="lazy" class="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:scale-105 group-hover:opacity-100 transition duration-700">`;
+        fig.addEventListener('click', () => openPhoto(set, i));
+        g.appendChild(fig);
+    });
+    return g;
 }
 function mediaCard(p, m, layoutClass, photoSetForGrid = [], photoIndex = -1) {
     const isPhoto = m.kind === 'photo' && !m.video && !!(m.full || m.thumbnail);
     const url = m.video || (isPhoto ? (m.full || m.thumbnail) : '');
-    const playable = !!url, external = !playable && !!m.link;
+    const playable = !!url, external = false;   // no forced external redirects: cards only open in-site lightboxes
     const label = m.title || p.title;
     const el = document.createElement(external ? 'a' : 'div');
     if (external) { el.href = m.link; el.target = '_blank'; el.rel = 'noopener'; }
@@ -303,12 +321,12 @@ function mediaCard(p, m, layoutClass, photoSetForGrid = [], photoIndex = -1) {
     el.innerHTML = `
         ${bg}
         <div class="relative z-10 p-4 md:p-5 flex justify-between items-center">
-            <span class="px-3 py-1 rounded-full bg-black/55 backdrop-blur-md border border-white/10 text-[10px] uppercase tracking-widest text-neutral-300">${m.views ? '▶ ' + esc(m.views) : kindLabel}</span>
+            <span class="px-3 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-[10px] uppercase tracking-widest ${m.views ? 'text-white' : 'text-neutral-300'}">${m.views ? '▶ ' + esc(m.views) + ' Views' : kindLabel}</span>
             <span class="px-2.5 py-1 rounded bg-black/60 text-[10px] font-mono text-neutral-400 border border-white/10">${esc(m.format)}</span>
         </div>
         ${playable && m.thumbnail && !isPhoto ? `<div class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"><div class="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/25 flex items-center justify-center group-hover:bg-white group-hover:text-black transition duration-300"><svg class="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>` : ''}
         <div class="relative z-10 p-5 flex items-center justify-between gap-3">
-            <span dir="auto" class="text-sm text-white truncate">${m.title ? esc(m.title) : (external ? 'Open ↗' : '')}</span>
+            <span dir="auto" class="text-sm text-white truncate">${m.title ? esc(m.title) : ''}</span>
             ${m.instagramUrl ? `<a href="${esc(m.instagramUrl)}" target="_blank" rel="noopener" data-ig class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white hover:text-black backdrop-blur-md border border-white/15 text-[11px] text-white transition whitespace-nowrap">Verify on IG ↗</a>` : ''}
         </div>`;
     if (isPhoto) el.addEventListener('click', () => openPhoto(photoSetForGrid.length ? photoSetForGrid : [{ src: url, caption: label }], Math.max(photoIndex, 0)));
@@ -329,11 +347,34 @@ function factsHTML(p) {
     return facts ? `<div class="grid grid-cols-1 sm:grid-cols-${Math.min((p.facts || []).length, 3)} gap-5 md:gap-6 mb-12 md:mb-14">${facts}</div>` : '';
 }
 function chapterHead(i, c) {
-    return `<div class="mb-6 md:mb-8 max-w-3xl">
-        <p class="text-xs font-mono text-neutral-500 mb-3">${String(i + 1).padStart(2, '0')}</p>
-        <h2 dir="auto" class="font-serif text-3xl md:text-4xl text-white mb-3">${esc(c.title)}</h2>
-        ${c.text ? `<p dir="auto" class="text-sm md:text-base text-neutral-400 font-light leading-relaxed">${esc(c.text)}</p>` : ''}
+    const points = (c.points || []).map(x => `
+        <div class="border-t border-white/10 pt-4">
+            <h3 dir="auto" class="text-xs uppercase tracking-widest text-white mb-2">${esc(x.title)}</h3>
+            <p dir="auto" class="text-sm text-neutral-400 font-light leading-relaxed">${esc(x.text)}</p>
+        </div>`).join('');
+    return `<div class="mb-8 md:mb-10 ${points ? 'grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12' : 'max-w-3xl'}">
+        <div class="${points ? 'lg:col-span-5' : ''}">
+            <p class="text-xs font-mono text-neutral-500 mb-3">${c.label ? esc(c.label).toUpperCase() : String(i + 1).padStart(2, '0')}</p>
+            <h2 dir="auto" class="font-serif text-3xl md:text-4xl text-white mb-3 leading-tight">${esc(c.title)}</h2>
+            ${c.text ? `<p dir="auto" class="text-sm md:text-base text-neutral-400 font-light leading-relaxed">${esc(c.text)}</p>` : ''}
+        </div>
+        ${points ? `<div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">${points}</div>` : ''}
     </div>`;
+}
+/* Optional strip of 3 highlight cards under the facts (e.g. gear & speed philosophy) */
+function highlightsHTML(p) {
+    const h = p.highlights;
+    if (!h || !(h.items || []).length) return '';
+    return `<section class="mb-14 md:mb-20">
+        ${h.title ? `<p class="eyebrow mb-5">${esc(h.title)}</p>` : ''}
+        <div class="grid grid-cols-1 md:grid-cols-${Math.min(h.items.length, 3)} gap-5 md:gap-6">${h.items.map((x, i) => `
+            <div class="luxury-card rounded-2xl p-6 md:p-7 flex flex-col gap-6">
+                <span class="text-xs font-mono text-neutral-500">${String(i + 1).padStart(2, '0')}</span>
+                <div><h3 dir="auto" class="font-serif text-2xl text-white mb-2">${esc(x.title)}</h3>
+                <p dir="auto" class="text-sm text-neutral-400 font-light leading-relaxed">${esc(x.text)}</p></div>
+            </div>`).join('')}
+        </div>
+    </section>`;
 }
 function accountChip(p) {
     return p.account ? `<a href="https://www.instagram.com/${esc(p.account.handle)}/" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-md bg-white/10 border border-white/10 text-xs text-white hover:bg-white hover:text-black transition">@${esc(p.account.handle)} · ${esc(p.account.followers)} ↗</a>` : '';
