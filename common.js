@@ -337,6 +337,154 @@ function mediaCard(p, m, layoutClass, photoSetForGrid = [], photoIndex = -1) {
     return el;
 }
 
+/* ---------------- Editorial case study (project page) ----------------
+   Each chapter (or each of its `steps`) is one row: the story sticks on the left (desktop),
+   its media stage scrolls on the right. Mobile stacks story above media. */
+const isLocalVideo = (u) => !!u && !/^https?:/.test(u) && /\.(mp4|webm|mov)$/i.test(u);
+function stageBadge(m) {
+    return m.views
+        ? `<span class="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-[10px] uppercase tracking-widest text-white">▶ ${esc(m.views)} Views</span>`
+        : `<span class="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-[10px] uppercase tracking-widest text-neutral-300">${esc(KIND_LABEL[m.kind] || m.kind)}</span>`;
+}
+/* Visual layer of a card: muted looping preview for local mp4 (starts when in view), else the thumbnail */
+function stageVisual(m, alt) {
+    return isLocalVideo(m.video)
+        ? `<video data-src="${esc(m.video)}" poster="${esc(m.thumbnail)}" muted loop playsinline preload="none" class="ed-preview absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-700"></video>`
+        : `<img src="${esc(m.thumbnail || m.full)}" alt="${esc(alt)}" loading="lazy" class="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:scale-105 group-hover:opacity-100 transition duration-700">`;
+}
+const playIcon = `<div class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"><div class="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/25 flex items-center justify-center text-white group-hover:bg-white group-hover:text-black transition duration-300"><svg class="w-4 h-4 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>`;
+function openMedia(p, m) { openModal({ title: m.title ? `${p.client} — ${m.title}` : p.client, url: m.video, format: m.format, instagramUrl: m.instagramUrl }); }
+
+/* Vertical card: reels/posts sit in a minimal phone frame, other verticals (screens, films) in a plain card.
+   Verify on Instagram sits under the card. */
+function phoneCard(p, m) {
+    const phone = m.kind === 'reel' || m.kind === 'post';
+    const wrap = document.createElement('div');
+    wrap.className = 'flex flex-col gap-3';
+    wrap.innerHTML = `
+        <div class="${phone ? 'phone-frame rounded-[26px] p-[5px] bg-[#0b0c0f] border border-white/15' : 'luxury-card rounded-2xl overflow-hidden'}">
+            <div class="ed-screen relative aspect-[9/16] ${phone ? 'rounded-[21px]' : ''} overflow-hidden bg-charcoal group cursor-pointer">
+                ${stageVisual(m, m.title || p.title)}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30"></div>
+                ${phone ? '<span class="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-1 rounded-full bg-black/70 z-10"></span>' : ''}
+                ${stageBadge(m)}${playIcon}
+            </div>
+        </div>
+        ${m.title || m.instagramUrl ? `<div class="flex items-center justify-between gap-2 px-1">
+            <span dir="auto" class="text-xs text-neutral-400 truncate">${esc(m.title || '')}</span>
+            ${m.instagramUrl ? `<a href="${esc(m.instagramUrl)}" target="_blank" rel="noopener" data-ig class="shrink-0 text-[10px] uppercase tracking-widest text-neutral-300 hover:text-white border-b border-white/20 hover:border-white transition">Verify on Instagram ↗</a>` : ''}
+        </div>` : ''}`;
+    wrap.querySelector('.ed-screen').addEventListener('click', () => openMedia(p, m));
+    return wrap;
+}
+/* Widescreen / square film card */
+function filmCard(p, m) {
+    const el = document.createElement('div');
+    el.className = 'flex flex-col gap-3';
+    el.innerHTML = `
+        <div class="ed-screen luxury-card relative rounded-2xl overflow-hidden group cursor-pointer" style="aspect-ratio:${(m.format === '1:1' ? '1 / 1' : '16 / 9')}">
+            ${stageVisual(m, m.title || p.title)}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20"></div>
+            ${stageBadge(m)}${playIcon}
+        </div>
+        ${m.title || m.instagramUrl ? `<div class="flex items-center justify-between gap-2 px-1">
+            <span dir="auto" class="text-xs text-neutral-400 truncate">${esc(m.title || '')}</span>
+            ${m.instagramUrl ? `<a href="${esc(m.instagramUrl)}" target="_blank" rel="noopener" data-ig class="shrink-0 text-[10px] uppercase tracking-widest text-neutral-300 hover:text-white border-b border-white/20 hover:border-white transition">Verify on Instagram ↗</a>` : ''}
+        </div>` : ''}`;
+    el.querySelector('.ed-screen').addEventListener('click', () => openMedia(p, m));
+    return el;
+}
+/* Right-hand media stage for one story step */
+function mediaStage(p, ms, caption) {
+    const stage = document.createElement('div');
+    stage.className = 'flex flex-col gap-6 md:gap-8';
+    ms = ms.filter(m => m.video || m.full || m.thumbnail);      // never link-only tiles
+    const photos = ms.filter(m => m.kind === 'photo' && !m.video);
+    const set = photos.map(m => ({ src: m.full || m.thumbnail, caption: m.title || caption }));
+    const films = ms.filter(m => !photos.includes(m));
+    const V = films.filter(m => isVertical(m.format)), H = films.filter(m => !isVertical(m.format));
+    const groups = films.length && isVertical(films[0].format) ? [V, H] : [H, V];
+    groups.forEach(g => {
+        if (!g.length) return;
+        const grid = document.createElement('div');
+        if (g === V) {
+            grid.className = `grid gap-4 md:gap-5 ${g.length === 1 ? 'grid-cols-1 max-w-[300px]' : g.length === 2 ? 'grid-cols-2 max-w-[620px]' : 'grid-cols-2 md:grid-cols-3'}`;
+            g.forEach(m => grid.appendChild(phoneCard(p, m)));
+        } else {
+            grid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5';
+            g.forEach((m, i) => { const c = filmCard(p, m); if (i === 0 && g.length % 2) c.classList.add('sm:col-span-2'); grid.appendChild(c); });
+        }
+        stage.appendChild(grid);
+    });
+    if (photos.length) {
+        const g = document.createElement('div');
+        g.className = photos.length === 1 ? '' : 'columns-2 gap-4 md:gap-5';
+        photos.forEach((m, i) => {
+            const fig = document.createElement('figure');
+            fig.className = 'luxury-card rounded-2xl overflow-hidden relative group cursor-zoom-in break-inside-avoid mb-4 md:mb-5';
+            fig.style.aspectRatio = (m.format || '4:5').replace(':', ' / ');
+            fig.innerHTML = `<img src="${esc(m.thumbnail || m.full)}" alt="${esc(set[i].caption)}" loading="lazy" class="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:scale-105 group-hover:opacity-100 transition duration-700">`;
+            fig.addEventListener('click', () => openPhoto(set, i));
+            g.appendChild(fig);
+        });
+        stage.appendChild(g);
+    }
+    return stage;
+}
+/* One story row: sticky narrative (left) + media stage (right) */
+function editorialRow(p, head, ms, caption) {
+    const row = document.createElement('div');
+    row.className = 'ed-row grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 py-10 md:py-14 border-t border-white/5';
+    row.innerHTML = `<div class="lg:col-span-4"><div class="ed-text lg:sticky lg:top-32">${head}</div></div><div class="ed-stage lg:col-span-8"></div>`;
+    if (ms && ms.length) row.querySelector('.ed-stage').appendChild(mediaStage(p, ms, caption));
+    else row.querySelector('.ed-stage').remove();
+    return row;
+}
+function pointsHTML(points) {
+    return (points || []).map(x => `<div class="border-t border-white/10 pt-4 mt-5">
+        <h4 dir="auto" class="text-xs uppercase tracking-widest text-white mb-2">${esc(x.title)}</h4>
+        <p dir="auto" class="text-sm text-neutral-400 font-light leading-relaxed">${esc(x.text)}</p></div>`).join('');
+}
+function renderEditorial(container, p) {
+    (p.chapters || []).forEach((c, i) => {
+        const sec = document.createElement('section');
+        sec.className = 'mb-12 md:mb-20';
+        const label = c.label ? esc(c.label).toUpperCase() : String(i + 1).padStart(2, '0');
+        const caption = `${p.client} — ${c.title}`;
+        if (c.steps && c.steps.length) {
+            sec.innerHTML = `<div class="max-w-3xl mb-4 md:mb-6">
+                <p class="text-xs font-mono text-neutral-500 mb-3">${label}</p>
+                <h2 dir="auto" class="font-serif text-3xl md:text-5xl text-white leading-tight mb-4">${esc(c.title)}</h2>
+                ${c.text ? `<p dir="auto" class="text-sm md:text-base text-neutral-400 font-light leading-relaxed">${esc(c.text)}</p>` : ''}
+            </div>`;
+            c.steps.forEach((st, j) => sec.appendChild(editorialRow(p, `
+                <p class="text-xs font-mono text-neutral-500 mb-4">${String(j + 1).padStart(2, '0')} <span class="text-neutral-700">/ ${String(c.steps.length).padStart(2, '0')}</span></p>
+                <h3 dir="auto" class="font-serif text-2xl md:text-3xl text-white leading-snug mb-3">${esc(st.title)}</h3>
+                ${st.text ? `<p dir="auto" class="text-sm md:text-[15px] text-neutral-400 font-light leading-relaxed">${esc(st.text)}</p>` : ''}
+                ${pointsHTML(st.points)}`, st.media, `${p.client} — ${st.title}`)));
+        } else {
+            sec.appendChild(editorialRow(p, `
+                <p class="text-xs font-mono text-neutral-500 mb-4">${label}</p>
+                <h2 dir="auto" class="font-serif text-3xl md:text-4xl text-white leading-tight mb-3">${esc(c.title)}</h2>
+                ${c.text ? `<p dir="auto" class="text-sm md:text-[15px] text-neutral-400 font-light leading-relaxed">${esc(c.text)}</p>` : ''}
+                ${pointsHTML(c.points)}`, c.media, caption));
+        }
+        container.appendChild(sec);
+    });
+    initEditorial(container);
+}
+/* Scroll behaviour: highlight the row in view, play local previews only while visible */
+function initEditorial(root) {
+    if (!('IntersectionObserver' in window)) { root.querySelectorAll('.ed-row').forEach(r => r.classList.add('is-active')); return; }
+    const rowIO = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('is-active', e.isIntersecting)), { rootMargin: '-40% 0px -40% 0px' });
+    root.querySelectorAll('.ed-row').forEach(r => rowIO.observe(r));
+    const vidIO = new IntersectionObserver(es => es.forEach(e => {
+        const v = e.target;
+        if (e.isIntersecting) { if (!v.src) v.src = v.dataset.src; v.play().catch(() => {}); } else v.pause();
+    }), { threshold: 0.35 });
+    root.querySelectorAll('video.ed-preview').forEach(v => vidIO.observe(v));
+}
+
 /* ---------------- Story blocks (project page) ---------------- */
 function factsHTML(p) {
     const facts = (p.facts || []).map(x => `

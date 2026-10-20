@@ -13,3 +13,9 @@ body { background-color: var(--obsidian); color: var(--ink); font-family: 'Plus 
 .eyebrow { font-size: 12px; letter-spacing: .25em; text-transform: uppercase; color: #737373; }
 .link-arrow { display: inline-flex; align-items: center; gap: .5rem; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid rgba(255,255,255,.25); padding-bottom: 2px; transition: border-color .3s; }
 .link-arrow:hover { border-color: #fff; }
+
+/* Editorial case study: dim the story rows that are not in view (desktop only) */
+.ed-text { transition: opacity .6s cubic-bezier(0.16,1,0.3,1); }
+@media (min-width: 1024px) { .ed-row:not(.is-active) .ed-text { opacity: .35; } }
+.phone-frame { box-shadow: 0 30px 60px -20px rgba(0,0,0,.9), inset 0 0 0 1px rgba(255,255,255,.03); transition: border-color .4s, transform .4s cubic-bezier(0.16,1,0.3,1); }
+.phone-frame:hover { border-color: rgba(255,255,255,.3); transform: translateY(-4px); }

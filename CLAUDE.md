@@ -21,13 +21,14 @@ You are the Senior Art Director and Lead Frontend Engineer for Adam Aladdin's pe
 - **Permanent metric badges:** `views` shows as a dark glass pill (`bg-black/75 backdrop-blur-md border-white/15`) top-left, always visible (no hover). Never invent numbers.
 - **NEVER** create Google Drive folder cards, Google Photos album links, "Open ↗" placeholder tiles, or any card that redirects to an external site. An item without a thumbnail or playable video is not shown at all (`mediaGrids` filters it) — keep its source link in the reply to Adam and ask for the real file instead.
 
-## 3b. Multi-chapter case study (default for every client story)
-Whenever Adam explains the story behind a client (Gate Mall, Gulf Cryo, Sportap, Leica…), build the page as an executive case study in `data.js`:
-- Header: `title`, `description` (overview, 1–2 sentences), `scope` = his role chips, `facts` (2–3 real numbers), optional `highlights` (3-card strip, e.g. gear & speed philosophy).
-- `chapters[]` = the campaigns/phases, each with `label` ("Campaign 01"), `title`, a one-line `text`, `points` (2–4 editorial `{ title, text }` bullets shown beside the title) and its own `media`.
-- A final "Behind the scenes" / stills chapter for photos (rendered as a masonry gallery with lightbox).
-- Media inside a chapter auto-groups into Vertical / Widescreen / Stills; never hand-write layout.
-- Only Adam's facts, compressed for a client scanning in 10 seconds.
+## 3b. Scrollable editorial case study (default for every client story)
+`project.html` renders chapter projects as an editorial scroll (`renderEditorial` in common.js): each story row = sticky narrative on the left (desktop) + its media stage on the right; mobile stacks story above media. The row in view is highlighted; local mp4s play as muted previews only while visible; click = in-site lightbox.
+Whenever Adam explains the story behind a client (Gate Mall, Gulf Cryo, Sportap, Leica…), build it in `data.js`:
+- Header: `title`, `description` (overview), `scope` = his role chips, `facts` (2–3 real numbers), optional `highlights` (3-card strip, e.g. gear & speed philosophy).
+- `chapters[]` = campaigns/phases: `label` ("Campaign 01"), `title`, one-line `text`, and `steps: [{ title, text, media: [...] }]` — one step per production step he describes, each with the exact deliverables that prove it. A chapter without steps uses its own `media` (+ optional `points`) as one row.
+- Finish with a "Behind the scenes" / stills chapter (photos → masonry + photo lightbox).
+- Reels/posts (9:16, 4:5) render in minimal phone frames with the badge top-left and "Verify on Instagram ↗" under the frame (only if `instagramUrl`); other verticals (screen animations, films) use plain 9:16 cards; widescreen uses 16:9 cards. Never hand-write layout.
+- Only Adam's facts, compressed for a client scanning in 10 seconds. Every media item appears exactly once in the steps and once in the flat `media[]`.
 
 ## 4. Decision protocol for `/add` and chat requests
 1. Analyze the input: 16:9 commercial, 9:16 reel, event, or photo series.

@@ -29,7 +29,7 @@ Read `CLAUDE.md` first (site rules + data model), then do these steps in order.
    - Drive video file → `video: "https://drive.google.com/file/d/<id>/preview"` + thumbnail from `drive.google.com/thumbnail?id=<id>&sz=w1600`; it plays in the site lightbox.
    - Instagram reel: `video` = the reel URL (opens in the lightbox), `instagramUrl` = same URL ("Verify on Instagram").
 
-5. **Chapters (multi-chapter case study — see CLAUDE.md §3b).** When he tells a story, use `label` ("Campaign 01"), `points` [{title,text}] and optional project `highlights`. Put each deliverable in the chapter it belongs to (e.g. "Studio", "Episodes", "Reels", "Live", "Behind the scenes"); keep the flat `media[]` in sync; set `cover`/`coverFormat`. Keep chapter text to 1–3 sentences from what Adam said. An account chip needs `account: { handle, followers }` (read the follower count from the public profile's og:description).
+5. **Chapters (multi-chapter case study — see CLAUDE.md §3b).** When he tells a story, use chapter `label` ("Campaign 01") + `steps: [{ title, text, media }]` (one per production step, each with its own deliverables) and optional project `highlights`; this renders as the sticky editorial scroll. Put each deliverable in the chapter it belongs to (e.g. "Studio", "Episodes", "Reels", "Live", "Behind the scenes"); keep the flat `media[]` in sync; set `cover`/`coverFormat`. Keep chapter text to 1–3 sentences from what Adam said. An account chip needs `account: { handle, followers }` (read the follower count from the public profile's og:description).
 
 6. **Edit `data.js` only** (never the HTML/JS pages). New projects go right after the `home` projects at the top of the list (newest first). Keep `slug` unique kebab-case. Run `node --check data.js`.
 

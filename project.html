@@ -50,14 +50,8 @@
                 </div>`;
             $('project-facts').innerHTML = factsHTML(p) + highlightsHTML(p);
             const chapters = p.chapters || [];
-            if (chapters.some(c => c.media && c.media.length)) {
-                chapters.forEach((c, i) => {
-                    const sec = document.createElement('section');
-                    sec.className = 'mb-12 md:mb-16';
-                    sec.innerHTML = chapterHead(i, c);
-                    if (c.media && c.media.length) sec.appendChild(mediaGrids(p, c.media, c.title));
-                    $('project-chapters').appendChild(sec);
-                });
+            if (chapters.some(c => (c.media && c.media.length) || (c.steps && c.steps.length))) {
+                renderEditorial($('project-chapters'), p);
             } else {
                 if (chapters.length) {
                     const n = chapters.length;
