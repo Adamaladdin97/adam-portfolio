@@ -29,6 +29,9 @@ Whenever Adam explains the story behind a client (Gate Mall, Gulf Cryo, Sportap,
 - Finish with a "Behind the scenes" / stills chapter (photos → masonry + photo lightbox).
 - Reels/posts (9:16, 4:5) render in minimal phone frames with the badge top-left and "Verify on Instagram ↗" under the frame (only if `instagramUrl`); other verticals (screen animations, films) use plain 9:16 cards; widescreen uses 16:9 cards. Never hand-write layout.
 - Only Adam's facts, compressed for a client scanning in 10 seconds. Every media item appears exactly once in the steps and once in the flat `media[]`.
+- Chapters follow the real chronology of the project (e.g. Phase 01 Pre-launch & hype → Phase 02 DOOH → Phase 03 Live execution → Phase 04 next activation). Name photo sets by what they are (e.g. "Eid al-Adha live event coverage") — never call event photography "BTS".
+- Screen/DOOH animations: give each `ratio: "WxH"` (ffprobe) and a `group` (Vertical mega-screens / Horizontal displays / Ultra-wide & arch screens) so they render as true-ratio lineups with specs, not repeated identical cards.
+- Image-only Instagram posts/carousels are `kind: "photo"` (open in the photo lightbox), never a video card that looks dead.
 
 ## 3c. Ambient glow standard (approved by Adam — permanent)
 - Base never changes: obsidian `#060709` page, charcoal `#0E1014` cards, 1px subtle borders. No bright or full-page colour changes.

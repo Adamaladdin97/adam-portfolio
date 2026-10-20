@@ -427,11 +427,41 @@ function toneOf(item, title) {
 }
 const CAT_TONE = { commercial: 'promo', social: 'motion', events: 'live', podcasts: 'live', reels: 'promo', photo: 'stills' };
 
+/* Screen-motion card at its true pixel ratio (`ratio: "256x1152"`), with the spec under it */
+function screenCard(p, m) {
+    const [w, h] = m.ratio.split('x').map(Number), r = w / h;
+    const el = document.createElement('div');
+    el.className = `flex flex-col gap-2 ${r >= 2.2 ? 'w-full' : ''}`;
+    el.innerHTML = `
+        <div class="ed-screen luxury-card relative rounded-xl overflow-hidden group cursor-pointer ${r < 1 ? 'h-[260px] md:h-[380px]' : r < 2.2 ? 'h-[110px] md:h-[150px]' : 'w-full'}" style="aspect-ratio:${w} / ${h}">
+            ${stageVisual(m, m.title || p.title)}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+        </div>
+        <span class="text-[10px] font-mono text-neutral-500">${w}×${h}${m.title ? ' · ' + esc(m.title) : ''}</span>`;
+    el.querySelector('.ed-screen').addEventListener('click', () => openMedia(p, m));
+    return el;
+}
 /* Right-hand media stage for one story step */
 function mediaStage(p, ms, caption) {
     const stage = document.createElement('div');
     stage.className = 'flex flex-col gap-6 md:gap-8';
     ms = ms.filter(m => m.video || m.full || m.thumbnail);      // never link-only tiles
+    if (ms.some(m => m.group)) {                                 // labelled sub-groups (e.g. screen families)
+        [...new Set(ms.map(m => m.group || ''))].forEach(gname => {
+            const box = document.createElement('div');
+            if (gname) box.innerHTML = `<p class="eyebrow mb-4">${esc(gname)}</p>`;
+            box.appendChild(mediaStage(p, ms.filter(m => (m.group || '') === gname).map(m => ({ ...m, group: '' })), caption));
+            stage.appendChild(box);
+        });
+        return stage;
+    }
+    if (ms.length && ms.every(m => m.ratio && m.video)) {         // true-ratio screen lineup
+        const row = document.createElement('div');
+        row.className = 'flex flex-wrap items-end gap-4 md:gap-5';
+        ms.forEach(m => row.appendChild(screenCard(p, m)));
+        stage.appendChild(row);
+        return stage;
+    }
     const photos = ms.filter(m => m.kind === 'photo' && !m.video);
     const set = photos.map(m => ({ src: m.full || m.thumbnail, caption: m.title || caption }));
     const films = ms.filter(m => !photos.includes(m));
@@ -441,7 +471,7 @@ function mediaStage(p, ms, caption) {
         if (!g.length) return;
         const grid = document.createElement('div');
         if (g === V) {
-            grid.className = `grid gap-4 md:gap-5 ${g.length === 1 ? 'grid-cols-1 max-w-[300px]' : g.length === 2 ? 'grid-cols-2 max-w-[620px]' : 'grid-cols-2 md:grid-cols-3'}`;
+            grid.className = `grid gap-4 md:gap-5 ${g.length === 1 ? `grid-cols-1 ${g[0].feature ? 'max-w-[360px]' : 'max-w-[300px]'}` : g.length === 2 ? 'grid-cols-2 max-w-[620px]' : 'grid-cols-2 md:grid-cols-3'}`;
             g.forEach(m => grid.appendChild(phoneCard(p, m)));
         } else {
             grid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5';
