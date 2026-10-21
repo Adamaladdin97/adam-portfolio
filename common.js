@@ -508,20 +508,36 @@ function pointsHTML(points) {
         <h4 dir="auto" class="text-xs uppercase tracking-widest text-white mb-2">${esc(x.title)}</h4>
         <p dir="auto" class="text-sm text-neutral-400 font-light leading-relaxed">${esc(x.text)}</p></div>`).join('');
 }
-function renderEditorial(container, p) {
-    (p.chapters || []).forEach((c, i) => {
+/* Layout (order + visibility) of a project's chapters/steps. `layout` = { order:[chapterId], hidden:[id], steps:{chapterId:[stepId]} }
+   with ids "c0" (chapter) and "c0s1" (step) = original positions in data.js. Used by the visual manager on project.html. */
+function resolveLayout(p, layout = {}) {
+    const hidden = new Set(layout.hidden || []);
+    const ordered = (ids, all) => [...(ids || []).filter(i => all.includes(i)), ...all.filter(i => !(ids || []).includes(i))];
+    const chapters = p.chapters || [];
+    return ordered(layout.order, chapters.map((_, i) => 'c' + i)).map(cid => {
+        const ci = +cid.slice(1), c = chapters[ci], sids = (c.steps || []).map((_, j) => `c${ci}s${j}`);
+        return { id: cid, c, hidden: hidden.has(cid),
+            steps: ordered((layout.steps || {})[cid], sids).map(sid => ({ id: sid, st: c.steps[+sid.split('s')[1]], hidden: hidden.has(sid) })) };
+    });
+}
+function renderEditorial(container, p, layout) {
+    let n = 0;
+    resolveLayout(p, layout).filter(ch => !ch.hidden).forEach(({ c, steps }, i) => {
         const sec = document.createElement('section');
         sec.className = 'mb-12 md:mb-20';
-        const label = c.label ? esc(c.label).toUpperCase() : String(i + 1).padStart(2, '0');
+        sec.dataset.chapter = c.title;
+        n++;
+        const label = c.label ? esc(c.label.replace(/\d+$/, d => String(n).padStart(d.length, '0'))).toUpperCase() : String(n).padStart(2, '0');
         const caption = `${p.client} — ${c.title}`;
         if (c.steps && c.steps.length) {
+            const vis = steps.filter(x => !x.hidden);
             sec.innerHTML = `<div class="max-w-3xl mb-4 md:mb-6">
                 <p class="text-xs font-mono text-neutral-500 mb-3">${label}</p>
                 <h2 dir="auto" class="font-serif text-3xl md:text-5xl text-white leading-tight mb-4">${esc(c.title)}</h2>
                 ${c.text ? `<p dir="auto" class="text-sm md:text-base text-neutral-400 font-light leading-relaxed">${esc(c.text)}</p>` : ''}
             </div>`;
-            c.steps.forEach((st, j) => sec.appendChild(editorialRow(p, `
-                <p class="text-xs font-mono text-neutral-500 mb-4">${String(j + 1).padStart(2, '0')} <span class="text-neutral-700">/ ${String(c.steps.length).padStart(2, '0')}</span></p>
+            vis.forEach(({ st }, j) => sec.appendChild(editorialRow(p, `
+                <p class="text-xs font-mono text-neutral-500 mb-4">${String(j + 1).padStart(2, '0')} <span class="text-neutral-700">/ ${String(vis.length).padStart(2, '0')}</span></p>
                 <h3 dir="auto" class="font-serif text-2xl md:text-3xl text-white leading-snug mb-3">${esc(st.title)}</h3>
                 ${st.text ? `<p dir="auto" class="text-sm md:text-[15px] text-neutral-400 font-light leading-relaxed">${esc(st.text)}</p>` : ''}
                 ${pointsHTML(st.points)}`, st.media, `${p.client} — ${st.title}`, toneOf(st, st.title))));

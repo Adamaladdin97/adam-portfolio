@@ -42,6 +42,9 @@ Whenever Adam explains the story behind a client (Gate Mall, Gulf Cryo, Sportap,
 - **Live view counts:** YouTube counts update automatically — `.github/workflows/views.yml` runs `scripts/update_views.py` every 6h, writing `assets/data/views.json`; badges with `data-yt` fill in client-side (from `siteConfig.viewsMin`, default 1000, so tiny unlisted counts never show). Instagram exposes no public view counts, so IG counts are read by hand from each account's Reels grid (logged-in Chrome) and stored under `"instagram": {shortcode: number}` in `views.json` (the script keeps that block). Re-read them when Adam asks to refresh, or when `/add` adds new reels. Badges use `data-igc`; numbers display rounded (`fmtViews`).
 - All project pages use this one standard: editorial split layout, universal in-site player, Verify on Instagram as a secondary link, ambient glows.
 
+## 3d. Visual layout manager (project pages)
+`project.html` has a floating "⚙ Layout" panel (`initLayoutManager`): ↑/↓ reorder and an eye toggle hide/show every chapter and step; the page re-renders live and the arrangement is saved in that browser's `localStorage` (`layout:<slug>`). It shows on localhost, or on the live site after opening any project once with `?admin=1` (`?admin=0` turns it off). Visitors never see it and their pages always use the order in `data.js`. "Export order" copies/prints a JSON of the current order + hidden flags — when Adam pastes it, apply it permanently in `data.js` (reorder `chapters`/`steps`, remove or `draft` what's hidden), keeping Phase/Campaign labels sequential, and keep the flat `media[]` in sync.
+
 ## 4. Decision protocol for `/add` and chat requests
 1. Analyze the input: 16:9 commercial, 9:16 reel, event, or photo series.
 2. Pick the bento span with the strict rules (widescreen = 8 or 6 cols; reels = 4 cols x 2 rows; photo = 4 cols) — `common.js` already encodes this; never hand-write spans.
