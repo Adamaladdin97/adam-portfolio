@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=202610210441">
+    <link rel="stylesheet" href="style.css?v=202610210450">
 </head>
 <body class="bg-grain antialiased selection:bg-white selection:text-black">
     <div id="site-nav"></div>
@@ -27,8 +27,8 @@
     </main>
 
     <div id="site-footer"></div>
-    <script src="data.js?v=202610210441"></script>
-    <script src="common.js?v=202610210441"></script>
+    <script src="data.js?v=202610210450"></script>
+    <script src="common.js?v=202610210450"></script>
     <script>
 
         renderChrome('work');
@@ -41,20 +41,34 @@
             const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }, del(k) { try { localStorage.removeItem(k); } catch (e) {} } };
             let layout = {};
             try { layout = JSON.parse(store.get(KEY)) || {}; } catch (e) {}
-            const render = () => { host.innerHTML = ''; renderEditorial(host, p, layout); };
-            render();
-
             const q = new URLSearchParams(location.search).get('admin');
             if (q === '1') store.set('admin', '1'); else if (q === '0') store.del('admin');
             const local = /^(localhost|127\.0\.0\.1|\[::1\]|.*\.local)$/.test(location.hostname);
-            if (!(local || store.get('admin') === '1')) return;
+            const admin = local || store.get('admin') === '1';
+            LM.on = admin;
+            const render = () => { const y = scrollY; host.innerHTML = ''; renderEditorial(host, p, layout); scrollTo(0, y); };
+            render();
+            if (!admin) return;
 
             const save = () => { store.set(KEY, JSON.stringify(layout)); render(); draw(); };
+            const parentOf = (mid) => mid.replace(/m\d+$/, '');
+            const findParent = (pid) => { const cur = state(); for (const ch of cur) { if (ch.id === pid) return ch.media; for (const s of ch.steps) if (s.id === pid) return s.media; } return []; };
+            LM.move = (mid, d) => {                                   // swap with the neighbour of the same kind, so the move is visible
+                const pid = parentOf(mid), list = findParent(pid).filter(x => !x.hidden), i = list.findIndex(x => x.id === mid);
+                const key = groupKey(list[i].m), same = list.filter(x => groupKey(x.m) === key), k = same.findIndex(x => x.id === mid), nb = same[k + d];
+                if (!nb) return;
+                const ids = findParent(pid).map(x => x.id), a = ids.indexOf(mid), b = ids.indexOf(nb.id);
+                [ids[a], ids[b]] = [ids[b], ids[a]];
+                layout.media = layout.media || {}; layout.media[pid] = ids; save();
+            };
+            LM.hide = (mid) => { toggle(mid); save(); };
+            LM.large = (mid) => { const s = new Set(layout.large || []); s.has(mid) ? s.delete(mid) : s.add(mid); layout.large = [...s]; save(); };
             const state = () => resolveLayout(p, layout);
             const flat = (arr) => arr.map(x => x.id);
             const move = (ids, id, d) => { const i = ids.indexOf(id), j = i + d; if (j < 0 || j >= ids.length) return ids; const o = [...ids]; [o[i], o[j]] = [o[j], o[i]]; return o; };
             const toggle = (id) => { const h = new Set(layout.hidden || []); h.has(id) ? h.delete(id) : h.add(id); layout.hidden = [...h]; };
-            const exportJSON = () => JSON.stringify({ slug: p.slug, chapters: state().map(ch => ({ title: ch.c.title, hidden: ch.hidden, ...(ch.steps.length ? { steps: ch.steps.map(s => ({ title: s.st.title, hidden: s.hidden })) } : {}) })) }, null, 2);
+            const mediaExport = (list) => list.map(x => ({ item: ((x.m.title ? x.m.title + ' · ' : '') + (x.m.thumbnail || x.m.full || '').split('/').pop()).trim(), ...(x.hidden ? { hidden: true } : {}), ...(x.large ? { large: true } : {}) }));
+            const exportJSON = () => JSON.stringify({ slug: p.slug, chapters: state().map(ch => ({ title: ch.c.title, hidden: ch.hidden, ...(ch.steps.length ? { steps: ch.steps.map(s => ({ title: s.st.title, hidden: s.hidden, media: mediaExport(s.media) })) } : { media: mediaExport(ch.media) }) })) }, null, 2);
 
             const wrap = document.createElement('div');
             wrap.className = 'fixed left-4 bottom-4 z-[45] font-sans';
@@ -69,6 +83,7 @@
             }
             function draw() {
                 const st = state();
+                const hiddenItems = st.flatMap(ch => [...ch.media, ...ch.steps.flatMap(s => s.media)]).filter(x => x.hidden);
                 wrap.innerHTML = open ? `
                     <div class="w-[320px] max-w-[calc(100vw-2rem)] rounded-2xl border border-white/15 bg-[rgba(14,16,20,0.96)] backdrop-blur-md shadow-2xl shadow-black/60">
                         <div class="flex items-center justify-between px-4 py-3 border-b border-white/10">
@@ -78,6 +93,7 @@
                         <div class="px-3 py-2 max-h-[52vh] overflow-y-auto">
                             ${st.map((ch, i) => row(ch.id, ch.c.title, ch.hidden, i, st.length, false) + ch.steps.map((s, j) => row(s.id, s.st.title, s.hidden, j, ch.steps.length, true)).join('')).join('')}
                         </div>
+                        ${hiddenItems.length ? `<div class="px-3 py-2 border-t border-white/10 max-h-[18vh] overflow-y-auto"><p class="eyebrow !text-[10px] mb-2">Hidden items (${hiddenItems.length})</p>${hiddenItems.map(x => `<div data-id="${x.id}" class="flex items-center gap-2 py-1"><img src="${esc(x.m.thumbnail || x.m.full)}" alt="" class="w-7 h-7 rounded object-cover border border-white/10"><span class="text-[11px] text-neutral-400 truncate flex-1">${esc(x.m.title || (x.m.thumbnail || x.m.full || '').split('/').pop())}</span><button data-act="eye" class="px-2 py-1 rounded-full border border-white/15 text-[10px] text-white hover:bg-white hover:text-black transition">Show</button></div>`).join('')}</div>` : ''}
                         <div class="flex gap-2 px-3 py-3 border-t border-white/10">
                             <button data-act="export" class="flex-1 px-3 py-2 rounded-full bg-white text-black text-[10px] uppercase tracking-widest font-medium hover:bg-neutral-200 transition">Export order</button>
                             <button data-act="reset" class="px-3 py-2 rounded-full border border-white/15 text-white text-[10px] uppercase tracking-widest hover:bg-white/10 transition">Reset</button>

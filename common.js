@@ -427,6 +427,27 @@ function toneOf(item, title) {
 }
 const CAT_TONE = { commercial: 'promo', social: 'motion', events: 'live', podcasts: 'live', reels: 'promo', photo: 'stills' };
 
+/* ---- Visual layout manager hooks (set by project.html when the manager is on) ----
+   LM = { on, move(id, ±1), hide(id), large(id) }; cards carry m._id when they come from renderEditorial. */
+const LM = { on: false };
+const isPhotoItem = (m) => m.kind === 'photo' && !m.video;
+const groupKey = (m) => m._group || (isPhotoItem(m) ? 'photo' : m.ratio ? 'screen' : isVertical(m.format) ? 'v' : 'h');
+function cardTools(el, m, canLarge) {
+    if (!LM.on || !m._id) return el;
+    el.classList.add('relative');
+    const b = (act, label, txt, on) => `<button data-t="${act}" aria-label="${label}" title="${label}" class="w-6 h-6 rounded-full text-[11px] leading-none ${on ? 'bg-white text-black' : 'text-white hover:bg-white hover:text-black'} transition">${txt}</button>`;
+    const bar = document.createElement('div');
+    bar.className = 'absolute top-2 right-2 z-30 flex items-center gap-0.5 p-0.5 rounded-full bg-black/80 backdrop-blur-md border border-white/20 shadow-lg';
+    bar.innerHTML = b('prev', 'Move earlier', '←') + b('next', 'Move later', '→') + (canLarge ? b('large', 'Bigger / normal', '⤢', m._large) : '') + b('hide', 'Hide', '✕');
+    bar.addEventListener('click', (e) => {
+        e.stopPropagation(); e.preventDefault();
+        const t = e.target.closest('[data-t]'); if (!t) return;
+        ({ prev: () => LM.move(m._id, -1), next: () => LM.move(m._id, 1), large: () => LM.large(m._id), hide: () => LM.hide(m._id) })[t.dataset.t]();
+    });
+    el.appendChild(bar);
+    return el;
+}
+
 /* Screen-motion card at its true pixel ratio (`ratio: "256x1152"`), with the spec under it */
 function screenCard(p, m) {
     const [w, h] = m.ratio.split('x').map(Number), r = w / h;
@@ -450,7 +471,7 @@ function mediaStage(p, ms, caption) {
         [...new Set(ms.map(m => m.group || ''))].forEach(gname => {
             const box = document.createElement('div');
             if (gname) box.innerHTML = `<p class="eyebrow mb-4">${esc(gname)}</p>`;
-            box.appendChild(mediaStage(p, ms.filter(m => (m.group || '') === gname).map(m => ({ ...m, group: '' })), caption));
+            box.appendChild(mediaStage(p, ms.filter(m => (m.group || '') === gname).map(m => ({ ...m, group: '', _group: gname })), caption));
             stage.appendChild(box);
         });
         return stage;
@@ -458,7 +479,7 @@ function mediaStage(p, ms, caption) {
     if (ms.length && ms.every(m => m.ratio && m.video)) {         // true-ratio screen lineup
         const row = document.createElement('div');
         row.className = 'flex flex-wrap items-end gap-4 md:gap-5';
-        ms.forEach(m => row.appendChild(screenCard(p, m)));
+        ms.forEach(m => row.appendChild(cardTools(screenCard(p, m), m)));
         stage.appendChild(row);
         return stage;
     }
@@ -472,10 +493,10 @@ function mediaStage(p, ms, caption) {
         const grid = document.createElement('div');
         if (g === V) {
             grid.className = `grid gap-4 md:gap-5 ${g.length === 1 ? `grid-cols-1 ${g[0].feature ? 'max-w-[360px]' : 'max-w-[300px]'}` : g.length === 2 ? 'grid-cols-2 max-w-[620px]' : 'grid-cols-2 md:grid-cols-3'}`;
-            g.forEach(m => grid.appendChild(phoneCard(p, m)));
+            g.forEach(m => { const c = cardTools(phoneCard(p, m), m, true); if (m._large) c.classList.add('col-span-2'); grid.appendChild(c); });
         } else {
             grid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5';
-            g.forEach((m, i) => { const c = filmCard(p, m); if (i === 0 && g.length % 2) c.classList.add('sm:col-span-2'); grid.appendChild(c); });
+            g.forEach((m, i) => { const c = cardTools(filmCard(p, m), m, true); if ((i === 0 && g.length % 2) || m._large) c.classList.add('sm:col-span-2'); grid.appendChild(c); });
         }
         stage.appendChild(grid);
     });
@@ -488,7 +509,7 @@ function mediaStage(p, ms, caption) {
             fig.style.aspectRatio = (m.format || '4:5').replace(':', ' / ');
             fig.innerHTML = `<img src="${esc(m.thumbnail || m.full)}" alt="${esc(set[i].caption)}" loading="lazy" class="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:scale-105 group-hover:opacity-100 transition duration-700">`;
             fig.addEventListener('click', () => openPhoto(set, i));
-            g.appendChild(fig);
+            g.appendChild(cardTools(fig, m));
         });
         stage.appendChild(g);
     }
@@ -511,18 +532,22 @@ function pointsHTML(points) {
 /* Layout (order + visibility) of a project's chapters/steps. `layout` = { order:[chapterId], hidden:[id], steps:{chapterId:[stepId]} }
    with ids "c0" (chapter) and "c0s1" (step) = original positions in data.js. Used by the visual manager on project.html. */
 function resolveLayout(p, layout = {}) {
-    const hidden = new Set(layout.hidden || []);
+    const hidden = new Set(layout.hidden || []), large = new Set(layout.large || []);
     const ordered = (ids, all) => [...(ids || []).filter(i => all.includes(i)), ...all.filter(i => !(ids || []).includes(i))];
+    const mediaOf = (pid, list) => ordered((layout.media || {})[pid], (list || []).map((_, k) => `${pid}m${k}`))
+        .map(mid => ({ id: mid, m: list[+mid.split('m').pop()], hidden: hidden.has(mid), large: large.has(mid) }));
     const chapters = p.chapters || [];
     return ordered(layout.order, chapters.map((_, i) => 'c' + i)).map(cid => {
         const ci = +cid.slice(1), c = chapters[ci], sids = (c.steps || []).map((_, j) => `c${ci}s${j}`);
-        return { id: cid, c, hidden: hidden.has(cid),
-            steps: ordered((layout.steps || {})[cid], sids).map(sid => ({ id: sid, st: c.steps[+sid.split('s')[1]], hidden: hidden.has(sid) })) };
+        return { id: cid, c, hidden: hidden.has(cid), media: mediaOf(cid, c.media),
+            steps: ordered((layout.steps || {})[cid], sids).map(sid => ({ id: sid, st: c.steps[+sid.split('s')[1]], hidden: hidden.has(sid), media: mediaOf(sid, c.steps[+sid.split('s')[1]].media) })) };
     });
 }
+/* visible media of a step/chapter with their layout ids, ready for mediaStage */
+const stageItems = (list) => list.filter(x => !x.hidden).map(x => ({ ...x.m, _id: x.id, _large: x.large }));
 function renderEditorial(container, p, layout) {
     let n = 0;
-    resolveLayout(p, layout).filter(ch => !ch.hidden).forEach(({ c, steps }, i) => {
+    resolveLayout(p, layout).filter(ch => !ch.hidden).forEach(({ c, steps, media }, i) => {
         const sec = document.createElement('section');
         sec.className = 'mb-12 md:mb-20';
         sec.dataset.chapter = c.title;
@@ -536,17 +561,17 @@ function renderEditorial(container, p, layout) {
                 <h2 dir="auto" class="font-serif text-3xl md:text-5xl text-white leading-tight mb-4">${esc(c.title)}</h2>
                 ${c.text ? `<p dir="auto" class="text-sm md:text-base text-neutral-400 font-light leading-relaxed">${esc(c.text)}</p>` : ''}
             </div>`;
-            vis.forEach(({ st }, j) => sec.appendChild(editorialRow(p, `
+            vis.forEach(({ st, media: smedia }, j) => sec.appendChild(editorialRow(p, `
                 <p class="text-xs font-mono text-neutral-500 mb-4">${String(j + 1).padStart(2, '0')} <span class="text-neutral-700">/ ${String(vis.length).padStart(2, '0')}</span></p>
                 <h3 dir="auto" class="font-serif text-2xl md:text-3xl text-white leading-snug mb-3">${esc(st.title)}</h3>
                 ${st.text ? `<p dir="auto" class="text-sm md:text-[15px] text-neutral-400 font-light leading-relaxed">${esc(st.text)}</p>` : ''}
-                ${pointsHTML(st.points)}`, st.media, `${p.client} — ${st.title}`, toneOf(st, st.title))));
+                ${pointsHTML(st.points)}`, stageItems(smedia), `${p.client} — ${st.title}`, toneOf(st, st.title))));
         } else {
             sec.appendChild(editorialRow(p, `
                 <p class="text-xs font-mono text-neutral-500 mb-4">${label}</p>
                 <h2 dir="auto" class="font-serif text-3xl md:text-4xl text-white leading-tight mb-3">${esc(c.title)}</h2>
                 ${c.text ? `<p dir="auto" class="text-sm md:text-[15px] text-neutral-400 font-light leading-relaxed">${esc(c.text)}</p>` : ''}
-                ${pointsHTML(c.points)}`, c.media, caption, toneOf(c, c.title)));
+                ${pointsHTML(c.points)}`, stageItems(media), caption, toneOf(c, c.title)));
         }
         container.appendChild(sec);
     });
