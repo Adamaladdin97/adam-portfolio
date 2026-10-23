@@ -10,6 +10,7 @@
      scope        optional – short chips of what was delivered
      facts        optional – 2–3 headline numbers: [{ value: "2", label: "major campaigns" }]
      account      optional – { handle: "brand", followers: "33K" }  (shown as an Instagram chip)
+     showcase     optional – home featured card collage: { items: [3 thumbnails from media, first = hero frame], stat: { value, label } }
      cover        thumbnail used on cards;  coverFormat = its format (decides the card shape)
      highlights   optional – 3-card strip under the facts: { title, items: [{ title, text }] }
      chapters     the story, in order: [{ label, title, text, steps | media }]
@@ -92,6 +93,7 @@ const projects = [
         },
         facts: [{ value: "2", label: "major campaigns" }, { value: "Next day", label: "promo delivery, during Eid" }],
         account: { handle: "thegatemallkwt", followers: "102K" },
+        showcase: { items: ["assets/images/drive-1wyrbfdjmrdu.jpg", "assets/images/gate-mall/eid/gm-screen-4.webp", "assets/images/ig-daawtpkqlm2.jpg"], stat: { value: "42", label: "deliverables · 2 campaigns" } },
         cover: "assets/images/ig-daawtpkqlm2.jpg",
         coverFormat: "9:16",
         chapters: [
@@ -463,6 +465,7 @@ const projects = [
         scope: ["Studio design & build", "Episode direction", "Reels & posts", "Live streaming"],
         facts: [{ value: "16K → 160K", label: "Instagram followers" }, { value: "12", label: "episodes produced" }, { value: "Millions", label: "reel views" }],
         account: { handle: "buthaina.podcast", followers: "160K" },
+        showcase: { items: ["assets/images/buthaina/bt-studio-5.webp", "assets/images/ig-dcehh1stsnu.jpg", "assets/images/ig-ddfkx8znxl5.jpg"], stat: { value: "16K → 160K", label: "Instagram followers" } },
         cover: "assets/images/yt-4ooiml8szha.jpg",
         coverFormat: "16:9",
         chapters: [
@@ -671,6 +674,7 @@ const projects = [
         description: "Months of content for a specialty coffee shop, led by its owner as a personal brand: storytelling first, advertising second.",
         scope: ["Personal brand", "Storytelling", "Reels", "Photography"],
         account: { handle: "oruroasters", followers: "33K" },
+        showcase: { items: ["assets/images/ig-drkcqapjx-h.jpg", "assets/images/ig-dsu1x47dtqf.jpg", "assets/images/ig-dqw3duyja9g.jpg"], stat: { value: "111K", label: "views on the top reel" } },
         cover: "assets/images/ig-drkcqapjx-h.jpg",
         coverFormat: "9:16",
         chapters: [

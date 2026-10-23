@@ -255,6 +255,33 @@ function projectCard(p, spanClass) {
         </div>`;
     return a;
 }
+/* Home featured card: a 3-frame collage of the project's story + one headline number (p.showcase).
+   Wide cards: hero frame left, two vertical frames right. Vertical cards: hero frame on top, two frames below. */
+function showcaseCard(p, spanClass) {
+    const sc = p.showcase, wide = !isVertical(projectFormat(p)), cat = catById(p.category);
+    const item = (src) => p.media.find(m => m.thumbnail === src) || { thumbnail: src };
+    const tile = (src, cls) => { const m = item(src);
+        return `<div class="relative overflow-hidden ${cls}"><img src="${esc(src)}" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-700">
+            ${m.video ? `<span ${viewsAttr(m)} class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/15 text-[9px] uppercase tracking-widest text-neutral-300">${esc(KIND_LABEL[m.kind] || '')}</span>` : ''}</div>`; };
+    const a = document.createElement('a');
+    a.href = `project.html?p=${encodeURIComponent(p.slug)}`;
+    a.className = `${wide ? 'h-[420px]' : 'h-[560px]'} md:h-auto ${spanClass} tone-${CAT_TONE[p.category] || 'promo'} glow-card luxury-card rounded-2xl overflow-hidden relative group flex flex-col`;
+    a.innerHTML = `
+        <div class="absolute inset-x-0 top-0 grid gap-1 ${wide ? 'bottom-0 grid-cols-[1.7fr_1fr] grid-rows-2' : 'h-[66%] grid-cols-2 grid-rows-[1.5fr_1fr]'}">
+            ${tile(sc.items[0], wide ? 'row-span-2' : 'col-span-2')}${tile(sc.items[1], '')}${tile(sc.items[2], '')}
+        </div>
+        <div class="absolute inset-0 ${wide ? 'bg-gradient-to-t from-obsidian via-obsidian/55 to-obsidian/5' : 'bg-gradient-to-t from-obsidian from-[34%] via-obsidian/40 via-[50%] to-transparent to-[70%]'}"></div>
+        <div class="relative z-10 p-4 md:p-5"><span class="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[10px] uppercase tracking-widest text-neutral-300">${esc(cat ? cat.short : p.category)}</span></div>
+        <div class="relative z-10 mt-auto p-5 md:p-7 flex flex-col gap-3">
+            ${sc.stat ? `<div><div class="font-serif text-4xl md:text-5xl text-white leading-none">${esc(sc.stat.value)}</div><div class="mt-1 text-[11px] uppercase tracking-widest text-neutral-400">${esc(sc.stat.label)}</div></div>` : ''}
+            <div class="border-t border-white/10 pt-3">
+                <p dir="auto" class="text-[11px] uppercase tracking-widest text-neutral-500 mb-1 truncate">${esc(p.client)}</p>
+                <h3 dir="auto" class="card-title font-serif text-xl md:text-2xl text-white leading-snug">${esc(p.title)}</h3>
+            </div>
+            <span class="text-xs uppercase tracking-widest text-white group-hover:underline">View project →</span>
+        </div>`;
+    return a;
+}
 /* view: 'home' (hand-picked 4, one wide) or 'work' (auto-packed) */
 function renderProjectGrid(container, list, view) {
     container.innerHTML = '';
