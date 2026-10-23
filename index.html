@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=202610210450">
+    <link rel="stylesheet" href="style.css?v=202610231557">
 </head>
 <body class="bg-grain antialiased selection:bg-white selection:text-black">
     <div id="site-nav"></div>
@@ -17,8 +17,11 @@
     <!-- Hero / Showreel -->
     <header class="pt-24 md:pt-32 pb-8 px-5 md:px-6 max-w-7xl mx-auto">
         <div id="hero" class="relative rounded-2xl overflow-hidden luxury-card group h-[380px] md:h-[560px]">
-            <video autoplay loop muted playsinline id="hero-video" class="absolute inset-0 w-full h-full object-cover opacity-65 group-hover:scale-105 group-hover:opacity-80 transition duration-700"></video>
-            <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/30 to-transparent flex flex-col justify-between p-5 md:p-10">
+            <video autoplay loop muted playsinline preload="auto" id="hero-video" aria-hidden="true" class="hero-ambient absolute inset-0 w-full h-full object-cover"></video>
+            <div class="absolute inset-0 bg-obsidian/45"></div>
+            <div class="absolute inset-0 hero-vignette"></div>
+            <div class="absolute inset-0 bg-grain opacity-60"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/40 to-transparent flex flex-col justify-between p-5 md:p-10">
                 <div class="flex justify-between items-center gap-3">
                     <span class="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[10px] md:text-[11px] tracking-widest uppercase text-neutral-300">Kuwait • Available Worldwide</span>
                 </div>
@@ -40,7 +43,7 @@
     <section class="max-w-7xl mx-auto px-5 md:px-6 pt-14 md:pt-20">
         <div class="flex items-end justify-between gap-4 mb-8 md:mb-10">
             <div>
-                <p class="eyebrow mb-3">Selected Projects</p>
+                <p class="eyebrow mb-3">Featured Projects</p>
                 <h2 class="font-serif text-3xl md:text-5xl text-white">Campaigns, start to finish.</h2>
             </div>
             <a href="work.html" class="link-arrow whitespace-nowrap">All projects →</a>
@@ -52,7 +55,7 @@
     <section class="max-w-7xl mx-auto px-5 md:px-6 pt-20 md:pt-28">
         <p class="eyebrow mb-3">What I Do</p>
         <h2 class="font-serif text-3xl md:text-5xl text-white mb-8 md:mb-10">One frame at a time.</h2>
-        <div id="cat-tiles" class="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6"></div>
+        <div id="cat-tiles" class="grid grid-cols-2 gap-3 md:gap-6"></div>
     </section>
 
     <!-- About teaser -->
@@ -61,16 +64,16 @@
             <div class="md:col-span-4 h-[360px] md:h-auto"><img src="assets/images/adam-portrait.jpg" alt="Adam Aladdin" loading="lazy" class="w-full h-full object-cover object-top"></div>
             <div class="md:col-span-8 p-7 md:p-14 flex flex-col justify-center gap-5">
                 <p class="eyebrow">About</p>
-                <h2 class="font-serif text-3xl md:text-5xl text-white leading-tight">Minimal on the outside.<br><span class="italic text-neutral-400">Relentless</span> inside the frame.</h2>
-                <p class="text-neutral-400 text-sm md:text-base leading-relaxed font-light max-w-xl">Certified TV Director, Videographer and Visual Creator based in Kuwait — from cinematic commercials to viral vertical reels and multi-cam productions.</p>
+                <h2 class="font-serif text-3xl md:text-5xl text-white leading-tight">Turning Vision into <span class="italic text-neutral-400">Frame-Accurate</span> Cinematic Reality.</h2>
+                <p class="text-neutral-400 text-sm md:text-base leading-relaxed font-light max-w-xl">Certified TV Director and Visual Media Producer based in Kuwait — from concept and multi-cam sets to post-production and final delivery.</p>
                 <div><a href="about.html" class="link-arrow">More about me →</a></div>
             </div>
         </div>
     </section>
 
     <div id="site-footer"></div>
-    <script src="data.js?v=202610210450"></script>
-    <script src="common.js?v=202610210450"></script>
+    <script src="data.js?v=202610231557"></script>
+    <script src="common.js?v=202610231557"></script>
     <script>
 
         renderChrome('home');
@@ -84,20 +87,41 @@
             b.addEventListener('click', () => openModal({ title: sr.title, url: sr.video, format: '16:9' }));
         }
 
-        // Selected projects (home: true)
-        const home = PROJECTS.filter(p => p.home);
+        // Featured projects (home: true, ordered by siteConfig.featured) + a card that leads to the full archive
+        const order = siteConfig.featured || [];
+        const home = PROJECTS.filter(p => p.home).sort((a, b) => (order.indexOf(a.slug) + 1 || 99) - (order.indexOf(b.slug) + 1 || 99));
+        const rest = PROJECTS.filter(p => !p.home);
         $('home-grid').className = GRID;
-        renderProjectGrid($('home-grid'), home, 'home');
+        home.forEach(p => $('home-grid').appendChild(projectCard(p, isVertical(projectFormat(p)) ? span('9:16', 4) : span('16:9', 8, '', 2))));
+        const archive = document.createElement('a');
+        archive.href = 'work.html';
+        archive.className = 'h-[300px] md:h-auto md:col-span-2 lg:col-span-8 md:row-span-1 lg:row-span-2 luxury-card glow-card tone-stills rounded-2xl overflow-hidden relative group flex flex-col justify-end';
+        archive.innerHTML = `
+            <div class="absolute inset-0 grid grid-cols-3 grid-rows-2 gap-1 opacity-30 group-hover:opacity-45 transition duration-700">${rest.slice(0, 6).map(p => `<img src="${esc(projectCover(p))}" alt="" loading="lazy" class="w-full h-full object-cover grayscale">`).join('')}</div>
+            <div class="absolute inset-0 backdrop-blur-[3px] bg-gradient-to-t from-obsidian via-obsidian/70 to-obsidian/30"></div>
+            <div class="relative z-10 p-6 md:p-10 flex flex-col gap-4">
+                <p class="eyebrow">The full archive</p>
+                <h3 class="font-serif text-3xl md:text-5xl text-white leading-tight">${rest.length} more projects.</h3>
+                <p class="text-sm text-neutral-400 font-light">${categories.filter(c => rest.some(p => p.category === c.id)).map(c => esc(c.label)).join(' · ')}</p>
+                <span class="mt-2 self-start px-6 py-3 rounded-full bg-white text-black text-xs uppercase tracking-widest font-medium group-hover:bg-neutral-200 transition">View all work →</span>
+            </div>`;
+        $('home-grid').appendChild(archive);
 
         // Category tiles
         const liveCats = categories.filter(c => PROJECTS.some(p => p.category === c.id));
         $('cat-tiles').classList.add({ 3: 'lg:grid-cols-3', 4: 'lg:grid-cols-4', 5: 'lg:grid-cols-5', 6: 'lg:grid-cols-3' }[liveCats.length] || 'lg:grid-cols-3');
         $('cat-tiles').innerHTML = liveCats.map(c => {
-            const n = PROJECTS.filter(p => p.category === c.id).length;
+            const list = PROJECTS.filter(p => p.category === c.id), n = list.length;
             if (!n) return '';
-            return `<a href="work.html?cat=${c.id}" class="luxury-card rounded-2xl p-6 md:p-7 flex flex-col gap-10 group">
-                <span class="text-xs font-mono text-neutral-500">${String(n).padStart(2, '0')} PROJECTS</span>
-                <div><h3 class="font-serif text-2xl text-white mb-2">${esc(c.label)}</h3><p class="text-sm text-neutral-400 font-light mb-4">${esc(c.blurb)}</p><span class="text-xs uppercase tracking-widest text-white group-hover:underline">Explore →</span></div>
+            const bg = projectCover(list.find(p => p.home) || list[0]);
+            return `<a href="work.html?cat=${c.id}" class="luxury-card glow-card tone-${CAT_TONE[c.id] || 'promo'} rounded-2xl overflow-hidden relative h-[160px] md:h-[260px] p-5 md:p-7 flex flex-col justify-between group">
+                <img src="${esc(bg)}" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover scale-110 blur-[4px] opacity-55 grayscale group-hover:opacity-75 group-hover:scale-125 transition duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/70 to-obsidian/30"></div>
+                <span class="relative text-xs font-mono text-neutral-500">${String(n).padStart(2, '0')}</span>
+                <div class="relative">
+                    <h3 class="font-serif text-xl md:text-3xl text-white leading-tight">${esc(c.label)}</h3>
+                    <p class="mt-1 text-xs uppercase tracking-widest text-neutral-400 group-hover:text-white transition">${esc(c.blurb)} →</p>
+                </div>
             </a>`;
         }).join('');
 

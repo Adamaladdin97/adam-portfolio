@@ -74,7 +74,7 @@ function renderChrome(active) {
         </div>
         <div class="flex flex-col sm:flex-row justify-between gap-2 text-xs text-neutral-600 mt-10">
             <span>© 2026 ADAM ALADDIN. ALL RIGHTS RESERVED.</span>
-            <span>BASE: KUWAIT · SILENT LUXURY EDITION</span>
+            <span>BASE: KUWAIT</span>
         </div>
     </footer>
     <div id="lightbox" class="fixed inset-0 z-50 bg-[rgba(6,7,9,0.96)] backdrop-blur-sm hidden items-center justify-center p-4 md:p-10" role="dialog" aria-modal="true">

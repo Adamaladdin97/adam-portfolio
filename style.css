@@ -35,3 +35,7 @@ body { background-color: var(--obsidian); color: var(--ink); font-family: 'Plus 
 .ed-row.is-active::before { opacity: 1; }
 .ed-row .luxury-card, .ed-row .phone-frame { background-color: var(--tint); }
 .glow-card:hover { box-shadow: 0 30px 80px -30px var(--glow-edge), 0 25px 50px -12px rgba(0,0,0,.9); border-color: var(--glow-edge); }
+
+/* Home hero: the showreel loop is an ambient background, not the main event */
+.hero-ambient { filter: blur(2px) saturate(.8) brightness(.8); transform: scale(1.06); }
+.hero-vignette { background: radial-gradient(120% 90% at 50% 40%, transparent 35%, rgba(6,7,9,.85) 100%); }

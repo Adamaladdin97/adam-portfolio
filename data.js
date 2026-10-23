@@ -21,8 +21,8 @@
                   (a project with no chapter media just uses the flat `media` list)
      media        flat list of every deliverable (cover/count source; keep in sync with chapters)
      wide         optional – true makes a 16:9 project card 8 columns wide (home only)
-     home         optional – true shows it on the home page (keep exactly 4:
-                  one wide 16:9, one vertical, two 16:9)
+     home         optional – true features it on the home page (Adam's key projects: Gate Mall, Oru, Buthaina);
+                  the order on the home page follows siteConfig.featured
      draft        optional – true hides the project everywhere
    Media item:
         kind         video | reel | post | photo | media | album
@@ -43,22 +43,23 @@ const siteConfig = {
     showreel: {
         title: "Selected Director's Showreel",
         video: "",                       // YouTube/Vimeo URL or assets/videos/showreel.mp4 – empty = not clickable yet
-        poster: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1800&q=80",
-        loop: "https://assets.mixkit.co/videos/preview/mixkit-set-of-plateaus-seen-from-the-heights-in-a-sunset-26070-large.mp4"
+        poster: "assets/images/hero-loop.webp",
+        loop: "assets/videos/hero-loop.mp4"       // muted ambient background loop of the home hero
     },
     whatsapp: "96566534771",          // country code + number, digits only (Kuwait +965)
     whatsappMessage: "Hi Adam, I saw your portfolio and I'd like to talk about a project.",
+    featured: ["buthaina-podcast", "the-gate-mall", "oru-roasters"],   // home page order (projects with home: true)
     viewsMin: 1000,                  // live YouTube view badges show only from this many views up
     email: "adamaladdin97@gmail.com"
 };
 
 const categories = [
-    { id: "commercial", label: "Commercials", short: "Commercials", blurb: "Brand films, campaigns and documentaries." },
-    { id: "social", label: "Social Campaigns", short: "Social", blurb: "Full social campaigns and personal-brand content." },
-    { id: "events", label: "Events", short: "Events", blurb: "Live multi-cam, promos and event marketing." },
-    { id: "podcasts", label: "Podcasts", short: "Podcasts", blurb: "Multi-cam podcast production and episodes." },
-    { id: "reels", label: "Reels", short: "Reels", blurb: "One-off reels, shot and cut fast." },
-    { id: "photo", label: "Photography", short: "Photography", blurb: "Product, lifestyle and studio photography." }
+    { id: "commercial", label: "Commercials", short: "Commercials", blurb: "Brand films" },
+    { id: "social", label: "Social Campaigns", short: "Social", blurb: "Campaigns" },
+    { id: "events", label: "Events", short: "Events", blurb: "Live multi-cam" },
+    { id: "podcasts", label: "Podcasts", short: "Podcasts", blurb: "Studio & episodes" },
+    { id: "reels", label: "Reels", short: "Reels", blurb: "Shot & cut fast" },
+    { id: "photo", label: "Photography", short: "Photography", blurb: "Stills" }
 ];
 
 const projects = [
@@ -69,7 +70,6 @@ const projects = [
         category: "commercial",
         description: "",
         wide: true,
-        home: true,
         media: [
             { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/mercedes-maybach.jpg", video: "https://www.youtube.com/watch?v=KDWBEMWzbmM", instagramUrl: "" }
         ]
@@ -78,6 +78,7 @@ const projects = [
         slug: "the-gate-mall",
         title: "The Gate Mall — 360° Seasonal & World Cup Campaigns",
         client: "The Gate Mall",
+        home: true,
         category: "social",
         description: "A full production partnership across two major seasonal activations at The Gate Mall, bridging high-end commercial production with fast, real-time social storytelling to drive footfall across multi-day festivals.",
         scope: ["Creative direction", "Full media production", "DOOH motion", "Real-time social coverage"],
@@ -228,7 +229,6 @@ const projects = [
                 ]
             }
         ],
-        home: true,
         media: [
             { kind: "post", title: "Eid teaser", format: "9:16", thumbnail: "assets/images/ig-dyj9auxixdj.jpg", video: "https://www.instagram.com/p/DYj9auxIxDJ/", instagramUrl: "https://www.instagram.com/p/DYj9auxIxDJ/", feature: true },
             { kind: "photo", title: "Social competition set", format: "4:5", thumbnail: "assets/images/ig-dywlix9ikht.jpg", video: "", instagramUrl: "", full: "assets/images/ig-dywlix9ikht.jpg" },
@@ -280,7 +280,6 @@ const projects = [
         client: "Avenues",
         category: "commercial",
         description: "",
-        home: true,
         media: [
             { kind: "video", title: "Mother", format: "16:9", thumbnail: "assets/images/avenues-mother.jpg", video: "https://www.youtube.com/watch?v=50Hdcnb5XE4", instagramUrl: "" },
             { kind: "video", title: "Kids", format: "16:9", thumbnail: "assets/images/avenues-kids.jpg", video: "https://www.youtube.com/watch?v=gOMBRIwsYnM", instagramUrl: "" },
@@ -294,7 +293,6 @@ const projects = [
         category: "social",
         description: "One big YouTube film cut into a series of Shorts — every story stands alone, linked by strong transitions — so a single shoot became a full campaign.",
         scope: ["YouTube film", "Shorts series", "Editing & transitions"],
-        home: true,
         media: [
             { kind: "video", title: "", format: "16:9", thumbnail: "assets/images/sportap-main.jpg", video: "https://www.youtube.com/watch?v=ncs-3tBcFeA", instagramUrl: "" }
         ]
@@ -459,6 +457,7 @@ const projects = [
         slug: "buthaina-podcast",
         title: "Buthaina Podcast",
         client: "Buthaina Abdullah",
+        home: true,
         category: "podcasts",
         description: "Brought in from season two when the host wanted a more professional production. We designed and built her home studio, directed 12 episodes, grew her reels to millions of views and ran live experiments across platforms.",
         scope: ["Studio design & build", "Episode direction", "Reels & posts", "Live streaming"],
@@ -667,6 +666,7 @@ const projects = [
         slug: "oru-roasters",
         title: "Oru Roasters — Personal Brand",
         client: "Oru Roasters",
+        home: true,
         category: "social",
         description: "Months of content for a specialty coffee shop, led by its owner as a personal brand: storytelling first, advertising second.",
         scope: ["Personal brand", "Storytelling", "Reels", "Photography"],

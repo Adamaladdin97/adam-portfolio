@@ -57,7 +57,7 @@ Whenever Adam explains the story behind a client (Gate Mall, Gulf Cryo, Sportap,
 Static multi-page site (no build step). Live: https://adamaladdin97.github.io/adam-portfolio/ — hosted on GitHub Pages, `git push` to `main` = live in ~1 minute.
 
 ## Files
-- `index.html` — short home: hero/showreel, 4 selected projects, category tiles, about teaser.
+- `index.html` — short home: ambient video hero, featured projects + archive card, minimal category tiles, about teaser.
 - `work.html` — all projects + filter pills (`?cat=` supported).
 - `project.html?p=<slug>` — project case-study page (all deliverables of one project).
 - `about.html` — about, portrait, philosophy.
@@ -75,7 +75,7 @@ Media from Instagram/YouTube/Drive is turned into a local thumbnail in `assets/i
 - Work-page layout is auto-packed in `layoutProjects()` (common.js) — don't hand-tune spans.
 - Grid is always `grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 md:auto-rows-[300px] grid-flow-dense`; every card spans whole 300px cells → no overlap.
 - Categories: `commercial` (no YouTube/long-form here), `social` (campaigns & personal brand), `events`, `podcasts`, `reels` (ONE collection project `reels` holding all loose one-off reels — add new loose reels to its `media[]`), `photo`. Empty categories are hidden automatically.
-- The home page shows exactly 4 projects (`home: true`): one `wide` 16:9, one vertical, two 16:9.
+- The home page features Adam's key projects only (`home: true`, ordered by `siteConfig.featured`: Buthaina, The Gate Mall, Oru) — a 16:9 (8 cols × 2 rows) + vertical cards — followed by a large "full archive" card (blurred covers of the other projects + "View all work →") so visitors know there is more. Hero = `siteConfig.showreel.loop` as a blurred, darkened ambient background (not a showcase). "What I do" tiles: category name + a 1–2 word line over a blurred real project frame — no long copy.
 - Story fields (`scope`, `facts`, `chapters`) make a project read as a case study. Keep text short and ONLY from what Adam said; `draft: true` hides a project until its media exists.
 - Silent Luxury look: obsidian `#060709`, charcoal `#0E1014`, off-white `#F4F4F6`, silver `#A1A1AA`, 1px `rgba(255,255,255,.08)` borders. No accent colors, no neon.
 - Never embed Instagram widgets on pages. Reels are thumbnail cards that open in the in-site lightbox on click, plus a small "Verify on IG ↗" pill when `instagramUrl` exists.
