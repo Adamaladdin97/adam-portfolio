@@ -39,5 +39,5 @@ body { background-color: var(--obsidian); color: var(--ink); font-family: 'Plus 
 /* Home hero: the showreel loop is an ambient background, not the main event */
 .hero-ambient { filter: blur(3px) saturate(.8); transform: scale(1.08); }   /* blur + scale hide compression artifacts and soft edges */
 .hero-vignette { background: radial-gradient(110% 85% at 50% 50%, transparent 30%, rgba(6,7,9,.8) 100%); }
-.showcase-logo { filter: drop-shadow(0 2px 14px rgba(0,0,0,.65)) drop-shadow(0 0 2px rgba(0,0,0,.4)); }
-.showcase-halo { background: radial-gradient(closest-side, rgba(6,7,9,.6), rgba(6,7,9,.25) 60%, transparent); }
+.showcase-blur { filter: blur(5px) saturate(.85); transform: scale(1.1); }   /* collage behind a client logo: soft and dark so the logo reads */
+.group:hover .showcase-blur { filter: blur(3px) saturate(.95); }
