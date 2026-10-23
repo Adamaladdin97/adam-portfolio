@@ -9,14 +9,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=202610231626">
+    <link rel="stylesheet" href="style.css?v=202610231905">
 </head>
 <body class="bg-grain antialiased selection:bg-white selection:text-black">
     <div id="site-nav"></div>
 
     <main class="max-w-7xl mx-auto px-5 md:px-6 pt-28 md:pt-36">
         <a href="work.html" class="link-arrow mb-8 md:mb-10">← All projects</a>
-        <div id="project-head" class="mb-10 md:mb-12"></div>
+        <div id="project-head" class="mb-10 md:mb-14"></div>
         <div id="project-facts"></div>
         <div id="project-chapters"></div>
         <div id="project-flat" class="hidden">
@@ -27,8 +27,8 @@
     </main>
 
     <div id="site-footer"></div>
-    <script src="data.js?v=202610231626"></script>
-    <script src="common.js?v=202610231626"></script>
+    <script src="data.js?v=202610231905"></script>
+    <script src="common.js?v=202610231905"></script>
     <script>
 
         renderChrome('work');
@@ -129,13 +129,16 @@
             $('project-head').innerHTML = `
                 <p dir="auto" class="eyebrow mb-3">${esc(p.client)}</p>
                 <h1 dir="auto" class="font-serif text-4xl md:text-6xl text-white leading-tight mb-5">${esc(p.title)}</h1>
-                ${p.description ? `<p dir="auto" class="text-neutral-400 text-sm md:text-base font-light leading-relaxed max-w-2xl mb-6">${esc(p.description)}</p>` : ''}
+                ${p.description ? `<p dir="auto" class="text-neutral-300 text-base md:text-xl font-light leading-snug max-w-3xl">${esc(p.description)}</p>` : ''}
+                ${factsHTML(p)}
                 <div class="flex flex-wrap gap-2">
                     <span class="px-3 py-1.5 rounded-md bg-white/10 border border-white/10 text-xs text-white">${esc(cat ? cat.label : p.category)}</span>
                     ${accountChip(p)}
-                    ${(p.scope || []).map(t => `<span class="px-3 py-1.5 rounded-md bg-white/5 border border-white/5 text-xs text-neutral-300">${esc(t)}</span>`).join('')}
+                    ${(p.scope || []).map(t => `<span class="hidden sm:inline-block px-3 py-1.5 rounded-md bg-white/5 border border-white/5 text-xs text-neutral-300">${esc(t)}</span>`).join('')}
                 </div>`;
-            $('project-facts').innerHTML = factsHTML(p) + highlightsHTML(p);
+            $('project-facts').innerHTML = highlightsHTML(p);
+            const strip = mediaStrip(p);
+            if (strip) $('project-facts').before(strip);
             const chapters = p.chapters || [];
             if (chapters.some(c => (c.media && c.media.length) || (c.steps && c.steps.length))) {
                 initLayoutManager(p);

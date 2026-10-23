@@ -12,7 +12,8 @@
      account      optional – { handle: "brand", followers: "33K" }  (shown as an Instagram chip)
      showcase     optional – home featured card collage: { items: [3 thumbnails from media, first = hero frame], logo: white transparent PNG (assets/images/logos/), stat: { value, label } }
      cover        thumbnail used on cards;  coverFormat = its format (decides the card shape)
-     highlights   optional – 3-card strip under the facts: { title, items: [{ title, text }] }
+     highlights   optional – 3 compact cards: { title, items: [{ title, text (3–5 words) }] }
+     strip        optional – 4–6 thumbnails from media shown as an autoplay preview strip right under the header
      chapters     the story, in order: [{ label, title, text, steps | media }]
                   steps  optional story steps, each one editorial row: [{ title, text, tone, media: [ ... ] }]
                   tone   optional ambient glow of the row: promo (blue) | motion (violet: DOOH, screens, design)
@@ -81,17 +82,18 @@ const projects = [
         client: "The Gate Mall",
         home: true,
         category: "social",
-        description: "A full production partnership across two major seasonal activations at The Gate Mall, bridging high-end commercial production with fast, real-time social storytelling to drive footfall across multi-day festivals.",
+        description: "Cinema-grade production meets real-time social — two mall-wide campaigns, delivered while they were still live.",
         scope: ["Creative direction", "Full media production", "DOOH motion", "Real-time social coverage"],
         highlights: {
-            title: "Purpose-driven gear & speed",
+            title: "Gear by purpose",
             items: [
-                { title: "Cinema cameras", text: "Flagship promos, celebrity appearances and the master festival recaps." },
-                { title: "360° action cam", text: "Funny POV reels following the Eidiya team, building FOMO across the four days of Eid." },
-                { title: "Real-time mobile", text: "Grand-prize winners captured on the spot and published within minutes, plus next-morning delivery of every daily promo." }
+                { title: "Cinema cameras", text: "Promos, stars & recaps" },
+                { title: "360° action cam", text: "POV reels that build FOMO" },
+                { title: "Real-time mobile", text: "Winners posted in minutes" }
             ]
         },
-        facts: [{ value: "2", label: "major campaigns" }, { value: "Next day", label: "promo delivery, during Eid" }],
+        facts: [{ value: "2", label: "major campaigns" }, { value: "42", label: "deliverables" }, { value: "Next day", label: "promo delivery" }, { value: "9", label: "screen formats" }],
+        strip: ["assets/images/gate-mall/eid/gm-recap.webp", "assets/images/gate-mall/eid/gm-eidiya-pov.webp", "assets/images/ig-daawtpkqlm2.jpg", "assets/images/gate-mall/eid/gm-screen-7.webp", "assets/images/gate-mall/eid/gm-contest-winner.webp", "assets/images/gate-mall/eid/gm-ugc.webp"],
         account: { handle: "thegatemallkwt", followers: "102K" },
         showcase: { items: ["assets/images/drive-1wyrbfdjmrdu.jpg", "assets/images/gate-mall/eid/gm-screen-4.webp", "assets/images/ig-daawtpkqlm2.jpg"], logo: "assets/images/logos/the-gate-mall.png", stat: { value: "42", label: "deliverables · 2 campaigns" } },
         cover: "assets/images/ig-daawtpkqlm2.jpg",

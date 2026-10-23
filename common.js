@@ -400,7 +400,7 @@ function stageBadge(m) {
 function stageVisual(m, alt) {
     return isLocalVideo(m.video)
         ? `<video data-src="${esc(m.video)}" poster="${esc(m.thumbnail)}" muted loop playsinline preload="none" class="ed-preview absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-700"></video>`
-        : `<img src="${esc(m.thumbnail || m.full)}" alt="${esc(alt)}" loading="lazy" class="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:scale-105 group-hover:opacity-100 transition duration-700">`;
+        : `<img src="${esc(m.thumbnail || m.full)}" alt="${esc(alt)}" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:scale-105 group-hover:opacity-100 transition duration-700">`;
 }
 const playIcon = `<div class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"><div class="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/25 flex items-center justify-center text-white group-hover:bg-white group-hover:text-black transition duration-300"><svg class="w-4 h-4 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>`;
 function openMedia(p, m) { openModal({ title: m.title ? `${p.client} — ${m.title}` : p.client, url: m.video, format: m.format, instagramUrl: m.instagramUrl }); }
@@ -613,21 +613,55 @@ function initEditorial(root) {
     if (!('IntersectionObserver' in window)) { root.querySelectorAll('.ed-row').forEach(r => r.classList.add('is-active')); return; }
     const rowIO = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('is-active', e.isIntersecting)), { rootMargin: '-40% 0px -40% 0px' });
     root.querySelectorAll('.ed-row').forEach(r => rowIO.observe(r));
-    const vidIO = new IntersectionObserver(es => es.forEach(e => {
-        const v = e.target;
-        if (e.isIntersecting) { if (!v.src) v.src = v.dataset.src; v.play().catch(() => {}); } else v.pause();
-    }), { threshold: 0.35 });
-    root.querySelectorAll('video.ed-preview').forEach(v => vidIO.observe(v));
+    observePreviews(root);
+}
+/* Local mp4 previews: the file loads only when the card first scrolls into view (poster until then),
+   plays muted only while visible, and everything pauses when the tab is hidden. */
+let previewIO;
+function observePreviews(root) {
+    if (!('IntersectionObserver' in window)) return;
+    if (!previewIO) {
+        previewIO = new IntersectionObserver(es => es.forEach(e => {
+            const v = e.target;
+            v._visible = e.isIntersecting;
+            if (e.isIntersecting && !document.hidden) { if (!v.src) v.src = v.dataset.src; v.play().catch(() => {}); } else v.pause();
+        }), { threshold: 0.35, rootMargin: '120px 0px' });
+        document.addEventListener('visibilitychange', () => document.querySelectorAll('video.ed-preview').forEach(v => {
+            if (document.hidden) v.pause(); else if (v._visible) v.play().catch(() => {});
+        }));
+    }
+    root.querySelectorAll('video.ed-preview').forEach(v => previewIO.observe(v));
 }
 
 /* ---------------- Story blocks (project page) ---------------- */
 function factsHTML(p) {
-    const facts = (p.facts || []).map(x => `
-        <div class="luxury-card rounded-2xl p-5 md:p-6">
-            <div class="font-serif text-3xl md:text-4xl text-white mb-1">${esc(x.value)}</div>
-            <div class="text-xs uppercase tracking-widest text-neutral-500">${esc(x.label)}</div>
-        </div>`).join('');
-    return facts ? `<div class="grid grid-cols-1 sm:grid-cols-${Math.min((p.facts || []).length, 3)} gap-5 md:gap-6 mb-12 md:mb-14">${facts}</div>` : '';
+    const f = p.facts || [];
+    if (!f.length) return '';
+    return `<div class="grid grid-cols-2 md:grid-cols-${Math.min(f.length, 4)} gap-y-6 my-8 md:my-10">${f.map(x => `
+        <div class="border-l border-white/15 pl-4 md:pl-5">
+            <div class="font-serif text-3xl md:text-5xl text-white leading-none">${esc(x.value)}</div>
+            <div class="mt-2 text-[10px] md:text-[11px] uppercase tracking-widest text-neutral-500">${esc(x.label)}</div>
+        </div>`).join('')}</div>`;
+}
+/* Autoplay preview strip right under the header (p.strip = thumbnails from media): visuals before any reading */
+function mediaStrip(p) {
+    const items = (p.strip || []).map(src => p.media.find(m => m.thumbnail === src)).filter(Boolean);
+    if (!items.length) return null;
+    const el = document.createElement('section');
+    el.className = 'mb-14 md:mb-20 -mx-5 md:mx-0';
+    el.innerHTML = `<div class="ed-strip flex md:grid md:grid-cols-${Math.min(items.length, 6)} gap-3 md:gap-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory px-5 md:px-0 pb-1"></div>`;
+    const row = el.firstChild;
+    items.forEach(m => {
+        const c = document.createElement('div');
+        c.className = 'ed-screen luxury-card relative aspect-[9/16] rounded-xl overflow-hidden group cursor-pointer shrink-0 w-[42%] sm:w-[30%] md:w-auto snap-start';
+        c.innerHTML = `${stageVisual(m, m.title || p.title)}<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>${stageBadge(m)}${playIcon}
+            ${m.title ? `<span dir="auto" class="absolute bottom-3 left-3 right-3 text-[11px] text-white/90 truncate">${esc(m.title)}</span>` : ''}`;
+        c.addEventListener('click', () => openMedia(p, m));
+        row.appendChild(c);
+    });
+    observePreviews(el);
+    applyViews();
+    return el;
 }
 function chapterHead(i, c) {
     const points = (c.points || []).map(x => `
@@ -649,12 +683,12 @@ function highlightsHTML(p) {
     const h = p.highlights;
     if (!h || !(h.items || []).length) return '';
     return `<section class="mb-14 md:mb-20">
-        ${h.title ? `<p class="eyebrow mb-5">${esc(h.title)}</p>` : ''}
-        <div class="grid grid-cols-1 md:grid-cols-${Math.min(h.items.length, 3)} gap-5 md:gap-6">${h.items.map((x, i) => `
-            <div class="luxury-card rounded-2xl p-6 md:p-7 flex flex-col gap-6">
-                <span class="text-xs font-mono text-neutral-500">${String(i + 1).padStart(2, '0')}</span>
-                <div><h3 dir="auto" class="font-serif text-2xl text-white mb-2">${esc(x.title)}</h3>
-                <p dir="auto" class="text-sm text-neutral-400 font-light leading-relaxed">${esc(x.text)}</p></div>
+        ${h.title ? `<p class="eyebrow mb-4">${esc(h.title)}</p>` : ''}
+        <div class="grid grid-cols-1 sm:grid-cols-${Math.min(h.items.length, 3)} gap-3 md:gap-4">${h.items.map((x, i) => `
+            <div class="luxury-card rounded-xl px-5 py-4 flex items-center gap-4">
+                <span class="text-[10px] font-mono text-neutral-600">${String(i + 1).padStart(2, '0')}</span>
+                <div class="min-w-0"><h3 dir="auto" class="text-sm text-white">${esc(x.title)}</h3>
+                <p dir="auto" class="text-xs text-neutral-500 truncate">${esc(x.text)}</p></div>
             </div>`).join('')}
         </div>
     </section>`;
