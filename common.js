@@ -270,7 +270,10 @@ function showcaseCard(p, spanClass) {
         <div class="absolute inset-x-0 top-0 grid gap-1 ${wide ? 'bottom-0 grid-cols-[1.7fr_1fr] grid-rows-2' : 'h-[66%] grid-cols-2 grid-rows-[1.5fr_1fr]'}">
             ${tile(sc.items[0], wide ? 'row-span-2' : 'col-span-2')}${tile(sc.items[1], '')}${tile(sc.items[2], '')}
         </div>
+        <div class="absolute inset-0 bg-obsidian/30 group-hover:bg-obsidian/20 transition duration-700"></div>
         <div class="absolute inset-0 ${wide ? 'bg-gradient-to-t from-obsidian via-obsidian/55 to-obsidian/5' : 'bg-gradient-to-t from-obsidian from-[34%] via-obsidian/40 via-[50%] to-transparent to-[70%]'}"></div>
+        ${sc.logo ? `<div class="showcase-halo absolute z-10 flex items-center justify-center pointer-events-none ${wide ? 'left-0 top-0 w-[63%] h-[62%]' : 'inset-x-0 top-0 h-[40%]'}">
+            <img src="${esc(sc.logo)}" alt="${esc(p.client)}" class="showcase-logo ${wide ? 'h-12 md:h-16' : 'h-16 md:h-20'} w-auto max-w-[62%] object-contain"></div>` : ''}
         <div class="relative z-10 p-4 md:p-5"><span class="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[10px] uppercase tracking-widest text-neutral-300">${esc(cat ? cat.short : p.category)}</span></div>
         <div class="relative z-10 mt-auto p-5 md:p-7 flex flex-col gap-3">
             ${sc.stat ? `<div><div class="font-serif text-4xl md:text-5xl text-white leading-none">${esc(sc.stat.value)}</div><div class="mt-1 text-[11px] uppercase tracking-widest text-neutral-400">${esc(sc.stat.label)}</div></div>` : ''}
